@@ -2,7 +2,8 @@
 
 int	main(void)
 {
-	printf("test phil\n");
+	printf("Leon\n");
+	printf("Phil\n");
 	printf("Hello minishell!\n");
 	return (0);
 }
