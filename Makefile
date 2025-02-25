@@ -21,7 +21,7 @@ all: $(OBJ_DIR) $(NAME)
 # Compilation de l'exécutable
 $(NAME): $(OBJ)
 	@echo "Compiling libraries..."
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
 	@echo "Libraries compiled successfully!"
 
 # Compilation des fichiers objets dans OBJ_DIR
