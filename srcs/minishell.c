@@ -16,7 +16,7 @@ int	check_quote(char *str)
 	return (quote);
 }
 
-void	builtins(char *line, char **env)
+void	builtins(char *line, char **env, int *exit_code)
 {
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd(); // print actual working
@@ -24,6 +24,10 @@ void	builtins(char *line, char **env)
 		ft_env(env); // print the env
 	if (ft_strncmp(line, "echo", 4) == 0)
 		ft_echo(line);
+	if (ft_strncmp(line, "cd", 2) == 0)
+		ft_cd(line);
+	if (ft_strncmp(line, "exit", 4) == 0)
+		ft_exit(exit_code);
 }
 
 char	*get_lines(char *line)
@@ -51,17 +55,18 @@ char	*get_lines(char *line)
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
+	int		exit_code;
 
 	(void) argc;
 	(void) argv;
 	(void) env;
-	line = NULL;
-	while (ft_strncmp(line, "exit", 4) != 0)
+	exit_code = 1;
+	while (exit_code == 1)
 	{
 		line = readline(">");
 		if (check_quote(line) % 2 != 0)
 			line = get_lines(line);
-		builtins(line, env);
+		builtins(line, env, &exit_code);
 	}
 	return (0);
 }
