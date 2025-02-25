@@ -4,12 +4,13 @@ int	main(int argc, char **argv, char **env)
 {
 	char	*line;
 
-	line = readline(">");
-	printf("%s\n", line);
 	(void) argc;
 	(void) argv;
-	ft_pdw();
-	ft_env(env);
+
+	line = readline(">");
+	printf("%s\n", line);
+	ft_pwd(); // print actual working
+	ft_env(env); // print the env
 	return (0);
 }
 
