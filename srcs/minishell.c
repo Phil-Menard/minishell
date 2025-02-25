@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
-	printf("Leon remodif\n");
-	printf("Phil\n");
-	printf("Another one\n");
-	printf("Hello minishell!\n");
+	(void) argc;
+	(void) argv;
+	ft_pdw();
+	ft_env(env);
 	return (0);
 }
 

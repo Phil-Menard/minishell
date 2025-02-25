@@ -9,6 +9,7 @@ OBJ_DIR = objs
 
 # Fichiers sources
 SRC = minishell.c \
+	builtins1.c
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))
