@@ -1,11 +1,15 @@
 #include "minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	char	*line;
 
 	line = readline(">");
 	printf("%s\n", line);
+	(void) argc;
+	(void) argv;
+	ft_pdw();
+	ft_env(env);
 	return (0);
 }
 
