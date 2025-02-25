@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_pdw(void)
+void	ft_pwd(void)
 {
 	char	*path;
 

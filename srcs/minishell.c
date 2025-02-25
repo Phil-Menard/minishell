@@ -2,10 +2,15 @@
 
 int	main(int argc, char **argv, char **env)
 {
+	char	*line;
+
 	(void) argc;
 	(void) argv;
-	ft_pdw();
-	ft_env(env);
+
+	line = readline(">");
+	printf("%s\n", line);
+	ft_pwd(); // print actual working
+	ft_env(env); // print the env
 	return (0);
 }
 
@@ -17,5 +22,3 @@ update main (git pull origin main)
 fusion branch (git merge mybranch)
 push everything (git push origin main)
 */
-
-// blabla la nouvelle branche leon a re modifier un truc
