@@ -2,10 +2,10 @@
 
 int	main(void)
 {
-	printf("Leon remodif\n");
-	printf("Phil\n");
-	printf("Another one\n");
-	printf("Hello minishell!\n");
+	char	*line;
+
+	line = readline(">");
+	printf("%s\n", line);
 	return (0);
 }
 
@@ -17,5 +17,3 @@ update main (git pull origin main)
 fusion branch (git merge mybranch)
 push everything (git push origin main)
 */
-
-// blabla la nouvelle branche leon a re modifier un truc
