@@ -82,4 +82,10 @@ void	exec_cmds(char *str)
 			exit(EXIT_FAILURE);
 		}
 	}
+	else
+	{
+		wait(NULL);
+		free_db_array(arg);
+		free(path);
+	}
 }
