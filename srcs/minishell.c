@@ -45,7 +45,7 @@ char	*get_lines(char *line)
 		temp = ft_strdup(res);
 		free(res);
 		new_line = readline(">");
-		res = ft_strjoin(temp, new_line);
+		res = ft_strjoin_middle(temp, '\n', new_line);
 		free(temp);
 	}
 	free(new_line);
