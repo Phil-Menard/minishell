@@ -29,6 +29,7 @@ void	ft_env(char **env)
 void	ft_cd(char *str)
 {
 	char	*path;
+
 	while (*str != ' ' && *str)
 		str++;
 	if (*str == '\0')

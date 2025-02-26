@@ -69,23 +69,20 @@ void	exec_cmds(char *str)
 	char	**arg;
 	int		id;
 
-	path = get_right_path(str);
-	arg = fill_arg(path, str);
-	id = fork();
-	if (id == 0)
-	{
-		if (execve(path, arg, NULL) == -1)
-		{
-			free(path);
-			free_db_array(arg);
-			perror("execve");
-			exit(EXIT_FAILURE);
-		}
-	}
+	if (is_redirected(str) == 1)
+		prepare_redir(str);
 	else
 	{
-		wait(NULL);
-		free_db_array(arg);
-		free(path);
+		path = get_right_path(str);
+		arg = fill_arg(path, str);
+		id = fork();
+		if (id == 0)
+			ft_execve(path, arg);
+		else
+		{
+			wait(NULL);
+			free_db_array(arg);
+			free(path);
+		}
 	}
 }
