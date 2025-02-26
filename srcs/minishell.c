@@ -35,9 +35,9 @@ char	*get_lines(char *line)
 	char	*new_line;
 	char	*temp;
 	char	*res;
-	int		i;
+	// int		i;
 
-	i = 0;
+	// i = 0;
 	new_line = readline(">");
 	res = ft_strjoin(line, new_line);
 	while (check_quote(new_line) % 2 == 0)
