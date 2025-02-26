@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
 # include "../libft/libft.h"
 
 void	ft_pwd(void);
@@ -15,5 +16,6 @@ void	ft_cd(char *str);
 void	ft_exit(int *exit_code);
 char	*ft_strjoin_middle(char const *s1, char slash, char const *s2);
 void	free_db_array(char **arr);
+void	exec_cmds(char *str);
 
 #endif

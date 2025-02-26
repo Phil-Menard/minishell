@@ -3,57 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:25:33 by lefoffan          #+#    #+#             */
-/*   Updated: 2024/11/18 15:24:31 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:40:08 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_count_word(const char *s, char c)
+static int	ft_countnbstring(char const *s, char c)
 {
-	size_t	cw;
+	int	i;
+	int	count;
 
-	cw = 0;
-	while (*s)
+	i = 0;
+	count = 0;
+	while (s[i])
 	{
-		if (*s != c)
-			cw++;
-		while (*s != c && *s && *(s + 1))
-			s++;
-		s++;
+		while (s[i] && s[i] == c)
+			i++;
+		if (s[i])
+			count++;
+		while (s[i] && s[i] != c)
+			i++;
 	}
-	return (cw);
+	return (count);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**split;
 	size_t	i;
-	size_t	j;
-	size_t	lenword;
+	int		j;
+	char	**tab;
+	size_t	start;
+	size_t	end;
 
-	j = 0;
-	split = malloc(sizeof(char *) * (ft_count_word(s, c) + 1));
-	if (!split)
+	tab = (char **) malloc ((ft_countnbstring(s, c) + 1) * sizeof(char *));
+	if (tab == NULL)
 		return (NULL);
 	i = 0;
-	while (s[i] && i < ft_strlen(s))
+	j = 0;
+	while (s[i])
 	{
-		if (s[i] && s[i] != c)
-		{
-			lenword = i;
-			while (s[lenword] != c && s[lenword])
-				lenword++;
-			split[j++] = ft_substr(s, i, lenword - i);
-			i += lenword - i;
-		}
-		i++;
+		while (s[i] && s[i] == c)
+			i++;
+		start = i;
+		while (s[i] && s[i] != c)
+			i++;
+		end = i;
+		if (end > start)
+			tab[j++] = ft_substr(s, start, end - start);
 	}
-	split[j] = NULL;
-	return (split);
+	tab[j] = 0;
+	return (tab);
 }
 
 ///////////////////
