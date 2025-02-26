@@ -48,7 +48,7 @@ char	*get_right_path(char *str)
 	char	**arr;
 
 	i = 0;
-	arr = ft_split(getenv("PATH"));
+	arr = ft_split(getenv("PATH"), ' ');
 	i = 0;
 	while (arr[i])
 	{
