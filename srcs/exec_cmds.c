@@ -18,8 +18,6 @@ char	*get_next_path(char *arr, char *str)
 	char	*cmd;
 	char	**args;
 
-	while (*str == ' ' && *str)
-		str++;
 	if (ft_strrchr(str, '/') != NULL)
 	{
 		args = ft_split(str, ' ');
@@ -48,7 +46,7 @@ char	*get_right_path(char *str)
 	char	**arr;
 
 	i = 0;
-	arr = ft_split(getenv("PATH"), ' ');
+	arr = ft_split(getenv("PATH"), ':');
 	i = 0;
 	while (arr[i])
 	{
@@ -69,14 +67,25 @@ void	exec_cmds(char *str)
 {
 	char	*path;
 	char	**arg;
+	int		id;
 
 	path = get_right_path(str);
 	arg = fill_arg(path, str);
-	if (execve(path, arg, NULL) == -1)
+	id = fork();
+	if (id == 0)
 	{
-		free(path);
+		if (execve(path, arg, NULL) == -1)
+		{
+			free(path);
+			free_db_array(arg);
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		wait(NULL);
 		free_db_array(arg);
-		perror("execve");
-		exit(EXIT_FAILURE);
+		free(path);
 	}
 }
