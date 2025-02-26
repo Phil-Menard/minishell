@@ -37,7 +37,6 @@ char	*str_without_redir(char *str)
 			i++;
 	}
 	free_db_array(arr);
-	free(str);
 	return (res);
 }
 
@@ -66,10 +65,16 @@ char	*get_infile(char *str)
 	return (res);
 }
 
-void	redir_input(int *pipefd, int infile, char *path, char **arg)
+void	redir_input(char *str, int *pipefd, char *path, char **arg)
 {
-	int	id;
+	int		id;
+	int		infile;
+	char	*infile_name;
 
+	infile_name = get_infile(str);
+	infile = open(infile_name, O_RDONLY);
+	if (infile == -1)
+		perror(infile_name);
 	id = fork();
 	if (id == 0)
 	{
@@ -83,11 +88,8 @@ void	redir_input(int *pipefd, int infile, char *path, char **arg)
 	else
 	{
 		wait(NULL);
-		close(pipefd[0]);
-		close(pipefd[1]);
 		close(infile);
-		free_db_array(arg);
-		free(path);
+		free(infile_name);
 	}
 }
 
@@ -95,16 +97,18 @@ void	prepare_redir(char *str)
 {
 	char	*path;
 	char	**arg;
+	char	*line;
 	int		pipefd[2];
-	int		infile;
 
-	infile = open(get_infile(str), O_RDONLY);
-	if (infile == -1)
-		perror(get_infile(str));
-	str = str_without_redir(str);
-	path = get_right_path(str);
-	arg = fill_arg(path, str);
+	line = str_without_redir(str);
+	path = get_right_path(line);
+	arg = fill_arg(path, line);
+	free(line);
 	if (pipe(pipefd) == -1)
 		return (perror("pipe"), exit(EXIT_FAILURE));
-	redir_input(pipefd, infile, path, arg);
+	redir_input(str, pipefd, path, arg);
+	close(pipefd[0]);
+	close(pipefd[1]);
+	free_db_array(arg);
+	free(path);
 }
