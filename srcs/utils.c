@@ -56,7 +56,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (ptr);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_middle(char const *s1, char slash, char const *s2)
 {
 	char	*ptr;
 	int		i;
@@ -71,7 +71,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		ptr[i] = s1[i];
 		i++;
 	}
-	ptr[i] = '\n';
+	ptr[i] = slash;
 	i++;
 	j = 0;
 	while (s2[j])

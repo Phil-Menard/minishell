@@ -11,7 +11,9 @@ OBJ_DIR = objs
 SRC = minishell.c \
 	builtins_1.c \
 	utils.c \
-	ft_echo.c
+	utils_2.c \
+	ft_echo.c \
+	exec_cmds.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))
