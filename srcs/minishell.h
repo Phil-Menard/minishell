@@ -19,7 +19,7 @@ char	*ft_strjoin_middle(char const *s1, char slash, char const *s2);
 void	free_db_array(char **arr);
 void	exec_cmds(char *str);
 int		is_redirected(char *str);
-void	prepare_redir(char *str);
+void	prepare_redir(char *str, int redirection);
 void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
 char	*get_next_path(char *arr, char *str);
@@ -28,5 +28,9 @@ char	*ft_stradd(char *s1, char *s2);
 char	*ft_add_end_space(char *str);
 int		check_quote(char *str);
 char	*get_lines(char *line);
+char	*get_infile(char *str);
+char	*get_outfile(char *str);
+void	redir_input(char *str, int *pipefd, char *path, char **arg);
+void	redir_output(char *str, int *pipefd, char *path, char **arg);
 
 #endif

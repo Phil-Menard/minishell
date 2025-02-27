@@ -83,7 +83,7 @@ void	exec_cmds(char *str)
 
 	redirection = is_redirected(str);
 	if (redirection > 0)
-		prepare_redir(str);
+		prepare_redir(str, redirection);
 	else
 	{
 		path = get_right_path(str);
