@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+void	ft_execve(char *path, char **arg)
+{
+	if (execve(path, arg, NULL) == -1)
+	{
+		free(path);
+		free_db_array(arg);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+}
+
 char	**fill_arg(char *path, char *argv)
 {
 	char	**arg;
@@ -68,8 +79,10 @@ void	exec_cmds(char *str)
 	char	*path;
 	char	**arg;
 	int		id;
+	int		redirection;
 
-	if (is_redirected(str) == 1)
+	redirection = is_redirected(str);
+	if (redirection > 0)
 		prepare_redir(str);
 	else
 	{

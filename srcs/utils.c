@@ -1,16 +1,5 @@
 #include "minishell.h"
 
-void	ft_execve(char *path, char **arg)
-{
-	if (execve(path, arg, NULL) == -1)
-	{
-		free(path);
-		free_db_array(arg);
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
-}
-
 char	*ft_strjoin_middle(char const *s1, char slash, char const *s2)
 {
 	char	*ptr;
@@ -73,4 +62,17 @@ char	*ft_add_end_space(char *str)
 	res[i] = '\0';
 	free(str);
 	return (res);
+}
+
+void	free_db_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }

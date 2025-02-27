@@ -1,19 +1,14 @@
 #include "minishell.h"
 
-int	check_quote(char *str)
+void	print_minishell(void)
 {
-	int	i;
-	int	quote;
-
-	quote = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '"')
-			quote++;
-		i++;
-	}
-	return (quote);
+	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
+	printf("|  \\/  |_   _| \\ | |_   _/  ___| | | ||  ___| |    | |    \n");
+	printf("| .  . | | | |  \\| | | | \\ `--.| |_| || |__ | |    | |    \n");
+	printf("| |\\/| | | | | . ` | | |  `--. \\  _  ||  __|| |    | |    \n");
+	printf("| |  | |_| |_| |\\  |_| |_/\\__/ / | | || |___| |____| |____\n");
+	printf("\\_|  |_/\\___/\\_| \\_/\\___/\\");
+	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
 void	builtins(char *line, char **env, int *exit_code)
@@ -32,41 +27,40 @@ void	builtins(char *line, char **env, int *exit_code)
 		exec_cmds(line);
 }
 
-char	*get_lines(char *line)
+char	*set_prompt_arg(char *user_name)
 {
-	char	*new_line;
-	char	*temp;
-	char	*res;
-	// int		i;
+	char	*prompt_arg;
+	char	*pwd;
+	char	*dollar_sign;
 
-	// i = 0;
-	new_line = readline(">");
-	res = ft_strjoin_middle(line, '\n', new_line);
-	while (check_quote(new_line) % 2 == 0)
-	{
-		temp = ft_strdup(res);
-		free(res);
-		new_line = readline(">");
-		res = ft_strjoin_middle(temp, '\n', new_line);
-		free(temp);
-	}
-	free(new_line);
-	return (res);
+	dollar_sign = ft_strdup("$ ");
+	prompt_arg = ft_strjoin(user_name, ":");
+	pwd = getcwd(NULL, 0);
+	prompt_arg = ft_stradd(prompt_arg, pwd);
+	prompt_arg = ft_stradd(prompt_arg, dollar_sign);
+	free(pwd);
+	free(dollar_sign);
+	return (prompt_arg);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
+	char	*user_name;
+	char	*prompt_arg;
 	int		exit_code;
 
 	(void) argc;
 	(void) argv;
 	(void) env;
+	print_minishell();
 	exit_code = 1;
 	line = NULL;
+	user_name = getenv("USER");
 	while (exit_code == 1)
 	{
-		line = readline(">");
+		prompt_arg = set_prompt_arg(user_name);
+		line = readline(prompt_arg);
 		if (ft_strlen(line) > 0)
 		{
 			if (check_quote(line) % 2 != 0)
@@ -74,6 +68,7 @@ int	main(int argc, char **argv, char **env)
 			builtins(line, env, &exit_code);
 		}
 	}
+	free(prompt_arg);
 	return (0);
 }
 

@@ -26,5 +26,7 @@ char	*get_next_path(char *arr, char *str);
 char	**fill_arg(char *path, char *argv);
 char	*ft_stradd(char *s1, char *s2);
 char	*ft_add_end_space(char *str);
+int		check_quote(char *str);
+char	*get_lines(char *line);
 
 #endif

@@ -9,6 +9,8 @@ int	is_redirected(char *str)
 	{
 		if (str[i] == '<')
 			return (1);
+		else if (str[i] == '>')
+			return (2);
 		i++;
 	}
 	return (0);
