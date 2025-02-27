@@ -37,3 +37,30 @@ char	*get_lines(char *line)
 	free(new_line);
 	return (res);
 }
+
+int	ft_strfind(char *s1, char *s2)
+{
+	int	i;
+	int	j;
+	int	s2_size;
+
+	i = 0;
+	s2_size = ft_strlen(s2);
+	while (s1[i])
+	{
+		j = 0;
+		if (s1[i] == s2[j])
+		{
+			while (s1[i] == s2[j])
+			{
+				j++;
+				i++;
+			}
+			if (j == s2_size)
+				return (1);
+		}
+		else
+			i++;
+	}
+	return (0);
+}

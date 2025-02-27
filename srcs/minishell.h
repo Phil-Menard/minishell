@@ -29,6 +29,7 @@ char	*ft_add_end_space(char *str);
 int		find_occurences(char *str, char c);
 int		check_quote(char *str);
 char	*get_lines(char *line);
+int		ft_strfind(char *s1, char *s2);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
 void	redir_input(char *str, int *pipefd, char *path, char **arg);
