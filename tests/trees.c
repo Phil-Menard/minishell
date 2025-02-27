@@ -19,13 +19,27 @@ void	ft_free_list(t_tree *tree)
 	free(tree);
 }
 
-void	ft_print_list(t_tree *tree)
+void ft_print_tree(t_tree *root, int space)
 {
-	if (!tree)
-		return ;
-	printf("%s", tree->cmd);
-	ft_print_list(tree->left);
-	ft_print_list(tree->right);
+	int i;
+
+	if (!root)
+		return;
+
+	// Augmenter l'indentation pour le niveau suivant
+	space += 5;
+
+	// Afficher d'abord le sous-arbre droit
+	ft_print_tree(root->right, space);
+
+	// Afficher le nœud courant avec indentation
+	printf("\n");
+	for (i = 5; i < space; i++)
+		printf(" ");
+	printf("%s\n", root->cmd);
+
+	// Afficher ensuite le sous-arbre gauche
+	ft_print_tree(root->left, space);
 }
 
 t_tree	*ft_new_node(char *cmd)
@@ -71,10 +85,11 @@ int	main(void)
 	tree->right = NULL;
 	tree->cmd = "echo ";
 	ft_add_node_end(tree, "left", "-e ");
-	ft_add_node_end(tree, "left", "left \n");
 	ft_add_node_end(tree, "right", "-e ");
 	ft_add_node_end(tree, "right", "right ");
-	ft_print_list(tree);
+	ft_add_node_end(tree, "right", "| ");
+	ft_add_node_end(tree, "right", "ls ");
+	ft_print_tree(tree, 0);
 	ft_free_list(tree);
 	return (0);
 }
