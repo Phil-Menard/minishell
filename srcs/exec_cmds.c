@@ -82,7 +82,7 @@ void	exec_cmds(char *str)
 	int		redirection;
 
 	redirection = is_redirected(str);
-	if (redirection > 0)
+	if (redirection >= 0)
 		prepare_redir(str, redirection);
 	else
 	{

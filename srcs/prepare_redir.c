@@ -2,18 +2,14 @@
 
 int	is_redirected(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '<')
-			return (1);
-		else if (str[i] == '>')
-			return (2);
-		i++;
-	}
-	return (0);
+	if (strrchr(str, '<') != NULL && strrchr(str, '>') != NULL)
+		return (0);
+	else if (strrchr(str, '<') != NULL && strrchr(str, '>') == NULL)
+		return (1);
+	else if (strrchr(str, '<') == NULL && strrchr(str, '>') != NULL)
+		return (2);
+	else
+		return (-1);
 }
 
 char	*str_without_redir(char *str)
@@ -105,7 +101,9 @@ void	prepare_redir(char *str, int redirection)
 	free(line);
 	if (pipe(pipefd) == -1)
 		return (perror("pipe"), exit(EXIT_FAILURE));
-	if (redirection == 1)
+	if (redirection == 0)
+		redir_in_and_out(str, pipefd, path, arg);
+	else if (redirection == 1)
 		redir_input(str, pipefd, path, arg);
 	else if (redirection == 2)
 		redir_output(str, pipefd, path, arg);
