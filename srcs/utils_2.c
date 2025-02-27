@@ -1,33 +1,39 @@
 #include "minishell.h"
 
-void	free_db_array(char **arr)
+int	check_quote(char *str)
 {
 	int	i;
+	int	quote;
 
+	quote = 0;
 	i = 0;
-	while (arr[i])
+	while (str[i])
 	{
-		free(arr[i]);
+		if (str[i] == '"')
+			quote++;
 		i++;
 	}
-	free(arr);
+	return (quote);
 }
 
-// static int	ft_countnbstring(char const *s, char c)
-// {
-// 	int	i;
-// 	int	count;
+char	*get_lines(char *line)
+{
+	char	*new_line;
+	char	*temp;
+	char	*res;
+	// int		i;
 
-// 	i = 0;
-// 	count = 0;
-// 	while (s[i])
-// 	{
-// 		while (s[i] && s[i] == c)
-// 			i++;
-// 		if (s[i])
-// 			count++;
-// 		while (s[i] && s[i] != c)
-// 			i++;
-// 	}
-// 	return (count);
-// }
+	// i = 0;
+	new_line = readline(">");
+	res = ft_strjoin_middle(line, '\n', new_line);
+	while (check_quote(new_line) % 2 == 0)
+	{
+		temp = ft_strdup(res);
+		free(res);
+		new_line = readline(">");
+		res = ft_strjoin_middle(temp, '\n', new_line);
+		free(temp);
+	}
+	free(new_line);
+	return (res);
+}
