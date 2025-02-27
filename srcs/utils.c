@@ -76,3 +76,19 @@ void	free_db_array(char **arr)
 	}
 	free(arr);
 }
+
+int	find_occurences(char *str, char c)
+{
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
+}

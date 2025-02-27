@@ -26,6 +26,7 @@ char	*get_next_path(char *arr, char *str);
 char	**fill_arg(char *path, char *argv);
 char	*ft_stradd(char *s1, char *s2);
 char	*ft_add_end_space(char *str);
+int		find_occurences(char *str, char c);
 int		check_quote(char *str);
 char	*get_lines(char *line);
 char	*get_infile(char *str);
@@ -33,5 +34,6 @@ char	*get_outfile(char *str);
 void	redir_input(char *str, int *pipefd, char *path, char **arg);
 void	redir_output(char *str, int *pipefd, char *path, char **arg);
 void	redir_in_and_out(char *str, int *pipefd, char *path, char **arg);
+void	redir_output_append(char *str, int *pipefd, char *path, char **arg);
 
 #endif

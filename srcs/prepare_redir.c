@@ -7,7 +7,12 @@ int	is_redirected(char *str)
 	else if (strrchr(str, '<') != NULL && strrchr(str, '>') == NULL)
 		return (1);
 	else if (strrchr(str, '<') == NULL && strrchr(str, '>') != NULL)
-		return (2);
+	{
+		if (find_occurences(str, '>') == 2)
+			return (3);
+		else
+			return (2);
+	}
 	else
 		return (-1);
 }
@@ -107,6 +112,8 @@ void	prepare_redir(char *str, int redirection)
 		redir_input(str, pipefd, path, arg);
 	else if (redirection == 2)
 		redir_output(str, pipefd, path, arg);
+	else if (redirection == 3)
+		redir_output_append(str, pipefd, path, arg);
 	close(pipefd[0]);
 	close(pipefd[1]);
 	free_db_array(arg);
