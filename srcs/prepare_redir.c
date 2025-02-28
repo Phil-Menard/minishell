@@ -2,11 +2,11 @@
 
 int	is_redirected(char *str)
 {
-	if (strrchr(str, '<') != NULL && strrchr(str, '>') != NULL)
+	if (find_occurences(str, '<') > 0 && find_occurences(str, '>') > 0)
 		return (0);
-	else if (strrchr(str, '<') != NULL && strrchr(str, '>') == NULL)
+	else if (find_occurences(str, '<') > 0 && find_occurences(str, '>') == 0)
 		return (1);
-	else if (strrchr(str, '<') == NULL && strrchr(str, '>') != NULL)
+	else if (find_occurences(str, '<') == 0 && find_occurences(str, '>') > 0)
 	{
 		if (find_occurences(str, '>') == 2)
 			return (3);
@@ -28,7 +28,8 @@ char	*str_without_redir(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (ft_strrchr(arr[i], '<') == NULL && ft_strrchr(arr[i], '>') == NULL)
+		if (find_occurences(arr[i], '<') == 0
+			&& find_occurences(arr[i], '>') == 0)
 		{
 			if (res)
 				res = ft_add_end_space(res);
@@ -54,7 +55,7 @@ char	*get_infile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (ft_strrchr(arr[i], '<') != NULL)
+		if (find_occurences(arr[i], '<') == 0)
 		{
 			i++;
 			res = ft_strdup(arr[i]);
@@ -79,7 +80,7 @@ char	*get_outfile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (ft_strrchr(arr[i], '>') != NULL)
+		if (find_occurences(arr[i], '>') == 0)
 		{
 			i++;
 			res = ft_strdup(arr[i]);

@@ -17,7 +17,7 @@ void	builtins(char *line, char **env, int *exit_code)
 		ft_pwd(); // print actual working
 	else if (ft_strncmp(line, "env", 3) == 0)
 		ft_env(env); // print the env
-	else if (ft_strfind(line, "echo") == 1)
+	else if (ft_strncmp(line, "echo", 4) == 0)
 		ft_echo(line);
 	else if (ft_strncmp(line, "cd", 2) == 0)
 		ft_cd(line);

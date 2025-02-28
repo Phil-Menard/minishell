@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	handle_var(char *str, int *x)
+void	handle_var(char *str, int *x, int fd)
 {
 	char	*var;
 	char	*res;
@@ -18,50 +18,45 @@ void	handle_var(char *str, int *x)
 	*x = i - 1;
 	res = getenv(var);
 	if (res)
-	{
-		i = 0;
-		while (res[i])
-		{
-			write(1, &res[i], 1);
-			i++;
-		}
-	}
+		ft_putstr_fd(res, fd);
 	free(var);
 }
 
-void	echo_loop(char *str, int i, int quote)
+void	echo_loop(char *str, int i, int fd)
 {
 	while (str[i])
 	{
-		if (str[i] == '"')
-			quote++;
-		else if (str[i] == '$')
+		if (str[i] == '$')
 		{
 			i++;
-			handle_var(str, &i);
+			handle_var(str, &i, fd);
 		}
 		else
-			write(1, &str[i], 1);
+			ft_putchar_fd(str[i], fd);
 		i++;
 	}
 }
 
 void	ft_echo(char *str)
 {
-	int	i;
-	int	option;
-	int	quote;
+	int		i;
+	int		option;
+	int		fd;
+	char	*fd_name;
 
-	quote = 0;
+	fd = 1;
 	option = 0;
 	if (ft_strncmp(str, "echo -n", 7) == 0)
 	{
-		i = 7;
+		i = 8;
 		option = 1;
 	}
 	else
 		i = 5;
-	echo_loop(str, i, quote);
+	fd_name = get_outfile(str);
+	if (is_redirected(str) == 2)
+		fd = open(fd_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	echo_loop(str, i, fd);
 	if (option == 0)
 		printf("\n");
 }
