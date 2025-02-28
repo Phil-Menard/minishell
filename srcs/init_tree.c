@@ -27,13 +27,13 @@ void	ft_add_node_end(t_tree *tree, const char *way, char *cmd)
 	t_tree	*cur;
 
 	cur = tree;
-	if (strcmp(way, "left") == 0)
+	if (ft_strcmp(way, "left") == 0)
 	{
 		while (cur->left != NULL)
 			cur = cur->left;
 		cur->left = ft_new_node(cmd);
 	}
-	else if (strcmp(way, "right") == 0)
+	else if (ft_strcmp(way, "right") == 0)
 	{
 		while (cur->right != NULL)
 			cur = cur->right;
