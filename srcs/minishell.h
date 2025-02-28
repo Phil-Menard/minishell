@@ -10,6 +10,13 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
+typedef struct s_tree
+{
+	char			*cmd;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}					t_tree;
+
 void	ft_pwd(void);
 void	ft_env(char **env);
 void	ft_echo(char *str);
