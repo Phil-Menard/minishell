@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	redir_input(char *str, int *pipefd, char *path, char **arg)
+void	redir_input(char *str, char *path, char **arg)
 {
 	int		id;
 	int		infile;
@@ -13,11 +13,8 @@ void	redir_input(char *str, int *pipefd, char *path, char **arg)
 	id = fork();
 	if (id == 0)
 	{
-		pipefd[0] = infile;
-		close(pipefd[1]);
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		if (dup2(infile, STDIN_FILENO) == -1)
 			exit(EXIT_FAILURE);
-		close(pipefd[0]);
 		ft_execve(path, arg);
 	}
 	else
@@ -28,7 +25,7 @@ void	redir_input(char *str, int *pipefd, char *path, char **arg)
 	}
 }
 
-void	redir_output(char *str, int *pipefd, char *path, char **arg)
+void	redir_output(char *str, char *path, char **arg)
 {
 	int		id;
 	int		outfile;
@@ -41,10 +38,8 @@ void	redir_output(char *str, int *pipefd, char *path, char **arg)
 	id = fork();
 	if (id == 0)
 	{
-		pipefd[1] = outfile;
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (dup2(outfile, STDOUT_FILENO) == -1)
 			exit(EXIT_FAILURE);
-		close(pipefd[1]);
 		ft_execve(path, arg);
 	}
 	else
@@ -55,7 +50,7 @@ void	redir_output(char *str, int *pipefd, char *path, char **arg)
 	}
 }
 
-void	redir_output_append(char *str, int *pipefd, char *path, char **arg)
+void	redir_output_append(char *str, char *path, char **arg)
 {
 	int		id;
 	int		outfile;
@@ -68,10 +63,8 @@ void	redir_output_append(char *str, int *pipefd, char *path, char **arg)
 	id = fork();
 	if (id == 0)
 	{
-		pipefd[1] = outfile;
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (dup2(outfile, STDOUT_FILENO) == -1)
 			exit(EXIT_FAILURE);
-		close(pipefd[1]);
 		ft_execve(path, arg);
 	}
 	else
@@ -82,21 +75,17 @@ void	redir_output_append(char *str, int *pipefd, char *path, char **arg)
 	}
 }
 
-void	pipe_me_that(int *pipefd, char *path, char **arg, int id)
+void	double_redir(char *path, char **arg, int infile, int outfile)
 {
-	if (id == 0)
-	{
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
-			exit(EXIT_FAILURE);
-		close(pipefd[0]);
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-			exit(EXIT_FAILURE);
-		close(pipefd[1]);
-		ft_execve(path, arg);
-	}
+	
+	if (dup2(infile, STDIN_FILENO) == -1)
+		exit(EXIT_FAILURE);
+	if (dup2(outfile, STDOUT_FILENO) == -1)
+		exit(EXIT_FAILURE);
+	ft_execve(path, arg);
 }
 
-void	redir_in_and_out(char *str, int *pipefd, char *path, char **arg)
+void	redir_in_and_out(char *str, char *path, char **arg)
 {
 	int		id;
 	int		infile;
@@ -116,9 +105,8 @@ void	redir_in_and_out(char *str, int *pipefd, char *path, char **arg)
 	if (outfile == -1)
 		perror(outfile_name);
 	id = fork();
-	pipefd[0] = infile;
-	pipefd[1] = outfile;
-	pipe_me_that(pipefd, path, arg, id);
+	if (id == 0)
+		double_redir(path, arg, infile, outfile);
 	wait(NULL);
 	close(outfile);
 	free(outfile_name);

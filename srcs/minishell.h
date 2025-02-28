@@ -32,9 +32,9 @@ char	*get_lines(char *line);
 int		ft_strfind(char *s1, char *s2);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
-void	redir_input(char *str, int *pipefd, char *path, char **arg);
-void	redir_output(char *str, int *pipefd, char *path, char **arg);
-void	redir_in_and_out(char *str, int *pipefd, char *path, char **arg);
-void	redir_output_append(char *str, int *pipefd, char *path, char **arg);
+void	redir_input(char *str, char *path, char **arg);
+void	redir_output(char *str, char *path, char **arg);
+void	redir_in_and_out(char *str, char *path, char **arg);
+void	redir_output_append(char *str, char *path, char **arg);
 
 #endif

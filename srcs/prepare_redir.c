@@ -98,24 +98,19 @@ void	prepare_redir(char *str, int redirection)
 	char	*path;
 	char	**arg;
 	char	*line;
-	int		pipefd[2];
 
 	line = str_without_redir(str);
 	path = get_right_path(line);
 	arg = fill_arg(path, line);
 	free(line);
-	if (pipe(pipefd) == -1)
-		return (perror("pipe"), exit(EXIT_FAILURE));
 	if (redirection == 0)
-		redir_in_and_out(str, pipefd, path, arg);
+		redir_in_and_out(str, path, arg);
 	else if (redirection == 1)
-		redir_input(str, pipefd, path, arg);
+		redir_input(str, path, arg);
 	else if (redirection == 2)
-		redir_output(str, pipefd, path, arg);
+		redir_output(str, path, arg);
 	else if (redirection == 3)
-		redir_output_append(str, pipefd, path, arg);
-	close(pipefd[0]);
-	close(pipefd[1]);
+		redir_output_append(str, path, arg);
 	free_db_array(arg);
 	free(path);
 }
