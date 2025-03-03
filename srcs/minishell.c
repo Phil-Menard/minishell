@@ -27,15 +27,6 @@ void	builtins(char *line, char **env, int *exit_code)
 		exec_cmds(line);
 }
 
-/*
-! Obligatoirement le premier mot = cmd
-! Second peut etre : option (option sont connus) ou un arg/str
-*/
-void	builtins_v2(char *line, char **env, int *exit_code)
-{
-	char	**split
-}
-
 char	*set_prompt_arg(char *user_name)
 {
 	char	*prompt_arg;

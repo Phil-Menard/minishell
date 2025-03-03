@@ -13,7 +13,6 @@
 typedef struct s_tree
 {
 	char			*cmd;
-	char			*option;
 	char			*arg;
 	struct s_tree	*left;
 	struct s_tree	*right;
