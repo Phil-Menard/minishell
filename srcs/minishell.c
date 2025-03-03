@@ -22,7 +22,7 @@ void	builtins(char *line, char **env, int *exit_code)
 		fd[i] = 1;
 	fd = set_fd(line, fd);
 	if (ft_strncmp(line, "pwd", 3) == 0)
-		ft_pwd();
+		ft_pwd(fd);
 	else if (ft_strncmp(line, "env", 3) == 0)
 		ft_env(env, fd);
 	else if (ft_strncmp(line, "echo", 4) == 0)

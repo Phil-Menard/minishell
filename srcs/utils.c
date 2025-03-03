@@ -26,7 +26,7 @@ char	*ft_join_mid(char *s1, char slash, char *s2)
 		j++;
 	}
 	ptr[i] = '\0';
-	return (free(s1), free(s2), ptr);
+	return (ptr);
 }
 
 //ADD A STRING AT THE END OF A STRING

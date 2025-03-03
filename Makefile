@@ -17,7 +17,7 @@ SRC = minishell.c \
 	exec_cmds.c \
 	prepare_redir.c \
 	redirections.c \
-	utils_fd.c
+	utils_fd.c \
 	init_tree.c
 
 # Ajout des préfixes de dossiers

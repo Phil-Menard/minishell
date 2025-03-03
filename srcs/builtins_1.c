@@ -41,7 +41,7 @@ void	ft_cd(char *str)
 	char	*path;
 	int		i;
 
-	arr = ft_split(str, ' ');
+	arr = ft_split(str, " ");
 	i = 1;
 	if (arr[i] == NULL)
 		path = getenv("HOME");

@@ -75,20 +75,22 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 
 void	ft_execute(char *line, char **env, int *exit_code)
 {
-	char	**split;
-	int		count;
 	t_tree	*tree;
+	char	**split;
+	char	*str;
+	int		count;
 
 	split = ft_split(line, " ");
 	count = 0;
+	str = NULL;
 	while (split[count])
-		count++;
-	if (count > 1)
 	{
-		while (--count != 1)
-			split[count - 1] = ft_join_mid(split[count - 1], ' ', split[count]);
+		str = ft_straddstr(str, split[count]);
+		if (split[count + 1])
+			str = ft_straddchar(str, ' ');
+		count++;
 	}
-	tree = ft_new_node(split[0]);
-	printf("%s\n", tree->cmd);
+	tree = ft_new_node(str);
+	printf("tree->cmd : %s\n", tree->cmd);
 	builtins(tree->cmd, env, exit_code);
 }
