@@ -16,7 +16,7 @@ void	ft_env(char **env);
 void	ft_echo(char *str);
 void	ft_cd(char *str);
 void	ft_exit(int *exit_code);
-void	exec_cmds(char *str);
+void	exec_cmds(char *str, int *fd);
 //---------------UTILS FUNCTIONS--------------------
 char	*ft_strjoin_middle(char const *s1, char slash, char const *s2);
 void	free_db_array(char **arr);
@@ -25,6 +25,7 @@ char	*ft_straddstr(char *s1, char *s2);
 int		ft_strfind(char *s1, char *s2);
 char	*ft_straddchar(char *str, char c);
 int		find_occurences(char *str, char c);
+void	close_multiple_fd(int *fd);
 //---------------HANDLE CMDS EXCEPT BUILTINS--------------------
 void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
@@ -34,13 +35,14 @@ int		check_quote(char *str);
 char	*get_lines(char *line);
 //---------------HANDLE REDIRECTIONS--------------------
 int		is_redirected(char *str);
-void	prepare_redir(char *str, int redirection);
+void	prepare_redir(char *str, int redirection, int *fd);
 char	*str_without_redir(char *str);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
-void	redir_input(char *str, char *path, char **arg);
-void	redir_output(char *str, char *path, char **arg);
-void	redir_in_and_out(char *str, char *path, char **arg);
-void	redir_output_append(char *str, char *path, char **arg);
+void	redir_input(char *path, char **arg, int *fd);
+void	redir_output(char *path, char **arg, int *fd);
+void	redir_output_append(char *path, char **arg, int *fd);
+void	redir_in_and_simple_out(char *path, char **arg, int *fd);
+void	redir_in_and_double_out(char *path, char **arg, int *fd);
 
 #endif
