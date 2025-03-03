@@ -30,7 +30,7 @@ char	*str_without_redir(char *str)
 	char	*res;
 	int		i;
 
-	arr = ft_split(str, ' ');
+	arr = ft_split(str, " ");
 	i = 0;
 	res = NULL;
 	while (arr[i])
@@ -58,7 +58,7 @@ char	*get_infile(char *str)
 	char	*res;
 	int		i;
 
-	arr = ft_split(str, ' ');
+	arr = ft_split(str, " ");
 	i = 0;
 	res = NULL;
 	while (arr[i])
@@ -83,7 +83,7 @@ char	*get_outfile(char *str)
 	char	*res;
 	int		i;
 
-	arr = ft_split(str, ' ');
+	arr = ft_split(str, " ");
 	i = 0;
 	res = NULL;
 	while (arr[i])

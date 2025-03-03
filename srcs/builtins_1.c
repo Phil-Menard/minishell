@@ -1,13 +1,12 @@
 #include "minishell.h"
 
-void	ft_pwd(int *fd)
+void	ft_pwd(void)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
 	if (path)
 	{
-		ft_putstr_fd(path, fd[1]);
 		printf("%s\n", path);
 		free(path);
 	}

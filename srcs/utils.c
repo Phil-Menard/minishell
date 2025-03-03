@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //SAME AS STR_JOIN, BUT ADD A CHAR BETWEEN THE 2 STRINGS
-char	*ft_strjoin_middle(char const *s1, char slash, char const *s2)
+char	*ft_join_mid(char *s1, char slash, char *s2)
 {
 	char	*ptr;
 	int		i;
@@ -26,7 +26,7 @@ char	*ft_strjoin_middle(char const *s1, char slash, char const *s2)
 		j++;
 	}
 	ptr[i] = '\0';
-	return (ptr);
+	return (free(s1), free(s2), ptr);
 }
 
 //ADD A STRING AT THE END OF A STRING

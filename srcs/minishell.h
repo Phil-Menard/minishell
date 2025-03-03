@@ -17,6 +17,7 @@ typedef struct s_tree
 	struct s_tree	*right;
 }					t_tree;
 
+void	ft_execute(char *line, char **env, int *exit_code);
 //---------------BUILTINS COMMANDS--------------------
 void	ft_pwd(void);
 void	ft_env(char **env);
@@ -26,7 +27,7 @@ void	ft_exit(int *exit_code);
 void	exec_cmds(char *str, int *fd);
 void	builtins(char *line, char **env, int *exit_code);
 //---------------UTILS FUNCTIONS--------------------
-char	*ft_strjoin_middle(char const *s1, char slash, char const *s2);
+char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
 char	**fill_arg(char *path, char *argv);
 char	*ft_straddstr(char *s1, char *s2);

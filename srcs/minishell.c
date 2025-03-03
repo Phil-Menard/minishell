@@ -45,7 +45,7 @@ void	builtins(char *line, char **env, int *exit_code)
 		fd[i] = 1;
 	fd = check_redir(line, fd);
 	if (ft_strncmp(line, "pwd", 3) == 0)
-		ft_pwd(fd);
+		ft_pwd();
 	else if (ft_strncmp(line, "env", 3) == 0)
 		ft_env(env);
 	else if (ft_strncmp(line, "echo", 4) == 0)
@@ -96,7 +96,8 @@ int	main(int argc, char **argv, char **env)
 		prompt_arg = set_prompt_arg();
 		line = readline(prompt_arg);
 		if (ft_strlen(line) > 0)
-			builtins(line, env, &exit_code);
+			ft_execute(line, env, &exit_code); // *fonction qui va appeler tout le reste
+			// builtins(line, env, &exit_code);
 	}
 	free(prompt_arg);
 	return (0);

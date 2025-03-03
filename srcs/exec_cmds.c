@@ -18,7 +18,7 @@ char	**fill_arg(char *path, char *argv)
 
 	if (!path)
 		return (NULL);
-	arg = ft_split(argv, ' ');
+	arg = ft_split(argv, " ");
 	free(arg[0]);
 	arg[0] = ft_strdup(path);
 	return (arg);
@@ -32,7 +32,7 @@ char	*get_next_path(char *arr, char *str)
 
 	if (ft_strrchr(str, '/') != NULL)
 	{
-		args = ft_split(str, ' ');
+		args = ft_split(str, " ");
 		cmd = ft_strdup(args[0]);
 		free_db_array(args);
 		if (access(cmd, X_OK) != 0)
@@ -43,10 +43,10 @@ char	*get_next_path(char *arr, char *str)
 		}
 		return (cmd);
 	}
-	args = ft_split(str, ' ');
+	args = ft_split(str, " ");
 	cmd = ft_strdup(args[0]);
 	free_db_array(args);
-	path = ft_strjoin_middle(arr, '/', cmd);
+	path = ft_join_mid(arr, '/', cmd);
 	free(cmd);
 	return (path);
 }
@@ -59,7 +59,7 @@ char	*get_right_path(char *str)
 	char	**arr;
 
 	i = 0;
-	arr = ft_split(getenv("PATH"), ':');
+	arr = ft_split(getenv("PATH"), ":");
 	i = 0;
 	while (arr[i])
 	{
