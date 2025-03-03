@@ -37,23 +37,24 @@ void	ft_env(char **env, int *fd)
 
 void	ft_cd(char *str)
 {
+	char	**arr;
 	char	*path;
+	int		i;
 
-	while (*str != ' ' && *str)
-		str++;
-	if (*str == '\0')
+	arr = ft_split(str, ' ');
+	i = 1;
+	if (arr[i] == NULL)
 		path = getenv("HOME");
 	else
-	{
-		str++;
-		path = ft_strdup(str);
-	}
-	if (chdir(path) == -1)
+		path = ft_strdup(arr[i]);
+	if (arr[++i] != NULL)
+		ft_putstr_fd("cd: too many arguments\n", 1);
+	else if (chdir(path) == -1)
 		perror("chdir");
 }
 
 void	ft_exit(int *exit_code)
 {
-	printf("exit\n");
+	ft_putstr_fd("exit\n", 1);
 	*exit_code = 0;
 }
