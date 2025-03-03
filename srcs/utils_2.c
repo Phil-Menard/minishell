@@ -66,3 +66,16 @@ int	ft_strfind(char *s1, char *s2)
 	}
 	return (0);
 }
+
+void	close_multiple_fd(int *fd)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (fd[i] != 1 && fd[i] != -1)
+			close(fd[i]);
+		i++;
+	}
+}

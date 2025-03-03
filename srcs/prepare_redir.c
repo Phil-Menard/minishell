@@ -3,16 +3,21 @@
 //CHECK IF THERE IS A REDIRECTION
 int	is_redirected(char *str)
 {
-	if (find_occurences(str, '<') > 0 && find_occurences(str, '>') > 0)
-		return (0);
-	else if (find_occurences(str, '<') > 0 && find_occurences(str, '>') == 0)
-		return (1);
-	else if (find_occurences(str, '<') == 0 && find_occurences(str, '>') > 0)
+	if (find_occurences(str, '<') == 1)
 	{
-		if (find_occurences(str, '>') == 2)
-			return (3);
+		if (find_occurences(str, '>') == 1)
+			return (0);
+		else if (find_occurences(str, '>') == 2)
+			return (4);
 		else
+			return (1);
+	}
+	else if (find_occurences(str, '>') > 0)
+	{
+		if (find_occurences(str, '>') == 1)
 			return (2);
+		else
+			return (3);
 	}
 	else
 		return (-1);
@@ -58,7 +63,7 @@ char	*get_infile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (find_occurences(arr[i], '<') == 0)
+		if (find_occurences(arr[i], '<') > 0)
 		{
 			i++;
 			res = ft_strdup(arr[i]);
@@ -68,7 +73,6 @@ char	*get_infile(char *str)
 		i++;
 	}
 	free_db_array(arr);
-	free(str);
 	return (res);
 }
 
@@ -94,11 +98,10 @@ char	*get_outfile(char *str)
 		i++;
 	}
 	free_db_array(arr);
-	free(str);
 	return (res);
 }
 
-void	prepare_redir(char *str, int redirection)
+void	prepare_redir(char *str, int redirection, int *fd)
 {
 	char	*path;
 	char	**arg;
@@ -109,13 +112,13 @@ void	prepare_redir(char *str, int redirection)
 	arg = fill_arg(path, line);
 	free(line);
 	if (redirection == 0)
-		redir_in_and_out(str, path, arg);
+		redir_in_and_simple_out(path, arg, fd);
 	else if (redirection == 1)
-		redir_input(str, path, arg);
+		redir_input(path, arg, fd);
 	else if (redirection == 2)
-		redir_output(str, path, arg);
+		redir_output(path, arg, fd);
 	else if (redirection == 3)
-		redir_output_append(str, path, arg);
+		redir_output_append(path, arg, fd);
 	free_db_array(arg);
 	free(path);
 }

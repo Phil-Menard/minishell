@@ -76,7 +76,7 @@ char	*get_right_path(char *str)
 	return (NULL);
 }
 
-void	exec_cmds(char *str)
+void	exec_cmds(char *str, int *fd)
 {
 	char	*path;
 	char	**arg;
@@ -85,7 +85,7 @@ void	exec_cmds(char *str)
 
 	redirection = is_redirected(str);
 	if (redirection >= 0)
-		prepare_redir(str, redirection);
+		prepare_redir(str, redirection, fd);
 	else
 	{
 		path = get_right_path(str);

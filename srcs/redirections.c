@@ -1,117 +1,96 @@
 #include "minishell.h"
 
 //EXECVE WITH SIMPLE INPUT : <
-void	redir_input(char *str, char *path, char **arg)
+void	redir_input(char *path, char **arg, int *fd)
 {
-	int		id;
-	int		infile;
-	char	*infile_name;
+	int	id;
 
-	infile_name = get_infile(str);
-	infile = open(infile_name, O_RDONLY);
-	if (infile == -1)
-		perror(infile_name);
 	id = fork();
 	if (id == 0)
 	{
-		if (dup2(infile, STDIN_FILENO) == -1)
+		if (dup2(fd[0], STDIN_FILENO) == -1)
 			exit(EXIT_FAILURE);
 		ft_execve(path, arg);
 	}
 	else
-	{
 		wait(NULL);
-		close(infile);
-		free(infile_name);
-	}
 }
 
 //EXECVE WITH SIMPLE OUTPUT : >
-void	redir_output(char *str, char *path, char **arg)
+void	redir_output(char *path, char **arg, int *fd)
 {
-	int		id;
-	int		outfile;
-	char	*outfile_name;
+	int	id;
 
-	outfile_name = get_outfile(str);
-	outfile = open(outfile_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (outfile == -1)
-		perror(outfile_name);
 	id = fork();
 	if (id == 0)
 	{
-		if (dup2(outfile, STDOUT_FILENO) == -1)
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
 			exit(EXIT_FAILURE);
 		ft_execve(path, arg);
 	}
 	else
-	{
 		wait(NULL);
-		close(outfile);
-		free(outfile_name);
-	}
 }
 
 //EXECVE WITH DOUBLE OUTPUT : >>
-void	redir_output_append(char *str, char *path, char **arg)
+void	redir_output_append(char *path, char **arg, int *fd)
 {
-	int		id;
-	int		outfile;
-	char	*outfile_name;
-
-	outfile_name = get_outfile(str);
-	outfile = open(outfile_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (outfile == -1)
-		perror(outfile_name);
+	int	id;
+	
 	id = fork();
 	if (id == 0)
 	{
-		if (dup2(outfile, STDOUT_FILENO) == -1)
+		if (dup2(fd[2], STDOUT_FILENO) == -1)
 			exit(EXIT_FAILURE);
 		ft_execve(path, arg);
 	}
 	else
-	{
 		wait(NULL);
-		close(outfile);
-		free(outfile_name);
-	}
 }
 
-//CALLED IN REDIR_IN_AND_OUT
-void	double_redir(char *path, char **arg, int infile, int outfile)
+//EXECVE WITH INPUT AND SIMPLE OUTPUT : < / >
+void	redir_in_and_simple_out(char *path, char **arg, int *fd)
 {
-	if (dup2(infile, STDIN_FILENO) == -1)
-		exit(EXIT_FAILURE);
-	if (dup2(outfile, STDOUT_FILENO) == -1)
-		exit(EXIT_FAILURE);
-	ft_execve(path, arg);
-}
+	int	id;
 
-//EXECVE WITH INPUT AND OUTPUT
-void	redir_in_and_out(char *str, char *path, char **arg)
-{
-	int		id;
-	int		infile;
-	char	*infile_name;
-	int		outfile;
-	char	*outfile_name;
-
-	infile_name = get_infile(str);
-	infile = open(infile_name, O_RDONLY);
-	if (infile == -1)
-		perror(infile_name);
-	outfile_name = get_outfile(str);
-	if (find_occurences(str, '>') == 2)
-		outfile = open(outfile_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else
-		outfile = open(outfile_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (outfile == -1)
-		perror(outfile_name);
 	id = fork();
 	if (id == 0)
-		double_redir(path, arg, infile, outfile);
-	wait(NULL);
-	close(outfile);
-	free(outfile_name);
+	{
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+		exit(EXIT_FAILURE);
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			exit(EXIT_FAILURE);
+		ft_execve(path, arg);
+	}
+	else
+		wait(NULL);
+}
+
+//EXECVE WITH INPUT AND DOUBLE OUTPUT : < / >>
+void	redir_in_and_double_out(char *path, char **arg, int *fd)
+{
+	int	id;
+
+	id = fork();
+	if (id == 0)
+	{
+		if (fd[0] != 1)
+		{
+			if (dup2(fd[0], STDIN_FILENO) == -1)
+				exit(EXIT_FAILURE);
+		}
+		if (fd[1] != 1)
+		{
+			if (dup2(fd[1], STDOUT_FILENO) == -1)
+				exit(EXIT_FAILURE);
+		}
+		if (fd[2] != 1)
+		{
+			if (dup2(fd[2], STDOUT_FILENO) == -1)
+				exit(EXIT_FAILURE);
+		}
+		ft_execve(path, arg);
+	}
+	else
+		wait(NULL);
 }
