@@ -1,12 +1,13 @@
 #include "minishell.h"
 
+//CHECK IF THERE IS A REDIRECTION
 int	is_redirected(char *str)
 {
-	if (strrchr(str, '<') != NULL && strrchr(str, '>') != NULL)
+	if (find_occurences(str, '<') > 0 && find_occurences(str, '>') > 0)
 		return (0);
-	else if (strrchr(str, '<') != NULL && strrchr(str, '>') == NULL)
+	else if (find_occurences(str, '<') > 0 && find_occurences(str, '>') == 0)
 		return (1);
-	else if (strrchr(str, '<') == NULL && strrchr(str, '>') != NULL)
+	else if (find_occurences(str, '<') == 0 && find_occurences(str, '>') > 0)
 	{
 		if (find_occurences(str, '>') == 2)
 			return (3);
@@ -17,6 +18,7 @@ int	is_redirected(char *str)
 		return (-1);
 }
 
+//RETURN LINE WITHOUT REDIRECTION
 char	*str_without_redir(char *str)
 {
 	char	**arr;
@@ -28,11 +30,12 @@ char	*str_without_redir(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (ft_strrchr(arr[i], '<') == NULL && ft_strrchr(arr[i], '>') == NULL)
+		if (find_occurences(arr[i], '<') == 0
+			&& find_occurences(arr[i], '>') == 0)
 		{
 			if (res)
-				res = ft_add_end_space(res);
-			res = ft_stradd(res, arr[i]);
+				res = ft_straddchar(res, ' ');
+			res = ft_straddstr(res, arr[i]);
 		}
 		else
 			i++;
@@ -43,6 +46,7 @@ char	*str_without_redir(char *str)
 	return (res);
 }
 
+//GET INFILE NAME
 char	*get_infile(char *str)
 {
 	char	**arr;
@@ -54,7 +58,7 @@ char	*get_infile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (ft_strrchr(arr[i], '<') != NULL)
+		if (find_occurences(arr[i], '<') == 0)
 		{
 			i++;
 			res = ft_strdup(arr[i]);
@@ -68,6 +72,7 @@ char	*get_infile(char *str)
 	return (res);
 }
 
+//GET OUTFILE NAME
 char	*get_outfile(char *str)
 {
 	char	**arr;
@@ -79,7 +84,7 @@ char	*get_outfile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (ft_strrchr(arr[i], '>') != NULL)
+		if (find_occurences(arr[i], '>') > 0)
 		{
 			i++;
 			res = ft_strdup(arr[i]);
@@ -98,24 +103,19 @@ void	prepare_redir(char *str, int redirection)
 	char	*path;
 	char	**arg;
 	char	*line;
-	int		pipefd[2];
 
 	line = str_without_redir(str);
 	path = get_right_path(line);
 	arg = fill_arg(path, line);
 	free(line);
-	if (pipe(pipefd) == -1)
-		return (perror("pipe"), exit(EXIT_FAILURE));
 	if (redirection == 0)
-		redir_in_and_out(str, pipefd, path, arg);
+		redir_in_and_out(str, path, arg);
 	else if (redirection == 1)
-		redir_input(str, pipefd, path, arg);
+		redir_input(str, path, arg);
 	else if (redirection == 2)
-		redir_output(str, pipefd, path, arg);
+		redir_output(str, path, arg);
 	else if (redirection == 3)
-		redir_output_append(str, pipefd, path, arg);
-	close(pipefd[0]);
-	close(pipefd[1]);
+		redir_output_append(str, path, arg);
 	free_db_array(arg);
 	free(path);
 }

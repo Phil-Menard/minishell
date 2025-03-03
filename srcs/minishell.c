@@ -14,9 +14,9 @@ void	print_minishell(void)
 void	builtins(char *line, char **env, int *exit_code)
 {
 	if (ft_strncmp(line, "pwd", 3) == 0)
-		ft_pwd(); // print actual working
+		ft_pwd();
 	else if (ft_strncmp(line, "env", 3) == 0)
-		ft_env(env); // print the env
+		ft_env(env);
 	else if (ft_strncmp(line, "echo", 4) == 0)
 		ft_echo(line);
 	else if (ft_strncmp(line, "cd", 2) == 0)
@@ -45,8 +45,8 @@ char	*set_prompt_arg(char *user_name)
 	dollar_sign = ft_strdup("$ ");
 	prompt_arg = ft_strjoin(user_name, ":");
 	pwd = getcwd(NULL, 0);
-	prompt_arg = ft_stradd(prompt_arg, pwd);
-	prompt_arg = ft_stradd(prompt_arg, dollar_sign);
+	prompt_arg = ft_straddstr(prompt_arg, pwd);
+	prompt_arg = ft_straddstr(prompt_arg, dollar_sign);
 	free(pwd);
 	free(dollar_sign);
 	return (prompt_arg);
