@@ -22,7 +22,7 @@ void	handle_var(char *str, int *x, int fd)
 	free(var);
 }
 
-void	echo_loop(char *str, int i, int fd)
+void	echo_loop(char *str, int i, int fd, int option)
 {
 	while (str[i])
 	{
@@ -35,6 +35,8 @@ void	echo_loop(char *str, int i, int fd)
 			ft_putchar_fd(str[i], fd);
 		i++;
 	}
+	if (option == 0)
+		ft_putchar_fd('\n', fd);
 }
 
 void	ft_echo(char *str)
@@ -43,6 +45,7 @@ void	ft_echo(char *str)
 	int		option;
 	int		fd;
 	char	*fd_name;
+	char	*line;
 
 	fd = 1;
 	option = 0;
@@ -53,10 +56,15 @@ void	ft_echo(char *str)
 	}
 	else
 		i = 5;
-	fd_name = get_outfile(str);
 	if (is_redirected(str) == 2)
+	{
+		fd_name = get_outfile(str);
 		fd = open(fd_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	echo_loop(str, i, fd);
-	if (option == 0)
-		printf("\n");
+		if (fd == -1)
+			perror("fd");
+		line = str_without_redir(str);
+		echo_loop(line, i, fd, option);
+	}
+	else
+		echo_loop(str, i, fd, option);
 }

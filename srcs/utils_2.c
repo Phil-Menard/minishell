@@ -16,6 +16,7 @@ int	check_quote(char *str)
 	return (quote);
 }
 
+//RETURN LINES UNTIL RIGHT NUMBER OF QUOTES ARE PROVIDED
 char	*get_lines(char *line)
 {
 	char	*new_line;
@@ -38,6 +39,7 @@ char	*get_lines(char *line)
 	return (res);
 }
 
+//FIND A STRING IN A STRING
 int	ft_strfind(char *s1, char *s2)
 {
 	int	i;

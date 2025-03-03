@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+//SAME AS STR_JOIN, BUT ADD A CHAR BETWEEN THE 2 STRINGS
 char	*ft_strjoin_middle(char const *s1, char slash, char const *s2)
 {
 	char	*ptr;
@@ -28,7 +29,8 @@ char	*ft_strjoin_middle(char const *s1, char slash, char const *s2)
 	return (ptr);
 }
 
-char	*ft_stradd(char *s1, char *s2)
+//ADD A STRING AT THE END OF A STRING
+char	*ft_straddstr(char *s1, char *s2)
 {
 	char	*res;
 
@@ -45,7 +47,8 @@ char	*ft_stradd(char *s1, char *s2)
 	}
 }
 
-char	*ft_add_end_space(char *str)
+//ADD A CHAR AT THE END OF A STRING
+char	*ft_straddchar(char *str, char c)
 {
 	char	*res;
 	int		i;
@@ -57,7 +60,7 @@ char	*ft_add_end_space(char *str)
 		res[i] = str[i];
 		i++;
 	}
-	res[i] = ' ';
+	res[i] = c;
 	i++;
 	res[i] = '\0';
 	free(str);

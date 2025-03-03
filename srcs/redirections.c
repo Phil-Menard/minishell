@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+//EXECVE WITH SIMPLE INPUT : <
 void	redir_input(char *str, char *path, char **arg)
 {
 	int		id;
@@ -25,6 +26,7 @@ void	redir_input(char *str, char *path, char **arg)
 	}
 }
 
+//EXECVE WITH SIMPLE OUTPUT : >
 void	redir_output(char *str, char *path, char **arg)
 {
 	int		id;
@@ -50,6 +52,7 @@ void	redir_output(char *str, char *path, char **arg)
 	}
 }
 
+//EXECVE WITH DOUBLE OUTPUT : >>
 void	redir_output_append(char *str, char *path, char **arg)
 {
 	int		id;
@@ -75,9 +78,9 @@ void	redir_output_append(char *str, char *path, char **arg)
 	}
 }
 
+//CALLED IN REDIR_IN_AND_OUT
 void	double_redir(char *path, char **arg, int infile, int outfile)
 {
-	
 	if (dup2(infile, STDIN_FILENO) == -1)
 		exit(EXIT_FAILURE);
 	if (dup2(outfile, STDOUT_FILENO) == -1)
@@ -85,6 +88,7 @@ void	double_redir(char *path, char **arg, int infile, int outfile)
 	ft_execve(path, arg);
 }
 
+//EXECVE WITH INPUT AND OUTPUT
 void	redir_in_and_out(char *str, char *path, char **arg)
 {
 	int		id;
