@@ -3,26 +3,34 @@
 void	ft_pwd(int *fd)
 {
 	char	*path;
+	int		fd_out;
 
 	path = getcwd(NULL, 0);
+	path = ft_straddchar(path, '\n');
+	fd_out = get_opened_fd_output(fd);
 	if (path)
 	{
-		ft_putstr_fd(path, fd[1]);
-		printf("%s\n", path);
+		ft_putstr_fd(path, fd_out);
 		free(path);
 	}
 	else
 		perror("path error");
 }
 
-void	ft_env(char **env)
+void	ft_env(char **env, int *fd)
 {
-	int	i;
+	char	*str;
+	int		fd_out;
+	int		i;
 
+	fd_out = get_opened_fd_output(fd);
 	i = 0;
 	while (env[i])
 	{
-		printf("%s\n", env[i]);
+		str = ft_strdup(env[i]);
+		str = ft_straddchar(str, '\n');
+		ft_putstr_fd(str, fd_out);
+		free(str);
 		i++;
 	}
 }

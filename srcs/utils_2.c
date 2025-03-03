@@ -22,9 +22,7 @@ char	*get_lines(char *line)
 	char	*new_line;
 	char	*temp;
 	char	*res;
-	// int		i;
 
-	// i = 0;
 	new_line = readline(">");
 	res = ft_strjoin_middle(line, '\n', new_line);
 	while (check_quote(new_line) % 2 == 0)
@@ -65,17 +63,4 @@ int	ft_strfind(char *s1, char *s2)
 			i++;
 	}
 	return (0);
-}
-
-void	close_multiple_fd(int *fd)
-{
-	int	i;
-
-	i = 0;
-	while (i < 3)
-	{
-		if (fd[i] != 1 && fd[i] != -1)
-			close(fd[i]);
-		i++;
-	}
 }

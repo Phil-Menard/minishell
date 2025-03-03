@@ -111,14 +111,8 @@ void	prepare_redir(char *str, int redirection, int *fd)
 	path = get_right_path(line);
 	arg = fill_arg(path, line);
 	free(line);
-	if (redirection == 0)
-		redir_in_and_simple_out(path, arg, fd);
-	else if (redirection == 1)
-		redir_input(path, arg, fd);
-	else if (redirection == 2)
-		redir_output(path, arg, fd);
-	else if (redirection == 3)
-		redir_output_append(path, arg, fd);
+	if (redirection >= 0)
+		exec_redir(path, arg, fd);
 	free_db_array(arg);
 	free(path);
 }

@@ -22,32 +22,34 @@ void	handle_var(char *str, int *x, int fd)
 	free(var);
 }
 
-void	echo_loop(char *str, int i, int fd, int option)
+void	echo_loop(char *str, int i, int *fd, int option)
 {
+	int	fd_out;
+
+	fd_out = get_opened_fd_output(fd);
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
 			i++;
-			handle_var(str, &i, fd);
+			handle_var(str, &i, fd_out);
 		}
 		else
-			ft_putchar_fd(str[i], fd);
+		{
+			ft_putchar_fd(str[i], fd_out);
+		}
 		i++;
 	}
 	if (option == 0)
-		ft_putchar_fd('\n', fd);
+		ft_putchar_fd('\n', fd_out);
 }
 
-void	ft_echo(char *str)
+void	ft_echo(char *str, int *fd)
 {
 	int		i;
 	int		option;
-	int		fd;
-	char	*fd_name;
 	char	*line;
 
-	fd = 1;
 	option = 0;
 	if (ft_strncmp(str, "echo -n", 7) == 0)
 	{
@@ -56,15 +58,7 @@ void	ft_echo(char *str)
 	}
 	else
 		i = 5;
-	if (is_redirected(str) == 2)
-	{
-		fd_name = get_outfile(str);
-		fd = open(fd_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-			perror("fd");
-		line = str_without_redir(str);
-		echo_loop(line, i, fd, option);
-	}
-	else
-		echo_loop(str, i, fd, option);
+	line = str_without_redir(str);
+	echo_loop(line, i, fd, option);
+	free(line);
 }

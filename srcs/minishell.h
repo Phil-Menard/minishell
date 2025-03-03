@@ -11,9 +11,9 @@
 # include "../libft/libft.h"
 
 //---------------BUILTINS COMMANDS--------------------
-void	ft_pwd(void);
-void	ft_env(char **env);
-void	ft_echo(char *str);
+void	ft_pwd(int *fd);
+void	ft_env(char **env, int *fd);
+void	ft_echo(char *str, int *fd);
 void	ft_cd(char *str);
 void	ft_exit(int *exit_code);
 void	exec_cmds(char *str, int *fd);
@@ -25,7 +25,10 @@ char	*ft_straddstr(char *s1, char *s2);
 int		ft_strfind(char *s1, char *s2);
 char	*ft_straddchar(char *str, char c);
 int		find_occurences(char *str, char c);
+//---------------UTILS FUNCTIONS FOR FD--------------------
+int		*set_fd(char *line, int *fd);
 void	close_multiple_fd(int *fd);
+int		get_opened_fd_output(int *fd);
 //---------------HANDLE CMDS EXCEPT BUILTINS--------------------
 void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
@@ -39,10 +42,6 @@ void	prepare_redir(char *str, int redirection, int *fd);
 char	*str_without_redir(char *str);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
-void	redir_input(char *path, char **arg, int *fd);
-void	redir_output(char *path, char **arg, int *fd);
-void	redir_output_append(char *path, char **arg, int *fd);
-void	redir_in_and_simple_out(char *path, char **arg, int *fd);
-void	redir_in_and_double_out(char *path, char **arg, int *fd);
+void	exec_redir(char *path, char **arg, int *fd);
 
 #endif
