@@ -3,16 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:25:33 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/02/26 14:40:08 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/03/03 16:32:53 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_countnbstring(char const *s, char c)
+static int	is_charset(char c, char *set)
+{
+	while (*set)
+	{
+		if (*set == c)
+			return (1);
+		set++;
+	}
+	return (0);
+}
+
+static int	ft_countnbstring(char const *s, char *charset)
 {
 	int	i;
 	int	count;
@@ -21,17 +32,17 @@ static int	ft_countnbstring(char const *s, char c)
 	count = 0;
 	while (s[i])
 	{
-		while (s[i] && s[i] == c)
+		while (s[i] && is_charset(s[i], charset) == 1)
 			i++;
 		if (s[i])
 			count++;
-		while (s[i] && s[i] != c)
+		while (s[i] && is_charset(s[i], charset) == 0)
 			i++;
 	}
 	return (count);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char *charset)
 {
 	size_t	i;
 	int		j;
@@ -39,17 +50,17 @@ char	**ft_split(char const *s, char c)
 	size_t	start;
 	size_t	end;
 
-	tab = (char **) malloc ((ft_countnbstring(s, c) + 1) * sizeof(char *));
+	tab = (char **) malloc ((ft_countnbstring(s, charset) + 1) * sizeof(char *));
 	if (tab == NULL)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (s[i])
 	{
-		while (s[i] && s[i] == c)
+		while (s[i] && is_charset(s[i], charset) == 1)
 			i++;
 		start = i;
-		while (s[i] && s[i] != c)
+		while (s[i] && is_charset(s[i], charset) == 0)
 			i++;
 		end = i;
 		if (end > start)

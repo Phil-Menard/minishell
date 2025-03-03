@@ -13,7 +13,6 @@
 typedef struct s_tree
 {
 	char			*cmd;
-	char			*arg;
 	struct s_tree	*left;
 	struct s_tree	*right;
 }					t_tree;
@@ -25,6 +24,7 @@ void	ft_echo(char *str);
 void	ft_cd(char *str);
 void	ft_exit(int *exit_code);
 void	exec_cmds(char *str, int *fd);
+void	builtins(char *line, char **env, int *exit_code);
 //---------------UTILS FUNCTIONS--------------------
 char	*ft_strjoin_middle(char const *s1, char slash, char const *s2);
 void	free_db_array(char **arr);

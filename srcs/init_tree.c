@@ -35,7 +35,7 @@ void	ft_free_list(t_tree *tree)
 	free(tree);
 }
 
-t_tree	*ft_new_node(char *cmd, char *arg)
+t_tree	*ft_new_node(char *cmd)
 {
 	t_tree	*node;
 
@@ -45,7 +45,6 @@ t_tree	*ft_new_node(char *cmd, char *arg)
 	node->left = NULL;
 	node->right = NULL;
 	node->cmd = cmd;
-	node->arg = arg;
 	return (node);
 }
 
@@ -54,6 +53,11 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 {
 	t_tree	*cur;
 
+	if (!tree)
+	{
+		tree = node;
+		return ;
+	}
 	cur = tree;
 	if (ft_strcmp(branch, "left") == 0)
 	{
@@ -69,19 +73,7 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 	}
 }
 
-/*	recupere la ligne, split la ligne, creer un node,
-*/
-void	ft_create_branch(char *line)
+void	ft_create_branch(char **split, int count, t_tree *tree, const char *branch)
 {
-	char	**split;
-	int		count;
-
-	split = ft_split(line, ' ');
-	count = 0;
-	while (split[count] != NULL)
-		count++;
-	if (count == 3)
-		split[1] = ft_strjoin_middle(split[1], ' ', split[2]);
-	
-	ft_new_node(split[0], split[1]);
+	// split, join until &&, ||, |
 }
