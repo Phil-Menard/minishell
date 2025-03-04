@@ -4,8 +4,10 @@ void	ft_execve(char *path, char **arg)
 {
 	if (execve(path, arg, NULL) == -1)
 	{
-		free(path);
-		free_db_array(arg);
+		if (path)
+			free(path);
+		if (arg)
+			free_db_array(arg);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
@@ -96,8 +98,10 @@ void	exec_cmds(char *str, int *fd)
 		else
 		{
 			wait(NULL);
-			free_db_array(arg);
-			free(path);
+			if (path)
+				free(path);
+			if (arg)
+				free_db_array(arg);
 		}
 	}
 }
