@@ -32,13 +32,13 @@ all: $(NAME)
 
 # Compilation de l'exécutable
 $(NAME): $(OBJ) $(LIBFT)
-	@echo "🔨 Compiling libraries..."
+	@echo "🔨 Compiling..."
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
-	@echo "✅ Libraries compiled successfully!"
+	@echo "✅ Compiled successfully!"
 
 # Compilation des fichiers objets dans OBJ_DIR
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	@echo "🔧 Compilation de $<..."
+	@echo "🔧 Compiling $<..."
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -c $< -o $@
 
 # Création du dossier OBJ_DIR si nécessaire
@@ -46,7 +46,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT):
-	@echo "📦 Compiling lifbt..."
+	@echo "📦 Adding lifbt..."
 	@make -s -C $(LIBFT_DIR)
 
 # Nettoyage des fichiers objets et du dossier OBJ_DIR
