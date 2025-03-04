@@ -11,7 +11,7 @@ void	ft_execve(char *path, char **arg)
 	}
 }
 
-//PREPARE DOUBLE ARRAY FOR EXECVE
+//prepare double array for execve
 char	**fill_arg(char *path, char *argv)
 {
 	char	**arg;
@@ -51,7 +51,7 @@ char	*get_next_path(char *arr, char *str)
 	return (path);
 }
 
-//FIND CORRECT PATH TO EXECUTE CMD
+//find correct path to execute cmd
 char	*get_right_path(char *str)
 {
 	int		i;

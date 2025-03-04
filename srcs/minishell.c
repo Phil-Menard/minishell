@@ -11,7 +11,7 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	builtins(char *line, char **env, int *exit_code, t_hist **historic)
+void	builtins(char *line, t_env *env, int *exit_code)
 {
 	int	*fd;
 	int	i;
@@ -28,7 +28,7 @@ void	builtins(char *line, char **env, int *exit_code, t_hist **historic)
 	else if (ft_strncmp(line, "echo", 4) == 0)
 		ft_echo(line, fd);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		ft_cd(line, historic);
+		ft_cd(line);
 	else if (ft_strncmp(line, "exit", 4) == 0)
 	{
 		close_multiple_fd(fd);
@@ -58,30 +58,32 @@ char	*set_prompt_arg(void)
 	return (prompt_arg);
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **envp)
 {
-	t_hist	*lst_history;
+	t_env	*env;
 	char	*line;
 	char	*prompt_arg;
 	int		exit_code;
 
 	(void) argc;
 	(void) argv;
-	lst_history = NULL;
+	env = NULL;
+	fill_env(&env, envp);
 	print_minishell();
 	exit_code = 1;
 	while (exit_code == 1)
 	{
 		prompt_arg = set_prompt_arg();
 		line = readline(prompt_arg);
+		add_history(line);
 		if (ft_strlen(line) > 0)
-			ft_execute(line, env, &exit_code, &lst_history); // *fonction qui va appeler tout le reste
+			ft_execute(line, env, &exit_code); // *fonction qui va appeler tout le reste
 			// builtins(line, env, &exit_code);
-		print_hist(lst_history);
 		free(line);
 		free(prompt_arg);
 	}
-	free_historic(lst_history);
+	free_env(env);
+	rl_clear_history();
 	return (0);
 }
 

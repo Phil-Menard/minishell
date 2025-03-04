@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//CHECK IF THERE IS A REDIRECTION
+//check if there is a redirection
 int	is_redirected(char *str)
 {
 	if (find_occurences(str, '<') == 1)
@@ -23,7 +23,7 @@ int	is_redirected(char *str)
 		return (-1);
 }
 
-//RETURN LINE WITHOUT REDIRECTION
+//return line without redirection
 char	*str_without_redir(char *str)
 {
 	char	**arr;
@@ -51,7 +51,7 @@ char	*str_without_redir(char *str)
 	return (res);
 }
 
-//GET INFILE NAME
+//get infile name
 char	*get_infile(char *str)
 {
 	char	**arr;
@@ -76,7 +76,7 @@ char	*get_infile(char *str)
 	return (res);
 }
 
-//GET OUTFILE NAME
+//get outfile name
 char	*get_outfile(char *str)
 {
 	char	**arr;

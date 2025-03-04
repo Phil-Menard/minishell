@@ -17,36 +17,21 @@ void	ft_pwd(int *fd)
 		perror("path error");
 }
 
-void	ft_env(char **env, int *fd)
+void	ft_env(t_env *env, int *fd)
 {
-	char	*str;
 	int		fd_out;
-	int		i;
 
 	fd_out = get_opened_fd_output(fd);
-	i = 0;
-	while (env[i])
-	{
-		str = ft_strdup(env[i]);
-		str = ft_straddchar(str, '\n');
-		ft_putstr_fd(str, fd_out);
-		free(str);
-		i++;
-	}
+	print_env(env, fd_out);
 }
 
-void	ft_cd(char *str, t_hist **historic)
+void	ft_cd(char *str)
 {
-	t_hist	*node;
 	char	**arr;
 	char	*path;
-	int		size;
 
 	arr = ft_split(str, " ");
-	size = 0;
-	while (arr[size])
-		size++;
-	if (size > 2)
+	if (double_arr_len(arr) > 2)
 		ft_putstr_fd("cd: too many arguments\n", 1);
 	else
 	{
@@ -54,10 +39,9 @@ void	ft_cd(char *str, t_hist **historic)
 			path = getenv("HOME");
 		else
 			path = ft_strdup(arr[1]);
+		
 		if (chdir(path) == -1)
 			perror("chdir");
-		node = ft_new_cmd(str);
-		ft_cmdadd_front(historic, node);
 		if (arr[1])
 			free(path);
 	}

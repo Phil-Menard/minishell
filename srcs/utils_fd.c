@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//FD[0] : INPUT / FD[1] : SIMPLE OUTPUT / FD[2] : DOUBLE OUTPUT
+//fd[0] : input | fd[1] : simple output | fd[2] : double output
 int	*set_fd(char *line, int *fd)
 {
 	int		redirection;
@@ -42,7 +42,7 @@ void	close_multiple_fd(int *fd)
 	}
 }
 
-//FIND WHICH FD IS OPENED FOR OUTPUT
+//find which fd is opened for output
 int	get_opened_fd_output(int *fd)
 {
 	if (fd[1] != 1)

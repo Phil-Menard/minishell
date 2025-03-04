@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//EXECVE WITH CORRECT REDIRECTION
+//execve with correct redirection
 void	exec_redir(char *path, char **arg, int *fd)
 {
 	int	id;

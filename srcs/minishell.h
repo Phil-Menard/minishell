@@ -10,12 +10,11 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
-typedef struct s_hist
+typedef struct s_env
 {
-	char			*last_dir;
-	char			*last_cmd;
-	struct s_hist	*next;
-}	t_hist;
+	char			*var;
+	struct s_env	*next;
+}					t_env;
 
 typedef struct s_tree
 {
@@ -24,21 +23,22 @@ typedef struct s_tree
 	struct s_tree	*right;
 }					t_tree;
 
-void	ft_execute(char *line, char **env, int *exit_code, t_hist **historic);
+void	ft_execute(char *line, t_env *env, int *exit_code);
 //---------------BUILTINS COMMANDS--------------------
 void	ft_pwd(int *fd);
-void	ft_env(char **env, int *fd);
+void	ft_env(t_env *env, int *fd);
 void	ft_echo(char *str, int *fd);
-void	ft_cd(char *str, t_hist **historic);
+void	ft_cd(char *str);
 void	ft_exit(int *exit_code);
 void	exec_cmds(char *str, int *fd);
-void	builtins(char *line, char **env, int *exit_code, t_hist **historic);
+void	builtins(char *line, t_env *env, int *exit_code);
 //---------------UTILS FUNCTIONS--------------------
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
 char	**fill_arg(char *path, char *argv);
 char	*ft_straddstr(char *s1, char *s2);
 int		ft_strfind(char *s1, char *s2);
+int		double_arr_len(char **arr);
 char	*ft_straddchar(char *str, char c);
 int		find_occurences(char *str, char c);
 //---------------UTILS FUNCTIONS FOR FD--------------------
@@ -60,9 +60,10 @@ char	*get_infile(char *str);
 char	*get_outfile(char *str);
 void	exec_redir(char *path, char **arg, int *fd);
 //---------------HISTORY CMDS (WORK IN PROGRESS)--------------------
-t_hist	*ft_new_cmd(char *cmd);
-void	ft_cmdadd_front(t_hist **lst, t_hist *new);
-void	print_hist(t_hist *lst);
-void	free_historic(t_hist *lst);
+t_env	*ft_new_env_node(char *content);
+t_env	*fill_env(t_env **lst, char **envp);
+void	ft_env_add_back(t_env **lst, t_env *new);
+void	print_env(t_env *lst, int fd);
+void	free_env(t_env *lst);
 
 #endif

@@ -16,7 +16,7 @@ int	check_quote(char *str)
 	return (quote);
 }
 
-//RETURN LINES UNTIL RIGHT NUMBER OF QUOTES ARE PROVIDED
+//return lines until right number of auotes are provided
 char	*get_lines(char *line)
 {
 	char	*new_line;
@@ -37,7 +37,7 @@ char	*get_lines(char *line)
 	return (res);
 }
 
-//FIND A STRING IN A STRING
+//find s2 in s1
 int	ft_strfind(char *s1, char *s2)
 {
 	int	i;
@@ -63,4 +63,15 @@ int	ft_strfind(char *s1, char *s2)
 			i++;
 	}
 	return (0);
+}
+
+//return the size of a 2D array
+int	double_arr_len(char **arr)
+{
+	int	size;
+
+	size = 0;
+	while (arr[size])
+		size++;
+	return (size);
 }
