@@ -8,7 +8,7 @@ t_env	*ft_new_env_node(char *content)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
-	node->var = content;
+	node->var = ft_strdup(content);
 	node->next = NULL;
 	return (node);
 }
@@ -63,6 +63,7 @@ void	free_env(t_env *lst)
 	while (temp)
 	{
 		temp = lst->next;
+		free(lst->var);
 		free(lst);
 		lst = temp;
 	}

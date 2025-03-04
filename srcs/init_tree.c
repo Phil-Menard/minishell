@@ -90,7 +90,10 @@ void	ft_execute(char *line, t_env *env, int *exit_code)
 			str = ft_straddchar(str, ' ');
 		count++;
 	}
+	free_db_array(split);
 	tree = ft_new_node(str);
 	// printf("tree->cmd : %s\n", tree->cmd);
 	builtins(tree->cmd, env, exit_code);
+	free(str);
+	ft_free_list(tree);
 }

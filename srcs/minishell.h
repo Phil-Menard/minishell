@@ -23,12 +23,14 @@ typedef struct s_tree
 	struct s_tree	*right;
 }					t_tree;
 
+//---------------------TREE--------------------
+void	ft_free_list(t_tree *tree);
 void	ft_execute(char *line, t_env *env, int *exit_code);
 //---------------BUILTINS COMMANDS--------------------
 void	ft_pwd(int *fd);
 void	ft_env(t_env *env, int *fd);
 void	ft_echo(char *str, int *fd);
-void	ft_cd(char *str);
+void	ft_cd(char *str, t_env *env, int *fd);
 void	ft_exit(int *exit_code);
 void	exec_cmds(char *str, int *fd);
 void	builtins(char *line, t_env *env, int *exit_code);
@@ -59,10 +61,12 @@ char	*str_without_redir(char *str);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
 void	exec_redir(char *path, char **arg, int *fd);
-//---------------HISTORY CMDS (WORK IN PROGRESS)--------------------
+//---------------ENVIRONNEMENT--------------------
 t_env	*ft_new_env_node(char *content);
 t_env	*fill_env(t_env **lst, char **envp);
+t_env	*modify_env(t_env *env, char *old_var, char *new_var);
 void	ft_env_add_back(t_env **lst, t_env *new);
+char	*get_var(t_env *env, char *content);
 void	print_env(t_env *lst, int fd);
 void	free_env(t_env *lst);
 
