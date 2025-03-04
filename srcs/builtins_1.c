@@ -17,40 +17,55 @@ void	ft_pwd(int *fd)
 		perror("path error");
 }
 
-void	ft_env(char **env, int *fd)
+void	ft_env(t_env *env, int *fd)
 {
-	char	*str;
 	int		fd_out;
-	int		i;
 
 	fd_out = get_opened_fd_output(fd);
-	i = 0;
-	while (env[i])
-	{
-		str = ft_strdup(env[i]);
-		str = ft_straddchar(str, '\n');
-		ft_putstr_fd(str, fd_out);
-		free(str);
-		i++;
-	}
+	print_env(env, fd_out);
 }
 
-void	ft_cd(char *str)
+//get OLDPWD var from env and print it in good fd
+char	*cd_oldpwd(t_env *env, int *fd)
+{
+	char	*str;
+	char	*path;
+	int		fd_out;
+
+	fd_out = get_opened_fd_output(fd);
+	path = get_var(env, "OLDPWD");
+	str = ft_strjoin(path, "\n");
+	ft_putstr_fd(str, fd_out);
+	free(str);
+	return (path);
+}
+
+void	ft_cd(char *str, t_env *env, int *fd)
 {
 	char	**arr;
 	char	*path;
-	int		i;
+	char	*temp;
 
 	arr = ft_split(str, " ");
-	i = 1;
-	if (arr[i] == NULL)
-		path = getenv("HOME");
-	else
-		path = ft_strdup(arr[i]);
-	if (arr[++i] != NULL)
+	if (double_arr_len(arr) > 2 && fd[1] == 1 && fd[2] == 1)
 		ft_putstr_fd("cd: too many arguments\n", 1);
-	else if (chdir(path) == -1)
-		perror("chdir");
+	else
+	{
+		if (arr[1] == NULL || ft_strncmp(arr[1], "~", 1) == 0)
+			path = getenv("HOME");
+		else if (ft_strncmp(arr[1], "-", 1) == 0)
+			path = cd_oldpwd(env, fd);
+		else
+			path = ft_strdup(arr[1]);
+		temp = getcwd(NULL, 0);
+		env = modify_env(env, "OLDPWD", temp);
+		free(temp);
+		if (chdir(path) == -1)
+			perror("chdir");
+		if (arr[1])
+			free(path);
+	}
+	free_db_array(arr);
 }
 
 void	ft_exit(int *exit_code)
