@@ -77,7 +77,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			ft_execute(line, env, &exit_code); // *fonction qui va appeler tout le reste
+			ft_parse(line, env, &exit_code); //* pour parser
 			// builtins(line, env, &exit_code);
 		free(line);
 		free(prompt_arg);

@@ -25,7 +25,7 @@ typedef struct s_tree
 
 //---------------------TREE--------------------
 void	ft_free_list(t_tree *tree);
-void	ft_execute(char *line, t_env *env, int *exit_code);
+void	ft_parse(char *line, t_env *env, int *exit_code);
 //---------------BUILTINS COMMANDS--------------------
 void	ft_pwd(int *fd);
 void	ft_env(t_env *env, int *fd);
