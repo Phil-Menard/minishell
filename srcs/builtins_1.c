@@ -35,22 +35,27 @@ void	ft_env(char **env, int *fd)
 	}
 }
 
-void	ft_cd(char *str)
+void	ft_cd(char *str, t_historic **historic)
 {
-	char	**arr;
-	char	*path;
-	int		i;
+	t_historic	*node;
+	char		**arr;
+	char		*path;
+	int			i;
 
 	arr = ft_split(str, " ");
 	i = 1;
 	if (arr[i] == NULL)
+	{
 		path = getenv("HOME");
+	}
 	else
 		path = ft_strdup(arr[i]);
 	if (arr[++i] != NULL)
 		ft_putstr_fd("cd: too many arguments\n", 1);
 	else if (chdir(path) == -1)
 		perror("chdir");
+	node = ft_new_cmd(str);
+	ft_cmdadd_front(historic, node);
 }
 
 void	ft_exit(int *exit_code)
