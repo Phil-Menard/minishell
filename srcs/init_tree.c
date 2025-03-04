@@ -73,7 +73,7 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 	}
 }
 
-void	ft_execute(char *line, char **env, int *exit_code, t_historic **historic)
+void	ft_execute(char *line, char **env, int *exit_code, t_hist **historic)
 {
 	t_tree	*tree;
 	char	**split;

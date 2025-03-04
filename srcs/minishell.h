@@ -10,12 +10,12 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
-typedef struct s_historic
+typedef struct s_hist
 {
-	char				*last_dir;
-	char				*last_cmd;
-	struct s_historic	*next;
-}	t_historic;
+	char			*last_dir;
+	char			*last_cmd;
+	struct s_hist	*next;
+}	t_hist;
 
 typedef struct s_tree
 {
@@ -24,15 +24,15 @@ typedef struct s_tree
 	struct s_tree	*right;
 }					t_tree;
 
-void	ft_execute(char *line, char **env, int *exit_code, t_historic **historic);
+void	ft_execute(char *line, char **env, int *exit_code, t_hist **historic);
 //---------------BUILTINS COMMANDS--------------------
 void	ft_pwd(int *fd);
 void	ft_env(char **env, int *fd);
 void	ft_echo(char *str, int *fd);
-void	ft_cd(char *str, t_historic **historic);
+void	ft_cd(char *str, t_hist **historic);
 void	ft_exit(int *exit_code);
 void	exec_cmds(char *str, int *fd);
-void	builtins(char *line, char **env, int *exit_code, t_historic **historic);
+void	builtins(char *line, char **env, int *exit_code, t_hist **historic);
 //---------------UTILS FUNCTIONS--------------------
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
@@ -60,8 +60,9 @@ char	*get_infile(char *str);
 char	*get_outfile(char *str);
 void	exec_redir(char *path, char **arg, int *fd);
 //---------------HISTORY CMDS (WORK IN PROGRESS)--------------------
-t_historic	*ft_new_cmd(char *cmd);
-void		ft_cmdadd_front(t_historic **lst, t_historic *new);
-void	print_historic(t_historic *lst);
+t_hist	*ft_new_cmd(char *cmd);
+void	ft_cmdadd_front(t_hist **lst, t_hist *new);
+void	print_hist(t_hist *lst);
+void	free_historic(t_hist *lst);
 
 #endif

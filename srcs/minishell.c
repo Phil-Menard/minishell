@@ -11,7 +11,7 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	builtins(char *line, char **env, int *exit_code, t_historic **historic)
+void	builtins(char *line, char **env, int *exit_code, t_hist **historic)
 {
 	int	*fd;
 	int	i;
@@ -60,10 +60,10 @@ char	*set_prompt_arg(void)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_historic	*lst_history;
-	char		*line;
-	char		*prompt_arg;
-	int			exit_code;
+	t_hist	*lst_history;
+	char	*line;
+	char	*prompt_arg;
+	int		exit_code;
 
 	(void) argc;
 	(void) argv;
@@ -77,10 +77,11 @@ int	main(int argc, char **argv, char **env)
 		if (ft_strlen(line) > 0)
 			ft_execute(line, env, &exit_code, &lst_history); // *fonction qui va appeler tout le reste
 			// builtins(line, env, &exit_code);
-		print_historic(lst_history);
+		print_hist(lst_history);
 		free(line);
 		free(prompt_arg);
 	}
+	free_historic(lst_history);
 	return (0);
 }
 
