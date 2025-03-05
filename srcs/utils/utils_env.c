@@ -1,4 +1,14 @@
-#include "minishell.h"
+#include "../minishell.h"
+
+void	print_env(t_env *lst, int fd)
+{
+	while (lst != NULL)
+	{
+		ft_putstr_fd(lst->var, fd);
+		ft_putchar_fd('\n', fd);
+		lst = lst->next;
+	}
+}
 
 //find variable and update it
 t_env	*modify_env(t_env *env, char *old_var, char *new_var)
@@ -43,4 +53,10 @@ char	*get_var(t_env *env, char *content)
 		current = current->next;
 	}
 	return (NULL);
+}
+
+void	free_env_node(char *var, t_env *node)
+{
+	free(var);
+	free(node);
 }

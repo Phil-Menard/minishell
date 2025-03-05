@@ -1,4 +1,16 @@
-#include "minishell.h"
+#include "../minishell.h"
+
+int	*init_fd(void)
+{
+	int	*fd;
+	int	i;
+
+	fd = malloc(3 * sizeof(int));
+	i = -1;
+	while (++i < 3)
+		fd[i] = 1;
+	return (fd);
+}
 
 //fd[0] : input | fd[1] : simple output | fd[2] : double output
 int	*set_fd(char *line, int *fd)
