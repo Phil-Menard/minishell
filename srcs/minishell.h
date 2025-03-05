@@ -16,16 +16,28 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
+typedef enum e_token
+{
+	CMD,
+	AND,
+	OR,
+	PIPE,
+}	t_token;
+
 typedef struct s_tree
 {
-	char			*cmd;
-	struct s_tree	*left;
-	struct s_tree	*right;
-}					t_tree;
+	t_token				token;
+	char				*cmd;
+	struct s_tree		*left;
+	struct s_tree		*right;
+}						t_tree;
 
 //---------------------TREE--------------------
 void	ft_free_list(t_tree *tree);
+t_tree	*ft_new_node(char *cmd, t_token type);
+void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node);
 void	ft_parse(char *line, t_env *env, int *exit_code);
+void ft_print_tree(t_tree *root, int space); //! a retirer
 //---------------BUILTINS COMMANDS--------------------
 void	ft_pwd(int *fd);
 void	ft_env(t_env *env, int *fd);

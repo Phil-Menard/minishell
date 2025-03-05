@@ -20,7 +20,8 @@ SRC = minishell.c \
 	utils_fd.c \
 	init_tree.c \
 	init_env.c \
-	utils_env.c
+	utils_env.c \
+	parser.c
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))

@@ -1,2 +1,4 @@
 - les options de la libft modifie tres souvent le pointeur (ex : strrchr)
 - printf s'affiche toujours apres write, meme si printf est appele avant
+
+cd ~ marche pas

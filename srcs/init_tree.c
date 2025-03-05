@@ -35,7 +35,7 @@ void	ft_free_list(t_tree *tree)
 	free(tree);
 }
 
-t_tree	*ft_new_node(char *cmd)
+t_tree	*ft_new_node(char *cmd, t_token token)
 {
 	t_tree	*node;
 
@@ -45,6 +45,7 @@ t_tree	*ft_new_node(char *cmd)
 	node->left = NULL;
 	node->right = NULL;
 	node->cmd = cmd;
+	node->token = token;
 	return (node);
 }
 
