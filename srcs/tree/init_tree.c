@@ -73,7 +73,7 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 	}
 }
 
-void	ft_execute(char *line, t_env **env, int *exit_code)
+void	ft_execute(char *line, t_env **env)
 {
 	t_tree	*tree;
 	char	**split;
@@ -93,7 +93,7 @@ void	ft_execute(char *line, t_env **env, int *exit_code)
 	free_db_array(split);
 	tree = ft_new_node(str);
 	// printf("tree->cmd : %s\n", tree->cmd);
-	builtins(tree->cmd, env, exit_code);
+	builtins(tree->cmd, env);
 	free(str);
 	ft_free_list(tree);
 }

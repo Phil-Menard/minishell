@@ -11,16 +11,8 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	builtins(char *line, t_env **env, int *exit_code)
+void	find_correct_function(char *line, int *fd, t_env **env)
 {
-	int	*fd;
-	int	i;
-
-	fd = malloc(3 * sizeof(int));
-	i = -1;
-	while (++i < 3)
-		fd[i] = 1;
-	fd = set_fd(line, fd);
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd(fd);
 	else if (ft_strncmp(line, "env", 3) == 0)
@@ -34,10 +26,63 @@ void	builtins(char *line, t_env **env, int *exit_code)
 	else if (ft_strncmp(line, "exit", 4) == 0)
 	{
 		close_multiple_fd(fd);
-		ft_exit(exit_code);
+		ft_exit();
 	}
 	else
 		exec_cmds(line, fd);
+}
+
+void	pipex(char **arr, char **env, int *fd)
+{
+	int		pipefd[2];
+	int		i;
+	int		previous_fd;
+	int		outfile;
+	pid_t	id;
+
+	i = 0;
+	while (arr[i])
+	{
+		fd = set_fd(arr[i], fd);
+		previous_fd = fd[0];
+		if (fd[1] != 1)
+			outfile = fd[1];
+		else if (fd[2] != 1)
+			outfile = fd[2];
+		if (pipe(pipefd) == -1)
+			return (perror("pipe"), exit(EXIT_FAILURE));
+		//child is born
+		id = fork();
+		if (id == -1)
+			return (perror("fork"), exit(EXIT_FAILURE));
+		if (id == 0)
+			find_correct_function(arr[i], pipefd, env);
+		//child is dead
+		previous_fd = pipefd[0];
+		close(pipefd[1]);
+		wait(NULL);
+		i++;
+	}
+	close(pipefd[0]);
+}
+
+void	builtins(char *line, t_env **env)
+{
+	char	**arr;
+	int		*fd;
+	int		i;
+
+	fd = init_fd();
+	arr = prepare_line(line);
+	i = 0;
+	if (!arr[1])
+	{
+		fd = set_fd(line, fd);
+		find_correct_function(arr[i], fd, env);
+	}
+	else
+		pipex(arr, env, fd);
+	free_db_array(arr);
 	close_multiple_fd(fd);
 	free(fd);
 }
@@ -65,21 +110,19 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env;
 	char	*line;
 	char	*prompt_arg;
-	int		exit_code;
 
 	(void) argc;
 	(void) argv;
 	env = NULL;
 	fill_env(&env, envp);
 	print_minishell();
-	exit_code = 1;
-	while (exit_code == 1)
+	while (1)
 	{
 		prompt_arg = set_prompt_arg();
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			ft_execute(line, &env, &exit_code); // *fonction qui va appeler tout le reste
+			ft_execute(line, &env); // *fonction qui va appeler tout le reste
 			// builtins(line, env, &exit_code);
 		free(line);
 		free(prompt_arg);

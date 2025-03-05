@@ -14,6 +14,7 @@ SRC = minishell.c \
 	execution/builtins_2.c \
 	execution/exec_cmds.c \
 	execution/ft_echo.c \
+	execution/pipex.c \
 	utils/utils.c \
 	utils/utils_2.c \
 	utils/utils_fd.c \

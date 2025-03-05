@@ -68,8 +68,8 @@ void	ft_cd(char *str, t_env *env, int *fd)
 	free_db_array(arr);
 }
 
-void	ft_exit(int *exit_code)
+void	ft_exit(void)
 {
 	ft_putstr_fd("exit\n", 1);
-	*exit_code = 0;
+	exit(EXIT_SUCCESS);
 }

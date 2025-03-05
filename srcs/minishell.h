@@ -25,19 +25,20 @@ typedef struct s_tree
 
 //---------------------TREE--------------------
 void	ft_free_list(t_tree *tree);
-void	ft_execute(char *line, t_env **env, int *exit_code);
+void	ft_execute(char *line, t_env **env);
 //---------------EXECUTION--------------------
-void	builtins(char *line, t_env **env, int *exit_code);
+void	builtins(char *line, t_env **env);
 void	ft_pwd(int *fd);
 void	ft_env(t_env *env, int *fd);
 void	ft_echo(char *str, int *fd);
 void	ft_cd(char *str, t_env *env, int *fd);
 void	ft_unset(char *str, t_env **env);
-void	ft_exit(int *exit_code);
+void	ft_exit();
 void	exec_cmds(char *str, int *fd);
 void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
 char	*get_next_path(char *arr, char *str);
+void	check_path_errors(char *argv, char **env, int *pipefd);
 //---------------UTILS--------------------
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
@@ -47,7 +48,9 @@ int		ft_strfind(char *s1, char *s2);
 int		double_arr_len(char **arr);
 char	*ft_straddchar(char *str, char c);
 int		find_occurences(char *str, char c);
+char	**prepare_line(char *line);
 //---------------UTILS FUNCTIONS FOR FD--------------------
+int		*init_fd(void);
 int		*set_fd(char *line, int *fd);
 void	close_multiple_fd(int *fd);
 int		get_opened_fd_output(int *fd);
