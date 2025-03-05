@@ -1,4 +1,4 @@
-# include "minishell.h"
+#include "../minishell.h"
 
 //! For testing, a retirer a la fin
 void ft_print_tree(t_tree *root, int space)
@@ -73,7 +73,7 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 	}
 }
 
-void	ft_execute(char *line, t_env *env, int *exit_code)
+void	ft_execute(char *line, t_env **env, int *exit_code)
 {
 	t_tree	*tree;
 	char	**split;

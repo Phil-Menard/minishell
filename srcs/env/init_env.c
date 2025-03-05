@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 //create new node
 t_env	*ft_new_env_node(char *content)
@@ -45,14 +45,34 @@ t_env	*fill_env(t_env **lst, char **envp)
 	return (node);
 }
 
-void	print_env(t_env *lst, int fd)
+//remove a node from env list
+t_env	*remove_env_var(t_env **lst, char *str)
 {
-	while (lst != NULL)
+	t_env	*current;
+	t_env	*previous;
+	int		str_size;
+
+	previous = *lst;
+	current = previous->next;
+	str_size = ft_strlen(str);
+	if (ft_strncmp(previous->var, str, str_size) == 0)
 	{
-		ft_putstr_fd(lst->var, fd);
-		ft_putchar_fd('\n', fd);
-		lst = lst->next;
+		free_env_node(previous->var, previous);
+		*lst = current;
+		return (*lst);
 	}
+	while (current)
+	{
+		if (ft_strncmp(current->var, str, str_size) == 0)
+		{
+			previous->next = current->next;
+			free_env_node(current->var, current);
+			return (*lst);
+		}
+		previous = current;
+		current = current->next;
+	}
+	return (*lst);
 }
 
 void	free_env(t_env *lst)
@@ -63,8 +83,7 @@ void	free_env(t_env *lst)
 	while (temp)
 	{
 		temp = lst->next;
-		free(lst->var);
-		free(lst);
+		free_env_node(lst->var, lst);
 		lst = temp;
 	}
 }

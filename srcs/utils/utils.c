@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 //same as str_join, but add a char between s1 and s2
 char	*ft_join_mid(char *s1, char slash, char *s2)

@@ -11,7 +11,7 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	builtins(char *line, t_env *env, int *exit_code)
+void	builtins(char *line, t_env **env, int *exit_code)
 {
 	int	*fd;
 	int	i;
@@ -24,11 +24,13 @@ void	builtins(char *line, t_env *env, int *exit_code)
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd(fd);
 	else if (ft_strncmp(line, "env", 3) == 0)
-		ft_env(env, fd);
+		ft_env(*env, fd);
 	else if (ft_strncmp(line, "echo", 4) == 0)
 		ft_echo(line, fd);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		ft_cd(line, env, fd);
+		ft_cd(line, *env, fd);
+	else if (ft_strncmp(line, "unset", 5) == 0)
+		ft_unset(line, env);
 	else if (ft_strncmp(line, "exit", 4) == 0)
 	{
 		close_multiple_fd(fd);
@@ -77,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			ft_execute(line, env, &exit_code); // *fonction qui va appeler tout le reste
+			ft_execute(line, &env, &exit_code); // *fonction qui va appeler tout le reste
 			// builtins(line, env, &exit_code);
 		free(line);
 		free(prompt_arg);

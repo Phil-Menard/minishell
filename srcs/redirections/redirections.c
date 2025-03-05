@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 //execve with correct redirection
 void	exec_redir(char *path, char **arg, int *fd)

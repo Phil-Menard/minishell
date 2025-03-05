@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 //check if there is a redirection
 int	is_redirected(char *str)

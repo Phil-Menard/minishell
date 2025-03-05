@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 void	ft_pwd(int *fd)
 {
@@ -62,7 +62,7 @@ void	ft_cd(char *str, t_env *env, int *fd)
 		free(temp);
 		if (chdir(path) == -1)
 			perror("chdir");
-		if (arr[1])
+		if (arr[1] && ft_strncmp(arr[1], "~", 1) != 0)
 			free(path);
 	}
 	free_db_array(arr);
