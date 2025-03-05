@@ -1,52 +1,11 @@
-# include "minishell.h"
-
-// Return a dup of tab, from tab[start] to tab[end], but start (from the call fct) is modified.
-char	**ft_duptab(char **tab, int *start, int end)
-{
-	char	**dup;
-
-	if (end < *start)
-		return (NULL);
-	dup = malloc(sizeof(char *) * (*start - end));
-	if (!dup)
-		return (NULL);
-	while (*start <= end && dup[*start])
-	{
-		dup[*start] = ft_strdup(tab[*start]);
-		start++;
-	}
-	dup[*start] = NULL;
-	return (dup);
-} //! a test
-
-// Return the command cleaned of delset, parts delete from deslset are link by linker
-char	*ft_clean_cmd(char *line, char *delset, char linker)
-{
-	char	**split;
-	char	*str;
-	int		count;
-
-	split = ft_split(line, delset);
-	count = 0;
-	str = NULL;
-	while (split[count])
-	{
-		str = ft_straddstr(str, split[count]);
-		if (split[count + 1])
-			str = ft_straddchar(str, linker);
-		count++;
-	}
-	free_db_array(split);
-	return (str);
-}
+# include "../minishell.h"
 
 void	ft_parse(char *line, t_env *env, int *exit_code)
 {
 	t_tree	*tree;
 	char	*str;
 
-	str = ft_clean_str(line);
-	//* fct 
+	
 	// tree = ft_new_node(str);
 	// printf("tree->cmd : %s\n", tree->cmd);
 	builtins(tree->cmd, env, exit_code);
@@ -77,14 +36,16 @@ t_token	ft_get_token(char *str)
 char	*ft_get_cmd(char **split, int *start)
 {
 	char	*str;
-	int		end;
 
-	while (ft_get_token(split[*start]) == CMD)
+	if (ft_get_token(split[*start]) == CMD)
 	{
-		/*str = ft_straddstr(str, split[*start]);
-		if (split[*start + 1])
-			str = ft_straddchar(str, ' ');
-		(*start)++; */
+		while (ft_get_token(split[*start]) == CMD)
+		{
+			str = ft_straddstr(str, split[*start]);
+			if (split[*start + 1])
+				str = ft_straddchar(str, ' ');
+			(*start)++;
+		}
 
 	}
 	return (str);
@@ -92,11 +53,13 @@ char	*ft_get_cmd(char **split, int *start)
 
 void	ft_create_tree(t_tree *tree, char **split, int i_arg)
 {
-
 	//TODO: creer le recursif pour les cmd, |, ||, ..
 	if (ft_get_token(split[i_arg]) == CMD)
 	{
 		tree = ft_new_node(ft_get_cmd(split[i_arg], &i_arg), CMD);
 		ft_create_tree(tree);// 
 	}
+
+	free_db_array(split);
+	split = NULL;
 }
