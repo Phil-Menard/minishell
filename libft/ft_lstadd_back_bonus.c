@@ -6,15 +6,15 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 15:18:18 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/02/26 12:21:08 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:40:43 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_libft **lst, t_libft *new)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_libft	*last;
+	t_list	*last;
 
 	if (!new)
 		return ;
@@ -33,7 +33,7 @@ void	ft_lstadd_back(t_libft **lst, t_libft *new)
 
 int	main(void)
 {
-	t_libft	*head;
+	t_list	*head;
 
 	head = ft_lstnew(1);
 	ft_lstadd_back(&head, ft_lstnew(2));

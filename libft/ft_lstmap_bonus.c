@@ -6,15 +6,15 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 11:34:17 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/02/26 12:21:16 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:40:33 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_libft	*ft_lstmap(t_libft *lst, void *(*f)(void *), void (*del)(void *))
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_libft	*res;
+	t_list	*res;
 
 	if (!lst)
 		return (NULL);
