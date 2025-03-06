@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //! For testing, a retirer a la fin
-void ft_print_tree(t_tree *root, int space)
+void ft_print_tree(t_ast *root, int space)
 {
 	int i;
 
@@ -12,7 +12,7 @@ void ft_print_tree(t_tree *root, int space)
 	space += 5;
 
 	// Afficher d'abord le sous-arbre droit
-	ft_print_tree(root->right, space);
+	ft_print_ast(root->right, space);
 
 	// Afficher le nœud courant avec indentation
 	printf("\n");
@@ -22,11 +22,11 @@ void ft_print_tree(t_tree *root, int space)
 	printf("%s\n", root->cmd);
 
 	// Afficher ensuite le sous-arbre gauche
-	ft_print_tree(root->left, space);
+	ft_print_ast(root->left, space);
 }
 
 // recursively free the tree
-void	ft_free_list(t_tree *tree)
+void	ft_free_list(t_ast *tree)
 {
 	if (!tree)
 		return ;
@@ -35,11 +35,11 @@ void	ft_free_list(t_tree *tree)
 	free(tree);
 }
 
-t_tree	*ft_new_node(char *cmd, t_token token)
+t_ast	*ft_new_node(char *cmd, t_token token)
 {
-	t_tree	*node;
+	t_ast	*node;
 
-	node = malloc(sizeof(t_tree));
+	node = malloc(sizeof(t_ast));
 	if (!node)
 		return (NULL);
 	node->left = NULL;
@@ -50,9 +50,9 @@ t_tree	*ft_new_node(char *cmd, t_token token)
 }
 
 // add a node at the end of the branch
-void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
+void	ft_add_node_end(t_ast *tree, const char *branch, t_ast *node)
 {
-	t_tree	*cur;
+	t_ast	*cur;
 
 	if (!tree)
 	{
@@ -73,12 +73,12 @@ void	ft_add_node_end(t_tree *tree, const char *branch, t_tree *node)
 		cur->right = node;
 	}
 }
-<<<<<<< HEAD:srcs/init_tree.c
+<<<<<<< HEAD:srcs/init_ast.c
 =======
 
 void	ft_execute(char *line, t_env **env, int *exit_code)
 {
-	t_tree	*tree;
+	t_ast	*tree;
 	char	**split;
 	char	*str;
 	int		count;
@@ -100,4 +100,4 @@ void	ft_execute(char *line, t_env **env, int *exit_code)
 	free(str);
 	ft_free_list(tree);
 }
->>>>>>> main:srcs/tree/init_tree.c
+>>>>>>> main:srcs/tree/init_ast.c
