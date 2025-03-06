@@ -11,7 +11,7 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	find_correct_function(char *line, int *fd, t_env **env)
+void	find_correct_function(char *line, int *fd, t_env **env, int id)
 {
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd(fd);
@@ -29,36 +29,117 @@ void	find_correct_function(char *line, int *fd, t_env **env)
 		ft_exit();
 	}
 	else
-		exec_cmds(line, fd);
+		exec_cmds(line, fd, id);
 }
 
-void	pipex(char **arr, char **env, int *fd)
+/*
+pipefd[0] = fd[0] 
+	if fd[0] = 1 > input is keyboard
+	if fd[0] > 1 > input is file
+pipefd[1] = fd[1] or fd[2]
+	if fd[1] > 1 et fd[2] == 1 => outfile is trunc mode
+	if fd[1] == 1 et fd[2] > 1 => outfile is append mode
+	if fd[1] == 1 et fd[2] == 1 => outfile is terminal
+		and should be send to brother if not last child
+*/
+void	exec_cmds_bis(char *str, int infile, int outfile)
+{
+	char	*path;
+	char	**arg;
+	
+	path = get_right_path(str);
+	arg = fill_arg(path, str);
+	if (dup2(infile, STDIN_FILENO) == -1)
+	{
+		perror("infile");
+		exit(EXIT_FAILURE);
+	}
+	close(infile);
+	if (outfile != 1)
+	{
+		if (dup2(outfile, STDOUT_FILENO) == -1)
+		{
+			perror("outfile");
+			exit(EXIT_FAILURE);
+		}
+		close(outfile);
+	}
+	if (execve(path, arg, NULL) == -1)
+	{
+		if (path)
+			free(path);
+		if (arg)
+			free_db_array(arg);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+}
+
+/* void	find_correct_function_bis(char *line, int infile, int outfile, t_env **env)
+{
+	if (ft_strncmp(line, "pwd", 3) == 0)
+		ft_pwd(&outfile);
+	else if (ft_strncmp(line, "env", 3) == 0)
+		ft_env(*env, &outfile);
+	else if (ft_strncmp(line, "echo", 4) == 0)
+		ft_echo(line, &outfile);
+	else if (ft_strncmp(line, "cd", 2) == 0)
+		ft_cd(line, *env, &outfile);
+	else if (ft_strncmp(line, "unset", 5) == 0)
+		ft_unset(line, env);
+	else if (ft_strncmp(line, "exit", 4) == 0)
+	{
+		ft_exit();
+	}
+	else
+		exec_cmds_bis(line, infile, outfile);
+} */
+
+/* void	exec_cmds(int previous_fd, int next_fd, char *argv, char **env)
+{
+	char	*path;
+	char	**arg;
+
+	if (dup2(previous_fd, STDIN_FILENO) == -1)
+		exit(EXIT_FAILURE);
+	close(previous_fd);
+	if (dup2(next_fd, STDOUT_FILENO) == -1)
+		exit(EXIT_FAILURE);
+	close(next_fd);
+	path = get_right_path(env, argv);
+	arg = fill_arg(path, argv);
+	if (execve(path, arg, NULL) == -1)
+	{
+		free(path);
+		free_db_array(arg);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+} */
+
+void	pipex(char **arr, t_env **env, int *fd)
 {
 	int		pipefd[2];
 	int		i;
-	int		previous_fd;
-	int		outfile;
 	pid_t	id;
 
+	(void) env;
 	i = 0;
 	while (arr[i])
 	{
-		fd = set_fd(arr[i], fd);
-		previous_fd = fd[0];
-		if (fd[1] != 1)
-			outfile = fd[1];
-		else if (fd[2] != 1)
-			outfile = fd[2];
 		if (pipe(pipefd) == -1)
 			return (perror("pipe"), exit(EXIT_FAILURE));
-		//child is born
 		id = fork();
 		if (id == -1)
 			return (perror("fork"), exit(EXIT_FAILURE));
 		if (id == 0)
-			find_correct_function(arr[i], pipefd, env);
-		//child is dead
-		previous_fd = pipefd[0];
+		{
+			pipefd[0] = fd[0];
+			if (i == double_arr_len(arr) - 1)
+				pipefd[1] = fd[1];
+			exec_cmds_bis(arr[i], pipefd[0], pipefd[1]);
+		}
+		fd[0] = pipefd[0];
 		close(pipefd[1]);
 		wait(NULL);
 		i++;
@@ -75,10 +156,10 @@ void	builtins(char *line, t_env **env)
 	fd = init_fd();
 	arr = prepare_line(line);
 	i = 0;
+	fd = set_fd(line, fd);
 	if (!arr[1])
 	{
-		fd = set_fd(line, fd);
-		find_correct_function(arr[i], fd, env);
+		find_correct_function(arr[i], fd, env, -1);
 	}
 	else
 		pipex(arr, env, fd);

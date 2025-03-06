@@ -7,7 +7,7 @@ void	ft_pwd(int *fd)
 
 	path = getcwd(NULL, 0);
 	path = ft_straddchar(path, '\n');
-	fd_out = get_opened_fd_output(fd);
+	fd_out = fd[1];
 	if (path)
 	{
 		ft_putstr_fd(path, fd_out);
@@ -21,7 +21,7 @@ void	ft_env(t_env *env, int *fd)
 {
 	int		fd_out;
 
-	fd_out = get_opened_fd_output(fd);
+	fd_out = fd[1];
 	print_env(env, fd_out);
 }
 
@@ -32,7 +32,7 @@ char	*cd_oldpwd(t_env *env, int *fd)
 	char	*path;
 	int		fd_out;
 
-	fd_out = get_opened_fd_output(fd);
+	fd_out = fd[1];
 	path = get_var(env, "OLDPWD");
 	str = ft_strjoin(path, "\n");
 	ft_putstr_fd(str, fd_out);

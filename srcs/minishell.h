@@ -8,6 +8,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <signal.h>
 # include "../libft/libft.h"
 
 typedef struct s_env
@@ -34,7 +35,7 @@ void	ft_echo(char *str, int *fd);
 void	ft_cd(char *str, t_env *env, int *fd);
 void	ft_unset(char *str, t_env **env);
 void	ft_exit();
-void	exec_cmds(char *str, int *fd);
+void	exec_cmds(char *str, int *fd, int id);
 void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
 char	*get_next_path(char *arr, char *str);
@@ -53,17 +54,17 @@ char	**prepare_line(char *line);
 int		*init_fd(void);
 int		*set_fd(char *line, int *fd);
 void	close_multiple_fd(int *fd);
-int		get_opened_fd_output(int *fd);
+// int		get_opened_fd_output(int *fd);
 //---------------CHECK QUOTES WHEN NEW LINE--------------------
 int		check_quote(char *str);
 char	*get_lines(char *line);
 //---------------REDIRECTIONS--------------------
 int		is_redirected(char *str);
-void	prepare_redir(char *str, int redirection, int *fd);
+void	prepare_redir(char *str, int redirection, int *fd, int id);
 char	*str_without_redir(char *str);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
-void	exec_redir(char *path, char **arg, int *fd);
+void	exec_redir(char *path, char **arg, int *fd, int id);
 //---------------ENV--------------------
 t_env	*ft_new_env_node(char *content);
 t_env	*fill_env(t_env **lst, char **envp);

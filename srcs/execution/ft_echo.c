@@ -26,7 +26,7 @@ void	echo_loop(char *str, int i, int *fd, int option)
 {
 	int	fd_out;
 
-	fd_out = get_opened_fd_output(fd);
+	fd_out = fd[1];
 	while (str[i])
 	{
 		if (str[i] == '$')

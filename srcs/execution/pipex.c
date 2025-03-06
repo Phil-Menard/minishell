@@ -5,13 +5,13 @@ char	*get_cmd_name(char *argv)
 	char	**arr;
 	char	*cmd;
 
-	arr = ft_split(argv, ' ');
+	arr = ft_split(argv, " ");
 	cmd = ft_strdup(arr[0]);
 	free_db_array(arr);
 	return (cmd);
 }
 
-void	check_path_errors(char *argv, char **env, int *pipefd)
+/* void	check_path_errors(char *argv, char **env, int *pipefd)
 {
 	char	*path;
 
@@ -26,4 +26,4 @@ void	check_path_errors(char *argv, char **env, int *pipefd)
 		free_db_array(argv);
 		exit(EXIT_FAILURE);
 	}
-}
+} */
