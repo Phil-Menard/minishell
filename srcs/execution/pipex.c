@@ -1,6 +1,46 @@
 #include "../minishell.h"
 
-char	*get_cmd_name(char *argv)
+void	pipex(char **arr, t_env **env, int *fd)
+{
+	int		pipefd[2];
+	int		previous_fd;
+	int		i;
+	pid_t	id;
+
+	i = 0;
+	while (arr[i])
+	{
+		fd = set_fd(arr[i], fd);
+		if (i == 0)
+			previous_fd = fd[0];
+		else
+		{
+			if (fd[0] > 1)
+				previous_fd = fd[0];
+		}
+		if (pipe(pipefd) == -1)
+			return (perror("pipe"), exit(EXIT_FAILURE));
+		id = fork();
+		if (id == -1)
+			return (perror("fork"), exit(EXIT_FAILURE));
+		if (id == 0)
+		{
+			pipefd[0] = previous_fd;
+			if (i == double_arr_len(arr) - 1)
+				pipefd[1] = fd[1];
+			find_correct_function(arr[i], pipefd, env, id);
+		}
+		previous_fd = pipefd[0];
+		fd[0] = 1;
+		fd[1] = 1;
+		close(pipefd[1]);
+		wait(NULL);
+		i++;
+	}
+	close(pipefd[0]);
+}
+
+/* char	*get_cmd_name(char *argv)
 {
 	char	**arr;
 	char	*cmd;
@@ -9,7 +49,7 @@ char	*get_cmd_name(char *argv)
 	cmd = ft_strdup(arr[0]);
 	free_db_array(arr);
 	return (cmd);
-}
+} */
 
 /* void	check_path_errors(char *argv, char **env, int *pipefd)
 {

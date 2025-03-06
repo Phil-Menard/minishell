@@ -22,29 +22,26 @@ void	handle_var(char *str, int *x, int fd)
 	free(var);
 }
 
-void	echo_loop(char *str, int i, int *fd, int option)
+void	echo_loop(char *str, int i, int fd, int option)
 {
-	int	fd_out;
-
-	fd_out = fd[1];
 	while (str[i])
 	{
 		if (str[i] == '$')
 		{
 			i++;
-			handle_var(str, &i, fd_out);
+			handle_var(str, &i, fd);
 		}
 		else
 		{
-			ft_putchar_fd(str[i], fd_out);
+			ft_putchar_fd(str[i], fd);
 		}
 		i++;
 	}
 	if (option == 0)
-		ft_putchar_fd('\n', fd_out);
+		ft_putchar_fd('\n', fd);
 }
 
-void	ft_echo(char *str, int *fd)
+void	ft_echo(char *str, int fd)
 {
 	int		i;
 	int		option;

@@ -29,10 +29,10 @@ void	ft_free_list(t_tree *tree);
 void	ft_execute(char *line, t_env **env);
 //---------------EXECUTION--------------------
 void	builtins(char *line, t_env **env);
-void	ft_pwd(int *fd);
-void	ft_env(t_env *env, int *fd);
-void	ft_echo(char *str, int *fd);
-void	ft_cd(char *str, t_env *env, int *fd);
+void	ft_pwd(int fd);
+void	ft_env(t_env *env, int fd);
+void	ft_echo(char *str, int fd);
+void	ft_cd(char *str, t_env *env, int fd);
 void	ft_unset(char *str, t_env **env);
 void	ft_exit();
 void	exec_cmds(char *str, int *fd, int id);
@@ -40,6 +40,9 @@ void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
 char	*get_next_path(char *arr, char *str);
 void	check_path_errors(char *argv, char **env, int *pipefd);
+void	find_correct_function(char *line, int *fd, t_env **env, int id);
+//---------------PIPES----------------------
+void	pipex(char **arr, t_env **env, int *fd);
 //---------------UTILS--------------------
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
