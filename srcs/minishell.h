@@ -10,6 +10,8 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
+# define LEX_BUFF_SIZE	200
+
 typedef struct s_env
 {
 	char			*var;
@@ -43,13 +45,13 @@ typedef struct s_ast
 
 typedef struct s_token_builder
 {
-	char					buf[200];
+	char					buf[LEX_BUFF_SIZE];
 	int						len;
 	struct s_token_builder	*next;
 }							t_token_builder;
 
 //---------------PARSING------------------------
-int		ft_get_pos(char *str, char c);
+int		ft_get_pos(char *str, int start, char c);
 t_token	ft_get_token(char *str);
 char	**ft_duptab(char **tab, int *start, int end);
 int		ft_check_pair(char *line, char what);

@@ -12,10 +12,43 @@ char	*ft_get_quotes(char *line, int start)
 {
 	int	curs;
 
+	if (!line)
+		return (NULL);
 	if (line[start] == '\'')
-		curs = ft_get_pos(line, '\'');
+		curs = ft_get_pos(line, start, '\'');
 	else if (line[start] == '\"')
-		curs = ft_get_pos(line, '\"');
+		curs = ft_get_pos(line, start, '\"');
+	return (ft_strndup(line, start, curs));
+}
+
+void	ft_addchar_to_token(t_token_builder **builder, char c)
+{
+	t_token_builder	*last;
+
+	if (!*builder)
+	{
+		*builder = malloc(sizeof(t_token_builder));
+		if (!*builder)
+			return (NULL);
+		(*builder)->len = 1;
+		(*builder)->buf[0] = c;
+		(*builder)->next = NULL;
+		return ;
+	}
+	last = *builder;
+	while (last)
+		last = last->next;
+	if (last->len >= LEX_BUFF_SIZE)
+	{
+		last->next = malloc(sizeof(t_token_builder));
+		if (!last->next)
+			return ; // faire une fonction pour free toute la liste
+		last = last->next;
+		last->len = 0;
+		last->next = NULL;
+	}
+	last->buf[last->len + 1] = c;
+	
 }
 
 t_list	*ft_tokenizer(char *line)
@@ -29,7 +62,8 @@ t_list	*ft_tokenizer(char *line)
 	i = 0;
 	while (line[i])
 	{
-
+		if (line[i] == '\'' || line[i] == '\"')
+			// add to list token_builder
 		i++;
 	}
 
