@@ -41,6 +41,15 @@ int	*set_fd(char *line, int *fd)
 	return (free(infile), free(outfile), fd);
 }
 
+int	*init_and_set_fd(char *line)
+{
+	int	*fd;
+
+	fd = init_fd();
+	fd = set_fd(line, fd);
+	return (fd);
+}
+
 void	close_multiple_fd(int *fd)
 {
 	int	i;
@@ -52,15 +61,12 @@ void	close_multiple_fd(int *fd)
 			close(fd[i]);
 		i++;
 	}
+	free(fd);
 }
 
-/* //find which fd is opened for output
-int	get_opened_fd_output(int *fd)
+int	set_previous_fd(int *fd, int previous_fd)
 {
-	if (fd[1] != 1)
-		return (fd[1]);
-	else if (fd[2] != 1)
-		return (fd[2]);
-	else
-		return (1);
-} */
+	if (fd[0] != 1)
+		previous_fd = fd[0];
+	return (previous_fd);
+}

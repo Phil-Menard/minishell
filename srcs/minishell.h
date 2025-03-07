@@ -42,7 +42,7 @@ char	*get_next_path(char *arr, char *str);
 void	check_path_errors(char *argv, char **env, int *pipefd);
 void	find_correct_function(char *line, int *fd, t_env **env, int id);
 //---------------PIPES----------------------
-void	pipex(char **arr, t_env **env, int *fd);
+void	pipex(char **arr, t_env **env);
 //---------------UTILS--------------------
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
@@ -56,8 +56,9 @@ char	**prepare_line(char *line);
 //---------------UTILS FUNCTIONS FOR FD--------------------
 int		*init_fd(void);
 int		*set_fd(char *line, int *fd);
+int		*init_and_set_fd(char *line);
 void	close_multiple_fd(int *fd);
-// int		get_opened_fd_output(int *fd);
+int		set_previous_fd(int *fd, int previous_fd);
 //---------------CHECK QUOTES WHEN NEW LINE--------------------
 int		check_quote(char *str);
 char	*get_lines(char *line);

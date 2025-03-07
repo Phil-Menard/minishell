@@ -40,18 +40,20 @@ void	builtins(char *line, t_env **env)
 	int		*fd;
 	int		i;
 
-	fd = init_fd();
 	arr = prepare_line(line);
 	i = 0;
+	fd = NULL;
 	if (!arr[1])
 	{
+		fd = init_fd();
 		fd = set_fd(line, fd);
-		find_correct_function(arr[i], fd, env, -1);
+		find_correct_function(line, fd, env, -1);
 	}
 	else
-		pipex(arr, env, fd);
+	{
+		pipex(arr, env);
+	}
 	free_db_array(arr);
-	close_multiple_fd(fd);
 	free(fd);
 }
 
