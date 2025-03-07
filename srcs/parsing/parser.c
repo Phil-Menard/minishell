@@ -6,9 +6,11 @@ void	ft_parse(char *line, t_env *env, int *exit_code)
 	t_ast	*tree;
 	char	**tokens;
 
-	tokens = ft_tokenizer(line); // create a tab of tokens
-	
-
+	if (!line)
+		return ;
+	tokens = ft_tokenizer(line); // lexing
+	// create tree
+	// exec
 	ft_free_list(tree);
 }
 

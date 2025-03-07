@@ -28,6 +28,7 @@ typedef enum e_token
 typedef enum e_state
 {
 	NORMAL,
+	WHITESPACE,
 	SINGLE_QUOTES,
 	DOUBLE_QUOTES,
 }	t_state;
@@ -40,6 +41,18 @@ typedef struct s_ast
 	struct s_ast		*right;
 }						t_ast;
 
+typedef struct s_token_builder
+{
+	char					buf[200];
+	int						len;
+	struct s_token_builder	*next;
+}							t_token_builder;
+
+//---------------PARSING------------------------
+int		ft_get_pos(char *str, char c);
+t_token	ft_get_token(char *str);
+char	**ft_duptab(char **tab, int *start, int end);
+int		ft_check_pair(char *line, char what);
 //---------------------TREE--------------------
 void	ft_free_list(t_ast *tree);
 t_ast	*ft_new_node(char *cmd, t_token type);

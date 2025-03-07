@@ -3,41 +3,53 @@
 //* Split using a state machine
 //		* for normal : split by whitespaces
 //		* for quotes : take all btw quotes
-// Verif if there's a pair nb of quotes ? Odd return error !
+// Verif if there's a pair nb of quotes ? Odd return error
 // Use a strchr to find pos of quote, set a curs,
 // duptab until curs, split the duptab put it in char **tokens.
 // For quotes, strndup all btw (redo a strchr for quote 2) in the tab.
 
-//* Return pos of c in str, -1 if not founded.
-int	ft_get_pos(char *str, char c)
+char	*ft_get_quotes(char *line, int start)
 {
-	int	i;
+	int	curs;
 
-	if (!str || !c)
-		return (-1);
-	i = 0;
-	while (str[i] && str[i] != c)
-		i++;
-	if (str[i] == c)
-		return (i);
-	else
-		return (-1);
+	if (line[start] == '\'')
+		curs = ft_get_pos(line, '\'');
+	else if (line[start] == '\"')
+		curs = ft_get_pos(line, '\"');
 }
 
-//todo: checker for pair quotes
-char	**ft_tokenizer(char *line)
+t_list	*ft_tokenizer(char *line)
 {
-	t_list	tokens;
+	t_list	*tokens;
 	int		i;
-	int		curs;
-	t_state	cs; // current state
 
-	i = -1;
-	cs = NORMAL;
-	// check pair quotes
-	while (line[++i] != "\"")
+	if (!ft_check_pair(line, '\'') || !ft_check_pair(line, '\"'))
+		return (NULL);
+
+	i = 0;
+	while (line[i])
 	{
 
+		i++;
 	}
+
+	return (tokens);
 }
 
+
+
+
+//!-------------------------TESTS---------------------------------
+
+int main()
+{
+	char *test = "echo 'hello world'";
+	t_list *tokens = ft_tokenizer(test);
+
+	while (tokens)
+	{
+		printf("Token: %s\n", ((t_ast *)tokens->content)->cmd);
+		tokens = tokens->next;
+	}
+	return 0;
+}

@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 15:12:20 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/03/06 14:40:45 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:36:38 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	**ft_split(char const *s, char *charset);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s);
-char	*ft_strndup(const char *s, int start, size_t len);
+char	*ft_strndup(const char *s, size_t start, size_t len);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_itoa(int n);
 char	*ft_strtrim(char const *s1, char const *set);

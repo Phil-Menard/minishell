@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //! For testing, a retirer a la fin
-void ft_print_tree(t_ast *root, int space)
+void ft_print_ast(t_ast *root, int space)
 {
 	int i;
 
@@ -73,31 +73,3 @@ void	ft_add_node_end(t_ast *tree, const char *branch, t_ast *node)
 		cur->right = node;
 	}
 }
-<<<<<<< HEAD:srcs/init_ast.c
-=======
-
-void	ft_execute(char *line, t_env **env, int *exit_code)
-{
-	t_ast	*tree;
-	char	**split;
-	char	*str;
-	int		count;
-
-	split = ft_split(line, " ");
-	count = 0;
-	str = NULL;
-	while (split[count])
-	{
-		str = ft_straddstr(str, split[count]);
-		if (split[count + 1])
-			str = ft_straddchar(str, ' ');
-		count++;
-	}
-	free_db_array(split);
-	tree = ft_new_node(str);
-	// printf("tree->cmd : %s\n", tree->cmd);
-	builtins(tree->cmd, env, exit_code);
-	free(str);
-	ft_free_list(tree);
-}
->>>>>>> main:srcs/tree/init_ast.c

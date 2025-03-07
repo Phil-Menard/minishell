@@ -20,8 +20,6 @@ char	**ft_duptab(char **tab, int *start, int end)
 }
 
 //* Detect the type of token str is.
-//todo : add a detector for quotes
-// 		(str of quotes must contains only a string delimited by quotes)
 t_token	ft_get_token(char *str)
 {
 	if (ft_strncmp(str, "&&", 2) == 0)
@@ -32,4 +30,36 @@ t_token	ft_get_token(char *str)
 		return (PIPE);
 	else
 		return (CMD);
+}
+
+//* Return pos of c in str, -1 if not founded.
+int	ft_get_pos(char *str, int start, char c)
+{
+	if (!str || !c)
+		return (-1);
+	while (str[start] && str[start] != c)
+		start++;
+	if (str[start] == c)
+		return (start);
+	else
+		return (-1);
+}
+
+//* 1 = pair \ 0 = odd
+int	ft_check_pair(char *line, char what)
+{
+	int	count;
+	int	i;
+
+	i = 0;
+	count = 0;
+	while (line[i])
+	{
+		if (line[i] == what)
+			count++;
+		i++;
+	}
+	if (count % 2 != 0)
+		return (0);
+	return (1);
 }

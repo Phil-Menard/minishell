@@ -6,13 +6,13 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:51:34 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/03/06 11:55:33 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/03/07 13:36:01 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strndup(const char *s, int start, size_t len)
+char	*ft_strndup(const char *s, size_t start, size_t len)
 {
 	char	*dst;
 
