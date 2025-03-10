@@ -1,5 +1,6 @@
 #include "../minishell.h"
 
+//same as exec_cmd but for pipes
 void	exec_cmds_pipes(char *str, t_env **env)
 {
 	char	*path;
@@ -12,6 +13,7 @@ void	exec_cmds_pipes(char *str, t_env **env)
 	ft_execve(path, arg, env);
 }
 
+//same as builtin_or_cmd but for pipes
 void	builtin_or_cmd_pipes(char *line, int *fd, int *pipefd, t_env **env)
 {
 	char	**arr;
@@ -50,6 +52,7 @@ void	pipe_and_fork(int *pipefd, int *pids)
 		return (perror("fork"), exit(EXIT_FAILURE));
 }
 
+//modified pipex that redirects input and output in correct file descriptor/pipe
 void	pipex(char **arr, t_env **env, int arr_size, pid_t *pids)
 {
 	int		pipefd[2];

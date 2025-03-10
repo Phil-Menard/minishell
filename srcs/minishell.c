@@ -11,6 +11,7 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
+//check which cmd is entered in line, and call a builtin or execve
 void	builtin_or_cmd(char *line, int *fd, t_env **env)
 {
 	char	**arr;
@@ -37,6 +38,7 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 	free_db_array(arr);
 }
 
+//check if line contains a pipe or not, and call the corresponding function
 void	check_pipes(char *line, t_env **env)
 {
 	pid_t	*pids;

@@ -6,6 +6,7 @@ void	close_previous_fd(int previous_fd)
 		close(previous_fd);
 }
 
+//wait for every child processes to finish
 void	wait_childs(pid_t *pids, int arr_size)
 {
 	int		j;
@@ -19,6 +20,7 @@ void	wait_childs(pid_t *pids, int arr_size)
 	free(pids);
 }
 
+//regroups dups2 in pipex
 void	outfile_dups(int *fd, int *pipefd, int i, int arr_size)
 {
 	if (fd[1] != 1)
@@ -27,6 +29,7 @@ void	outfile_dups(int *fd, int *pipefd, int i, int arr_size)
 		dup2(pipefd[1], STDOUT_FILENO);
 }
 
+//regroups every functions called after child process
 void	post_cmd(int *pipefd, int *previous_fd, int *fd)
 {
 	close(pipefd[1]);
@@ -35,6 +38,7 @@ void	post_cmd(int *pipefd, int *previous_fd, int *fd)
 	close_multiple_fd(fd);
 }
 
+//regroups every functions called at the end of pipex
 void	end_pipex(int *pipefd, pid_t *pids, int arr_size, int previous_fd)
 {
 	close(pipefd[0]);
