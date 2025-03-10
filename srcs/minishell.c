@@ -32,6 +32,7 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 		exec_cmds(line, fd, env);
 }
 
+// verifie si il y a un pipe 
 void	check_pipes(char *line, t_env **env)
 {
 	pid_t	*pids;
@@ -92,8 +93,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			ft_parse(line, env, &exit_code); //* pour parser
-			// builtins(line, env, &exit_code);
+			ft_parse(line, env); //* pour parser
 		free(line);
 		free(prompt_arg);
 	}

@@ -47,6 +47,7 @@ $(NAME): $(OBJ) $(LIBFT)
 
 # Compilation des fichiers objets dans OBJ_DIR
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@echo "🔧 Compiling $<..."
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) -c $< -o $@
 
