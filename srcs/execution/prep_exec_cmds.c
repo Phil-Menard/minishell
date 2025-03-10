@@ -61,7 +61,8 @@ char	*get_right_path(char *str)
 		free(path);
 		i++;
 	}
-	free_db_array(arr);
+	if (arr)
+		free_db_array(arr);
 	return (NULL);
 }
 

@@ -75,6 +75,7 @@ void	ft_env(t_env *env, int fd);
 void	ft_echo(char *str, int fd);
 void	ft_cd(char *str, t_env *env, int fd);
 void	ft_unset(char *str, t_env **env);
+void	ft_export(char *str, t_env **env);
 void	ft_exit(void);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
@@ -144,5 +145,10 @@ void	print_env(t_env *lst, int fd);
 int		env_size(t_env *lst);
 void	free_env_node(char *var, t_env *node);
 void	free_env(t_env *lst);
+/**========================================================================
+ *!                                 EXPORT
+ *========================================================================**/
+t_env	*init_export_lst(t_env **env, t_env **lst);
+void	print_t_list(t_list *lst);
 
 #endif

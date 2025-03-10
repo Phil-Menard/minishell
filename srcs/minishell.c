@@ -27,6 +27,8 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 		ft_cd(line, *env, fd[1]);
 	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
 		ft_unset(line, env);
+	/* else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
+		ft_export(line, env); */
 	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
 	{
 		free_db_array(arr);
@@ -85,13 +87,17 @@ char	*set_prompt_arg(void)
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
+	t_env	*export;
 	char	*line;
 	char	*prompt_arg;
 
 	(void) argc;
 	(void) argv;
 	env = NULL;
+	export = NULL;
 	fill_env(&env, envp);
+	init_export_lst(&env, &export);
+	print_env(export, 1);
 	print_minishell();
 	while (1)
 	{
@@ -106,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 		free(prompt_arg);
 	}
 	free_env(env);
+	free_env(export);
 	rl_clear_history();
 	return (0);
 }

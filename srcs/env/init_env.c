@@ -8,7 +8,10 @@ t_env	*ft_new_env_node(char *content)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
-	node->var = ft_strdup(content);
+	if (content == NULL)
+		node->var = NULL;
+	else
+		node->var = ft_strdup(content);
 	node->next = NULL;
 	return (node);
 }
