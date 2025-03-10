@@ -12,14 +12,14 @@ LIBFT_DIR = libft
 SRC = minishell.c \
 	execution/builtins_1.c \
 	execution/builtins_2.c \
-	execution/exec_cmds.c \
 	execution/ft_echo.c \
-	execution/pipex.c \
+	execution/prep_exec_cmds.c \
+	execution/exec_cmds.c \
+	pipes/pipex.c \
+	pipes/utils_pipex.c \
 	utils/utils.c \
 	utils/utils_2.c \
 	utils/utils_fd.c \
-	utils/utils_env.c \
-	utils/utils_pipex.c \
 	redirections/prepare_redir.c \
 	redirections/redirections.c \
 	env/init_env.c \
@@ -27,6 +27,7 @@ SRC = minishell.c \
 	parsing/parser.c \
 	parsing/lexing.c \
 	parsing/parser_utils.c \
+	env/utils_env.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))
