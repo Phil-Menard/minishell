@@ -36,12 +36,12 @@ void	find_correct_function(char *line, int *fd, t_env **env, int id)
 
 void	builtins(char *line, t_env **env)
 {
+	pid_t	*pids;
 	char	**arr;
 	int		*fd;
-	int		i;
+	int		arr_size;
 
 	arr = prepare_line(line);
-	i = 0;
 	fd = NULL;
 	if (!arr[1])
 	{
@@ -51,7 +51,9 @@ void	builtins(char *line, t_env **env)
 	}
 	else
 	{
-		pipex(arr, env);
+		arr_size = double_arr_len(arr);
+		pids = malloc(sizeof(pid_t) * arr_size);
+		pipex(arr, env, arr_size, pids);
 	}
 	free_db_array(arr);
 	free(fd);

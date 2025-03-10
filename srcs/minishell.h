@@ -34,7 +34,7 @@ void	ft_env(t_env *env, int fd);
 void	ft_echo(char *str, int fd);
 void	ft_cd(char *str, t_env *env, int fd);
 void	ft_unset(char *str, t_env **env);
-void	ft_exit();
+void	ft_exit(void);
 void	exec_cmds(char *str, int *fd, int id);
 void	ft_execve(char *path, char **arg);
 char	*get_right_path(char *str);
@@ -42,7 +42,7 @@ char	*get_next_path(char *arr, char *str);
 void	check_path_errors(char *argv, char **env, int *pipefd);
 void	find_correct_function(char *line, int *fd, t_env **env, int id);
 //---------------PIPES----------------------
-void	pipex(char **arr, t_env **env);
+void	pipex(char **arr, t_env **env, int arr_size, pid_t *pids);
 //---------------UTILS--------------------
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
@@ -59,6 +59,12 @@ int		*set_fd(char *line, int *fd);
 int		*init_and_set_fd(char *line);
 void	close_multiple_fd(int *fd);
 int		set_previous_fd(int *fd, int previous_fd);
+//---------------UTILS FUNCTIONS FOR PIPEX--------------------
+void	close_previous_fd(int previous_fd);
+void	wait_childs(pid_t *pids, int arr_size);
+void	outfile_dups(int *fd, int *pipefd, int i, int arr_size);
+void	post_cmd(int *pipefd, int *previous_fd, int *fd);
+void	end_pipex(int *pipefd, pid_t *pids, int arr_size, int previous_fd);
 //---------------CHECK QUOTES WHEN NEW LINE--------------------
 int		check_quote(char *str);
 char	*get_lines(char *line);

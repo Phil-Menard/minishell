@@ -25,7 +25,7 @@ char	*cd_oldpwd(t_env *env, int fd)
 {
 	char	*str;
 	char	*path;
-	
+
 	path = get_var(env, "OLDPWD");
 	str = ft_strjoin(path, "\n");
 	ft_putstr_fd(str, fd);
