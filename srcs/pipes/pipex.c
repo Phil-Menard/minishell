@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	exec_cmds_bis(char *str, t_env **env)
+void	exec_cmds_pipes(char *str, t_env **env)
 {
 	char	*path;
 	char	**arg;
@@ -12,7 +12,7 @@ void	exec_cmds_bis(char *str, t_env **env)
 	ft_execve(path, arg, env);
 }
 
-void	find_correct_function_bis(char *line, int *fd, int *pipefd, t_env **env)
+void	builtin_or_cmd_pipes(char *line, int *fd, int *pipefd, t_env **env)
 {
 	close(pipefd[0]);
 	close(pipefd[1]);
@@ -32,7 +32,7 @@ void	find_correct_function_bis(char *line, int *fd, int *pipefd, t_env **env)
 		ft_exit();
 	}
 	else
-		exec_cmds_bis(line, env);
+		exec_cmds_pipes(line, env);
 	exit(EXIT_SUCCESS);
 }
 
@@ -65,7 +65,7 @@ void	pipex(char **arr, t_env **env, int arr_size, pid_t *pids)
 				dup2(previous_fd, STDIN_FILENO);
 			outfile_dups(fd, pipefd, i, arr_size);
 			close_previous_fd(previous_fd);
-			find_correct_function_bis(arr[i], fd, pipefd, env);
+			builtin_or_cmd_pipes(arr[i], fd, pipefd, env);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
 	}

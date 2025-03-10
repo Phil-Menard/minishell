@@ -1,10 +1,11 @@
 #include "../minishell.h"
 
 //execve with correct redirection
-void	exec_redir(char *path, char **arg, int *fd, int id, t_env **env)
+void	exec_redir(char *path, char **arg, int *fd, t_env **env)
 {
-	if (id != 0)
-		id = fork();
+	int	id;
+
+	id = fork();
 	if (id == 0)
 	{
 		if (dup2(fd[0], STDIN_FILENO) == -1)

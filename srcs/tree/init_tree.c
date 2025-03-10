@@ -93,7 +93,7 @@ void	ft_execute(char *line, t_env **env)
 	free_db_array(split);
 	tree = ft_new_node(str);
 	// printf("tree->cmd : %s\n", tree->cmd);
-	builtins(tree->cmd, env);
+	check_pipes(tree->cmd, env);
 	free(str);
 	ft_free_list(tree);
 }
