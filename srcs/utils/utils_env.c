@@ -60,3 +60,16 @@ void	free_env_node(char *var, t_env *node)
 	free(var);
 	free(node);
 }
+
+int	env_size(t_env *lst)
+{
+	int	size;
+
+	size = 0;
+	while (lst != NULL)
+	{
+		size += 1;
+		lst = lst->next;
+	}
+	return (size);
+}

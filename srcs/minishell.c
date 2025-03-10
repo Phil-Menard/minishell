@@ -29,7 +29,7 @@ void	find_correct_function(char *line, int *fd, t_env **env, int id)
 		ft_exit();
 	}
 	else
-		exec_cmds(line, fd, id);
+		exec_cmds(line, fd, id, env);
 	if (id == 0)
 		exit(EXIT_SUCCESS);
 }
@@ -103,12 +103,3 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (0);
 }
-
-/*
-work on mybranch (Leon || Phil)
-push with git push origin mybranch
-go to main (git checkout main)
-update main (git pull origin main)
-fusion branch (git merge mybranch)
-push everything (git push origin main)
-*/

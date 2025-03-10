@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //execve with correct redirection
-void	exec_redir(char *path, char **arg, int *fd, int id)
+void	exec_redir(char *path, char **arg, int *fd, int id, t_env **env)
 {
 	if (id != 0)
 		id = fork();
@@ -22,7 +22,7 @@ void	exec_redir(char *path, char **arg, int *fd, int id)
 			}
 			close(fd[1]);
 		}
-		ft_execve(path, arg);
+		ft_execve(path, arg, env);
 	}
 	else
 		wait(NULL);

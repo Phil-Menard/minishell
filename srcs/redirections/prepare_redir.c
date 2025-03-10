@@ -101,7 +101,7 @@ char	*get_outfile(char *str)
 	return (res);
 }
 
-void	prepare_redir(char *str, int redirection, int *fd, int id)
+void	prepare_redir(char *str, int redirection, int *fd, int id, t_env **env)
 {
 	char	*path;
 	char	**arg;
@@ -112,7 +112,7 @@ void	prepare_redir(char *str, int redirection, int *fd, int id)
 	arg = fill_arg(path, line);
 	free(line);
 	if (redirection >= 0)
-		exec_redir(path, arg, fd, id);
+		exec_redir(path, arg, fd, id, env);
 	free_db_array(arg);
 	free(path);
 }

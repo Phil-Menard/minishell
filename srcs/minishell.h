@@ -35,8 +35,8 @@ void	ft_echo(char *str, int fd);
 void	ft_cd(char *str, t_env *env, int fd);
 void	ft_unset(char *str, t_env **env);
 void	ft_exit(void);
-void	exec_cmds(char *str, int *fd, int id);
-void	ft_execve(char *path, char **arg);
+void	exec_cmds(char *str, int *fd, int id, t_env **env);
+void	ft_execve(char *path, char **arg, t_env **env);
 char	*get_right_path(char *str);
 char	*get_next_path(char *arr, char *str);
 void	check_path_errors(char *argv, char **env, int *pipefd);
@@ -70,11 +70,11 @@ int		check_quote(char *str);
 char	*get_lines(char *line);
 //---------------REDIRECTIONS--------------------
 int		is_redirected(char *str);
-void	prepare_redir(char *str, int redirection, int *fd, int id);
+void	prepare_redir(char *str, int redirection, int *fd, int id, t_env **env);
 char	*str_without_redir(char *str);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
-void	exec_redir(char *path, char **arg, int *fd, int id);
+void	exec_redir(char *path, char **arg, int *fd, int id, t_env **env);
 //---------------ENV--------------------
 t_env	*ft_new_env_node(char *content);
 t_env	*fill_env(t_env **lst, char **envp);
@@ -83,6 +83,7 @@ void	ft_env_add_back(t_env **lst, t_env *new);
 char	*get_var(t_env *env, char *content);
 t_env	*remove_env_var(t_env **lst, char *str);
 void	print_env(t_env *lst, int fd);
+int		env_size(t_env *lst);
 void	free_env_node(char *var, t_env *node);
 void	free_env(t_env *lst);
 
