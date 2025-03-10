@@ -78,20 +78,21 @@ char	*get_right_path(char *str)
 	return (NULL);
 }
 
-void	exec_cmds(char *str, int *fd)
+void	exec_cmds(char *str, int *fd, int id)
 {
 	char	*path;
 	char	**arg;
-	int		id;
 	int		redirection;
 
 	redirection = is_redirected(str);
 	if (redirection >= 0)
-		prepare_redir(str, redirection, fd);
+		prepare_redir(str, redirection, fd, id);
 	else
 	{
 		path = get_right_path(str);
 		arg = fill_arg(path, str);
+		if (id == 0)
+			exec_redir(path, arg, fd, id);
 		id = fork();
 		if (id == 0)
 			ft_execve(path, arg);

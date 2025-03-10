@@ -75,3 +75,25 @@ int	double_arr_len(char **arr)
 		size++;
 	return (size);
 }
+
+char	**prepare_line(char *line)
+{
+	char	**arr;
+	char	**res;
+	int		i;
+
+	arr = ft_split(line, "|");
+	i = 0;
+	while (arr[i])
+		i++;
+	res = malloc((i + 1) * sizeof(char *));
+	i = 0;
+	while (arr[i])
+	{
+		res[i] = ft_strtrim(arr[i], " ");
+		i++;
+	}
+	res[i] = NULL;
+	free_db_array(arr);
+	return (res);
+}

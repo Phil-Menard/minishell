@@ -14,3 +14,4 @@ void	ft_unset(char *str, t_env **env)
 	}
 	free_db_array(arr);
 }
+

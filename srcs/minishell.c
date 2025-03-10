@@ -11,34 +11,51 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	builtins(char *line, t_env **env, int *exit_code)
+void	find_correct_function(char *line, int *fd, t_env **env, int id)
 {
-	int	*fd;
-	int	i;
-
-	fd = malloc(3 * sizeof(int));
-	i = -1;
-	while (++i < 3)
-		fd[i] = 1;
-	fd = set_fd(line, fd);
 	if (ft_strncmp(line, "pwd", 3) == 0)
-		ft_pwd(fd);
+		ft_pwd(fd[1]);
 	else if (ft_strncmp(line, "env", 3) == 0)
-		ft_env(*env, fd);
+		ft_env(*env, fd[1]);
 	else if (ft_strncmp(line, "echo", 4) == 0)
-		ft_echo(line, fd);
+		ft_echo(line, fd[1]);
 	else if (ft_strncmp(line, "cd", 2) == 0)
-		ft_cd(line, *env, fd);
+		ft_cd(line, *env, fd[1]);
 	else if (ft_strncmp(line, "unset", 5) == 0)
 		ft_unset(line, env);
 	else if (ft_strncmp(line, "exit", 4) == 0)
 	{
 		close_multiple_fd(fd);
-		ft_exit(exit_code);
+		ft_exit();
 	}
 	else
-		exec_cmds(line, fd);
-	close_multiple_fd(fd);
+		exec_cmds(line, fd, id);
+	if (id == 0)
+		exit(EXIT_SUCCESS);
+}
+
+void	builtins(char *line, t_env **env)
+{
+	pid_t	*pids;
+	char	**arr;
+	int		*fd;
+	int		arr_size;
+
+	arr = prepare_line(line);
+	fd = NULL;
+	if (!arr[1])
+	{
+		fd = init_fd();
+		fd = set_fd(line, fd);
+		find_correct_function(line, fd, env, -1);
+	}
+	else
+	{
+		arr_size = double_arr_len(arr);
+		pids = malloc(sizeof(pid_t) * arr_size);
+		pipex(arr, env, arr_size, pids);
+	}
+	free_db_array(arr);
 	free(fd);
 }
 
@@ -65,15 +82,13 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env;
 	char	*line;
 	char	*prompt_arg;
-	int		exit_code;
 
 	(void) argc;
 	(void) argv;
 	env = NULL;
 	fill_env(&env, envp);
 	print_minishell();
-	exit_code = 1;
-	while (exit_code == 1)
+	while (1)
 	{
 		prompt_arg = set_prompt_arg();
 		line = readline(prompt_arg);
