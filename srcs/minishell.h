@@ -51,18 +51,24 @@ typedef struct s_token_builder
 	struct s_token_builder	*next;
 }							t_token_builder;
 
-//---------------PARSING------------------------
+/**========================================================================
+ *!                                  PARSING
+ *========================================================================**/
 int		ft_get_pos(char *str, int start, char c);
 t_token	ft_get_token(char *str);
 char	**ft_duptab(char **tab, int *start, int end);
 int		ft_check_pair(char *line, char what);
-//---------------------TREE--------------------
+/**========================================================================
+ *!                                  TREE
+ *========================================================================**/
 void	ft_free_list(t_ast *tree);
 t_ast	*ft_new_node(char *cmd, t_token type);
 void	ft_add_node_end(t_ast *tree, const char *branch, t_ast *node);
 void	ft_parse(char *line, t_env *env);
 void	ft_print_tree(t_ast *root, int space); //! a retirer
-//---------------EXECUTION BUILTINS--------------------
+/**========================================================================
+ *!                           EXECUTION BUILTINS
+ *========================================================================**/
 void	check_pipes(char *line, t_env **env);
 void	ft_pwd(int fd);
 void	ft_env(t_env *env, int fd);
@@ -70,22 +76,30 @@ void	ft_echo(char *str, int fd);
 void	ft_cd(char *str, t_env *env, int fd);
 void	ft_unset(char *str, t_env **env);
 void	ft_exit(void);
-//---------------EXECUTION BASH COMMANDS--------------------
+/**========================================================================
+ *!                        EXECUTION BASH COMMANDS
+ *========================================================================**/
 void	exec_cmds(char *str, int *fd, t_env **env);
 void	ft_execve(char *path, char **arg, t_env **env);
 char	*get_right_path(char *str);
 char	*get_next_path(char *arr, char *str);
 void	check_path_errors(char *argv, char **env, int *pipefd);
 void	builtin_or_cmd(char *line, int *fd, t_env **env);
-//-----------------------PIPES----------------------
+/**========================================================================
+ *!                                 PIPES
+ *========================================================================**/
 void	pipex(char **arr, t_env **env, int arr_size, pid_t *pids);
-//---------------UTILS FUNCTIONS FOR PIPES--------------------
+/**========================================================================
+ *!                      UTILS FUNCTIONS FOR PIPES
+ *========================================================================**/
 void	close_previous_fd(int previous_fd);
 void	wait_childs(pid_t *pids, int arr_size);
 void	outfile_dups(int *fd, int *pipefd, int i, int arr_size);
 void	post_cmd(int *pipefd, int *previous_fd, int *fd);
 void	end_pipex(int *pipefd, pid_t *pids, int arr_size, int previous_fd);
-//---------------UTILS--------------------
+/**========================================================================
+ *!                               UTILS
+ *========================================================================**/
 char	*ft_join_mid(char *s1, char slash, char *s2);
 void	free_db_array(char **arr);
 char	**fill_arg(char *path, char *argv);
@@ -95,23 +109,31 @@ int		double_arr_len(char **arr);
 char	*ft_straddchar(char *str, char c);
 int		find_occurences(char *str, char c);
 char	**prepare_line(char *line);
-//---------------UTILS FUNCTIONS FOR FD--------------------
+/**========================================================================
+ *!                      UTILS FUNCTIONS FOR FD
+ *========================================================================**/
 int		*init_fd(void);
 int		*set_fd(char *line, int *fd);
 int		*init_and_set_fd(char *line);
 void	close_multiple_fd(int *fd);
 int		set_previous_fd(int *fd, int previous_fd);
-//---------------CHECK QUOTES WHEN NEW LINE--------------------
+/**========================================================================
+ *!                      CHECK QUOTES WHEN NEW LINE
+ *========================================================================**/
 int		check_quote(char *str);
 char	*get_lines(char *line);
-//---------------REDIRECTIONS--------------------
+/**========================================================================
+ *!                            REDIRECTIONS
+ *========================================================================**/
 int		is_redirected(char *str);
 void	prepare_redir(char *str, int redirection, int *fd, t_env **env);
 char	*str_without_redir(char *str);
 char	*get_infile(char *str);
 char	*get_outfile(char *str);
 void	exec_redir(char *path, char **arg, int *fd, t_env **env);
-//---------------ENV--------------------
+/**========================================================================
+ *!                                 ENV
+ *========================================================================**/
 t_env	*ft_new_env_node(char *content);
 t_env	*fill_env(t_env **lst, char **envp);
 t_env	*modify_env(t_env *env, char *old_var, char *new_var);

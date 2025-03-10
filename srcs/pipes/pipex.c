@@ -14,25 +14,30 @@ void	exec_cmds_pipes(char *str, t_env **env)
 
 void	builtin_or_cmd_pipes(char *line, int *fd, int *pipefd, t_env **env)
 {
+	char	**arr;
+
+	arr = ft_split(line, " ");
 	close(pipefd[0]);
 	close(pipefd[1]);
-	if (ft_strncmp(line, "pwd", 3) == 0)
+	if (ft_strncmp(arr[0], "pwd", ft_strlen(arr[0])) == 0)
 		ft_pwd(fd[1]);
-	else if (ft_strncmp(line, "env", 3) == 0)
+	else if (ft_strncmp(arr[0], "env", ft_strlen(arr[0])) == 0)
 		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line, "echo", 4) == 0)
+	else if (ft_strncmp(arr[0], "echo", ft_strlen(arr[0])) == 0)
 		ft_echo(line, fd[1]);
-	else if (ft_strncmp(line, "cd", 2) == 0)
+	else if (ft_strncmp(arr[0], "cd", ft_strlen(arr[0])) == 0)
 		ft_cd(line, *env, fd[1]);
-	else if (ft_strncmp(line, "unset", 5) == 0)
+	else if (ft_strncmp(arr[0], "unset", ft_strlen(arr[0])) == 0)
 		ft_unset(line, env);
-	else if (ft_strncmp(line, "exit", 4) == 0)
+	else if (ft_strncmp(arr[0], "exit", ft_strlen(arr[0])) == 0)
 	{
+		free_db_array(arr);
 		close_multiple_fd(fd);
 		ft_exit();
 	}
 	else
 		exec_cmds_pipes(line, env);
+	free_db_array(arr);
 	exit(EXIT_SUCCESS);
 }
 
