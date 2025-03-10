@@ -11,7 +11,7 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	find_correct_function(char *line, int *fd, t_env **env, int id)
+void	builtin_or_cmd(char *line, int *fd, t_env **env)
 {
 	if (ft_strncmp(line, "pwd", 3) == 0)
 		ft_pwd(fd[1]);
@@ -29,12 +29,10 @@ void	find_correct_function(char *line, int *fd, t_env **env, int id)
 		ft_exit();
 	}
 	else
-		exec_cmds(line, fd, id);
-	if (id == 0)
-		exit(EXIT_SUCCESS);
+		exec_cmds(line, fd, env);
 }
 
-void	builtins(char *line, t_env **env)
+void	check_pipes(char *line, t_env **env)
 {
 	pid_t	*pids;
 	char	**arr;
@@ -47,7 +45,7 @@ void	builtins(char *line, t_env **env)
 	{
 		fd = init_fd();
 		fd = set_fd(line, fd);
-		find_correct_function(line, fd, env, -1);
+		builtin_or_cmd(line, fd, env);
 	}
 	else
 	{
@@ -103,12 +101,3 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (0);
 }
-
-/*
-work on mybranch (Leon || Phil)
-push with git push origin mybranch
-go to main (git checkout main)
-update main (git pull origin main)
-fusion branch (git merge mybranch)
-push everything (git push origin main)
-*/
