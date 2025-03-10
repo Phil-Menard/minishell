@@ -60,7 +60,7 @@ int		ft_check_pair(char *line, char what);
 void	ft_free_list(t_ast *tree);
 t_ast	*ft_new_node(char *cmd, t_token type);
 void	ft_add_node_end(t_ast *tree, const char *branch, t_ast *node);
-void	ft_parse(char *line, t_env *env, int *exit_code);
+void	ft_parse(char *line, t_env *env);
 void	ft_print_tree(t_ast *root, int space); //! a retirer
 //---------------EXECUTION BUILTINS--------------------
 void	check_pipes(char *line, t_env **env);

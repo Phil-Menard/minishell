@@ -13,23 +13,28 @@ void	print_minishell(void)
 
 void	builtin_or_cmd(char *line, int *fd, t_env **env)
 {
-	if (ft_strncmp(line, "pwd", 3) == 0)
+	char	**arr;
+
+	arr = ft_split(line, " ");
+	if (ft_strncmp(arr[0], "pwd", ft_strlen(arr[0])) == 0)
 		ft_pwd(fd[1]);
-	else if (ft_strncmp(line, "env", 3) == 0)
+	else if (ft_strncmp(line, "env", ft_strlen(arr[0])) == 0)
 		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line, "echo", 4) == 0)
+	else if (ft_strncmp(line, "echo", ft_strlen(arr[0])) == 0)
 		ft_echo(line, fd[1]);
-	else if (ft_strncmp(line, "cd", 2) == 0)
+	else if (ft_strncmp(line, "cd", ft_strlen(arr[0])) == 0)
 		ft_cd(line, *env, fd[1]);
-	else if (ft_strncmp(line, "unset", 5) == 0)
+	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
 		ft_unset(line, env);
-	else if (ft_strncmp(line, "exit", 4) == 0)
+	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
 	{
+		free_db_array(arr);
 		close_multiple_fd(fd);
 		ft_exit();
 	}
 	else
 		exec_cmds(line, fd, env);
+	free_db_array(arr);
 }
 
 void	check_pipes(char *line, t_env **env)
@@ -92,7 +97,8 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			ft_parse(line, env, &exit_code); //* pour parser
+			check_pipes(line, &env);
+			// ft_parse(line, env); //* pour parser
 			// builtins(line, env, &exit_code);
 		free(line);
 		free(prompt_arg);

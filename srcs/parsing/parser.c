@@ -1,7 +1,7 @@
 # include "../minishell.h"
 
 //* func called by main, call all other
-void	ft_parse(char *line, t_env *env, int *exit_code)
+void	ft_parse(char *line, t_env *env)
 {
 	t_ast	*tree;
 	char	**tokens;
@@ -47,7 +47,7 @@ void	ft_create_tree(t_ast *tree, char **split, int i_arg)
 		tree = ft_new_node(ft_get_cmd(split[i_arg], &i_arg), CMD);
 		//ft_create_tree(tree);
 	}
-	else if ()
+	// else if ()
 
 
 	free_db_array(split);
