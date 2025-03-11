@@ -26,9 +26,9 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export)
 	else if (ft_strncmp(line, "cd", ft_strlen(arr[0])) == 0)
 		ft_cd(line, *env, fd[1]);
 	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
-		ft_unset(line, env);
+		ft_unset(line, env, export);
 	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
-		ft_export(*export, fd[1]);
+		ft_export(line, env, export, fd[1]);
 	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
 	{
 		free_db_array(arr);

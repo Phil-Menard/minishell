@@ -74,8 +74,8 @@ void	ft_pwd(int fd);
 void	ft_env(t_env *env, int fd);
 void	ft_echo(char *str, int fd);
 void	ft_cd(char *str, t_env *env, int fd);
-void	ft_unset(char *str, t_env **env);
-void	ft_export(t_env *export, int fd);
+void	ft_unset(char *str, t_env **env, t_env **export);
+void	ft_export(char *line, t_env **env, t_env **export, int fd);
 void	ft_exit(void);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
@@ -140,7 +140,7 @@ t_env	*fill_env(t_env **lst, char **envp);
 t_env	*modify_env(t_env *env, char *old_var, char *new_var);
 void	ft_env_add_back(t_env **lst, t_env *new);
 char	*get_var(t_env *env, char *content);
-t_env	*remove_env_var(t_env **lst, char *str);
+t_env	*remove_env_var(t_env **lst, char *str, int x);
 void	print_env(t_env *lst, int fd);
 int		env_size(t_env *lst);
 void	free_env_node(char *var, t_env *node);

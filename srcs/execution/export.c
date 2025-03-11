@@ -1,27 +1,83 @@
 #include "../minishell.h"
 
-void	ft_export(t_env *export, int fd)
+//add var to export, x == 1 means there is a value to variable
+t_env	*add_var_export(t_env **export, char *line, int x)
 {
-	print_env(export, fd);
-}
-
-//set export var from env but with declare -x at first and then between quotes
-char	*set_export_var(char **arr, char *env_var)
-{
+	t_env	*node;
+	char	**arr;
 	char	*str;
+	char	*temp;
 	int		i;
 
-	i = 0;
-	str = NULL;
-	str = ft_straddstr(str, "declare -x ");
+	arr = ft_split(line, "=");
+	str = ft_strdup("declare -x ");
 	str = ft_straddstr(str, arr[0]);
-	while (env_var[i] != '=')
+	if (x == 1)
+	{
+		str = ft_straddstr(str, "=\"");
+		i = 0;
+		while (line[i - 1] != '=')
+			i++;
+		temp = ft_substr(line, i, ft_strlen(line));
+		str = ft_straddstr(str, temp);
+		free(temp);
+		str = ft_straddchar(str, '\"');
+	}
+	node = ft_new_env_node(ft_strdup(str));
+	free(str);
+	free_db_array(arr);
+	ft_env_add_back(export, node);
+	return (*export);
+}
+
+t_env	*add_var_env(t_env **env, char *line)
+{
+	t_env	*node;
+	char	**arr;
+	char	*str;
+	char	*temp;
+	int		i;
+
+	arr = ft_split(line, "=");
+	str = ft_straddchar(arr[0], '=');
+	i = 0;
+	while (line[i - 1] != '=')
 		i++;
-	i++;
-	str = ft_straddstr(str, "=\"");
-	str = ft_straddstr(str, env_var + i);
-	str = ft_straddchar(str, '\"');
-	return (str);
+	temp = ft_substr(line, i, ft_strlen(line));
+	str = ft_straddstr(str, temp);
+	free(temp);
+	node = ft_new_env_node(ft_strdup(str));
+	free(str);
+	free_db_array(arr);
+	ft_env_add_back(env, node);
+	return (*env);
+}
+
+void	ft_export(char *line, t_env **env, t_env **export, int fd)
+{
+	char	**arr;
+	int		i;
+
+	(void)env;
+	i = 1;
+	arr = ft_split(line, " ");
+	if (!arr[i])
+		print_env(*export, fd);
+	else
+	{
+		while (arr[i])
+		{
+			if (find_occurences(arr[i], '=') == 0)
+				*export = add_var_export(export, arr[i], 0);
+			else
+			{
+				*export = add_var_export(export, arr[i], 1);
+				*env = add_var_env(env, arr[i]);
+			}
+			i++;
+		}
+	}
+	free_db_array(arr);
 }
 
 t_env	*sort_export(t_env **lst)
@@ -51,6 +107,25 @@ t_env	*sort_export(t_env **lst)
 			current = current->next;
 	}
 	return (*lst);
+}
+
+//set export var from env but with 'declare -x ' at first and then between quotes
+char	*set_export_var(char **arr, char *env_var)
+{
+	char	*str;
+	int		i;
+
+	i = 0;
+	str = NULL;
+	str = ft_straddstr(str, "declare -x ");
+	str = ft_straddstr(str, arr[0]);
+	while (env_var[i] != '=')
+		i++;
+	i++;
+	str = ft_straddstr(str, "=\"");
+	str = ft_straddstr(str, env_var + i);
+	str = ft_straddchar(str, '\"');
+	return (str);
 }
 
 t_env	*init_export_lst(t_env **env, t_env **lst)
