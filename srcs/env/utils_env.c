@@ -10,7 +10,7 @@ void	print_env(t_env *lst, int fd)
 	}
 }
 
-//find variable and update it
+//find variable and update it, arr[0] is variable name
 t_env	*modify_env(t_env *env, char *old_var, char *new_var)
 {
 	t_env	*current;

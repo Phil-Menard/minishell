@@ -27,6 +27,8 @@ void	outfile_dups(int *fd, int *pipefd, int i, int arr_size)
 		dup2(fd[1], STDOUT_FILENO);
 	else if (i < arr_size - 1)
 		dup2(pipefd[1], STDOUT_FILENO);
+	close(pipefd[0]);
+	close(pipefd[1]);
 }
 
 //regroups every functions called after child process

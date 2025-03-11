@@ -12,7 +12,7 @@ void	print_minishell(void)
 }
 
 //check which cmd is entered in line, and call a builtin or execve
-void	builtin_or_cmd(char *line, int *fd, t_env **env)
+void	builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export)
 {
 	char	**arr;
 
@@ -27,8 +27,8 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 		ft_cd(line, *env, fd[1]);
 	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
 		ft_unset(line, env);
-	/* else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
-		ft_export(line, env); */
+	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
+		ft_export(*export, fd[1]);
 	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
 	{
 		free_db_array(arr);
@@ -41,9 +41,8 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 }
 
 //check if line contains a pipe or not, and call the corresponding function
-void	check_pipes(char *line, t_env **env)
+void	check_pipes(char *line, t_env **env, t_env **export)
 {
-	pid_t	*pids;
 	char	**arr;
 	int		*fd;
 	int		arr_size;
@@ -54,13 +53,12 @@ void	check_pipes(char *line, t_env **env)
 	{
 		fd = init_fd();
 		fd = set_fd(line, fd);
-		builtin_or_cmd(line, fd, env);
+		builtin_or_cmd(line, fd, env, export);
 	}
 	else
 	{
 		arr_size = double_arr_len(arr);
-		pids = malloc(sizeof(pid_t) * arr_size);
-		pipex(arr, env, arr_size, pids);
+		pipex(arr, env, export, arr_size);
 	}
 	free_db_array(arr);
 	free(fd);
@@ -97,7 +95,6 @@ int	main(int argc, char **argv, char **envp)
 	export = NULL;
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
-	print_env(export, 1);
 	print_minishell();
 	while (1)
 	{
@@ -105,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			check_pipes(line, &env);
+			check_pipes(line, &env, &export);
 			// ft_parse(line, env); //* pour parser
 			// builtins(line, env, &exit_code);
 		free(line);
