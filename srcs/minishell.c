@@ -11,7 +11,8 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-void	builtin_or_cmd(char *line, int *fd, t_env **env)
+//check which cmd is entered in line, and call a builtin or execve
+void	builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export)
 {
 	char	**arr;
 
@@ -25,7 +26,9 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 	else if (ft_strncmp(line, "cd", ft_strlen(arr[0])) == 0)
 		ft_cd(line, *env, fd[1]);
 	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
-		ft_unset(line, env);
+		ft_unset(line, env, export);
+	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
+		ft_export(line, env, export, fd[1]);
 	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
 	{
 		free_db_array(arr);
@@ -37,10 +40,9 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env)
 	free_db_array(arr);
 }
 
-// verifie si il y a un pipe 
-void	check_pipes(char *line, t_env **env)
+//check if line contains a pipe or not, and call the corresponding function
+void	check_pipes(char *line, t_env **env, t_env **export)
 {
-	pid_t	*pids;
 	char	**arr;
 	int		*fd;
 	int		arr_size;
@@ -51,13 +53,12 @@ void	check_pipes(char *line, t_env **env)
 	{
 		fd = init_fd();
 		fd = set_fd(line, fd);
-		builtin_or_cmd(line, fd, env);
+		builtin_or_cmd(line, fd, env, export);
 	}
 	else
 	{
 		arr_size = double_arr_len(arr);
-		pids = malloc(sizeof(pid_t) * arr_size);
-		pipex(arr, env, arr_size, pids);
+		pipex(arr, env, export, arr_size);
 	}
 	free_db_array(arr);
 	free(fd);
@@ -84,13 +85,16 @@ char	*set_prompt_arg(void)
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
+	t_env	*export;
 	char	*line;
 	char	*prompt_arg;
 
 	(void) argc;
 	(void) argv;
 	env = NULL;
+	export = NULL;
 	fill_env(&env, envp);
+	init_export_lst(&env, &export);
 	print_minishell();
 	while (1)
 	{
@@ -98,13 +102,14 @@ int	main(int argc, char **argv, char **envp)
 		line = readline(prompt_arg);
 		add_history(line);
 		if (ft_strlen(line) > 0)
-			check_pipes(line, &env);
+			check_pipes(line, &env, &export);
 			// ft_parse(line, env);
 			// builtins(line, env, &exit_code);
 		free(line);
 		free(prompt_arg);
 	}
 	free_env(env);
+	free_env(export);
 	rl_clear_history();
 	return (0);
 }

@@ -8,7 +8,10 @@ t_env	*ft_new_env_node(char *content)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
-	node->var = ft_strdup(content);
+	if (content == NULL)
+		node->var = NULL;
+	else
+		node->var = ft_strdup(content);
 	node->next = NULL;
 	return (node);
 }
@@ -46,7 +49,7 @@ t_env	*fill_env(t_env **lst, char **envp)
 }
 
 //remove a node from env list
-t_env	*remove_env_var(t_env **lst, char *str)
+t_env	*remove_env_var(t_env **lst, char *str, int x)
 {
 	t_env	*current;
 	t_env	*previous;
@@ -55,7 +58,7 @@ t_env	*remove_env_var(t_env **lst, char *str)
 	previous = *lst;
 	current = previous->next;
 	str_size = ft_strlen(str);
-	if (ft_strncmp(previous->var, str, str_size) == 0)
+	if (ft_strncmp(previous->var + x, str, str_size) == 0)
 	{
 		free_env_node(previous->var, previous);
 		*lst = current;
@@ -63,7 +66,7 @@ t_env	*remove_env_var(t_env **lst, char *str)
 	}
 	while (current)
 	{
-		if (ft_strncmp(current->var, str, str_size) == 0)
+		if (ft_strncmp(current->var + x, str, str_size) == 0)
 		{
 			previous->next = current->next;
 			free_env_node(current->var, current);

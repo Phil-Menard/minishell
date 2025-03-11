@@ -1,5 +1,6 @@
 #include "../minishell.h"
 
+//same as exec_cmd but for pipes
 void	exec_cmds_pipes(char *str, t_env **env)
 {
 	char	*path;
@@ -12,13 +13,12 @@ void	exec_cmds_pipes(char *str, t_env **env)
 	ft_execve(path, arg, env);
 }
 
-void	builtin_or_cmd_pipes(char *line, int *fd, int *pipefd, t_env **env)
+//same as builtin_or_cmd but for pipes
+void	builtin_or_cmd_pipes(char *line, int *fd, t_env **env, t_env **export)
 {
 	char	**arr;
 
 	arr = ft_split(line, " ");
-	close(pipefd[0]);
-	close(pipefd[1]);
 	if (ft_strncmp(arr[0], "pwd", ft_strlen(arr[0])) == 0)
 		ft_pwd(fd[1]);
 	else if (ft_strncmp(arr[0], "env", ft_strlen(arr[0])) == 0)
@@ -28,7 +28,9 @@ void	builtin_or_cmd_pipes(char *line, int *fd, int *pipefd, t_env **env)
 	else if (ft_strncmp(arr[0], "cd", ft_strlen(arr[0])) == 0)
 		ft_cd(line, *env, fd[1]);
 	else if (ft_strncmp(arr[0], "unset", ft_strlen(arr[0])) == 0)
-		ft_unset(line, env);
+		ft_unset(line, env, export);
+	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
+		ft_export(line, env, export, fd[1]);
 	else if (ft_strncmp(arr[0], "exit", ft_strlen(arr[0])) == 0)
 	{
 		free_db_array(arr);
@@ -50,13 +52,16 @@ void	pipe_and_fork(int *pipefd, int *pids)
 		return (perror("fork"), exit(EXIT_FAILURE));
 }
 
-void	pipex(char **arr, t_env **env, int arr_size, pid_t *pids)
+//modified pipex that redirects input and output in correct file descriptor/pipe
+void	pipex(char **arr, t_env **env, t_env **export, int arr_size)
 {
+	pid_t	*pids;
 	int		pipefd[2];
 	int		*fd;
 	int		previous_fd;
 	int		i;
 
+	pids = malloc(sizeof(pid_t) * arr_size);
 	previous_fd = -1;
 	i = -1;
 	while (arr[++i])
@@ -70,7 +75,7 @@ void	pipex(char **arr, t_env **env, int arr_size, pid_t *pids)
 				dup2(previous_fd, STDIN_FILENO);
 			outfile_dups(fd, pipefd, i, arr_size);
 			close_previous_fd(previous_fd);
-			builtin_or_cmd_pipes(arr[i], fd, pipefd, env);
+			builtin_or_cmd_pipes(arr[i], fd, env, export);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
 	}
