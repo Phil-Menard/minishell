@@ -1,42 +1,41 @@
 #include "../minishell.h"
+void	ft_addchar_to_token(t_token_builder **builder, char c);
 
-void	ft_get_quotes(t_token_builder **builder, char *line, int start)
+//* Add all quoted text in buf into list token_builder
+void	ft_addquotes_to_token(t_token_builder **builder, char *line, int *start)
 {
-	int	curs;
+	int				curs;
 	t_token_builder	*last;
+	int				i;
 
 	if (!line)
-		return (NULL);
+		return ;
 
-	if (line[start] == '\'')
-		curs = ft_get_pos(line, ++start, '\'');
-	else if (line[start] == '\"')
-		curs = ft_get_pos(line, ++start, '\"');
+	if (line[*start] == '\'')
+		curs = ft_get_pos(line, (*start), '\'');
+	else if (line[*start] == '\"')
+		curs = ft_get_pos(line, (*start), '\"');
+
 
 	last = *builder;
-	while (last)
+	while (last->next)
 		last = last->next;
-	last->next = ft_calloc(sizeof(t_token_builder), 1);
-	if (!last->next)
+	last = ft_calloc(sizeof(t_token_builder), 1);
+	if (!last)
 		return ; // free
-	//ft_strndup(line, start, curs - start);
-	if (curs - start >= LEX_BUFF_SIZE)
-	{
 
-	}
-	else
-	{
-		while (start < curs && line[start])
-		{
-			last->next->buf[]
-		}
-	}
+	last->buf = ft_calloc(sizeof(char), curs - *start);
+	if (!last->buf)
+		return ;
+	last->buf = ft_strndup(line, *start, curs - *start);
+
+	printf("Quoted : %s\n", last->buf);
 }
 
 
 
 
-
+//* Add char by char to buf into list token_builder
 void	ft_addchar_to_token(t_token_builder **builder, char c)
 {
 	t_token_builder	*last;
@@ -45,25 +44,27 @@ void	ft_addchar_to_token(t_token_builder **builder, char c)
 	{
 		*builder = malloc(sizeof(t_token_builder));
 		if (!*builder)
-			return (NULL);
+			return ;
 		(*builder)->len = 1;
+		(*builder)->buf = ft_calloc(sizeof(char), LEX_BUFF_SIZE);
 		(*builder)->buf[0] = c;
 		(*builder)->next = NULL;
 		return ;
 	}
 	last = *builder;
-	while (last)
+	while (last->next)
 		last = last->next;
 	if (last->len >= LEX_BUFF_SIZE)
 	{
-		last->next = malloc(sizeof(t_token_builder));
-		if (!last->next)
+		last = malloc(sizeof(t_token_builder));
+		if (!last)
 			return ; // faire une fonction pour free toute la liste
-		last = last->next;
 		last->len = 0;
 		last->next = NULL;
+		last->buf = ft_calloc(sizeof(char), LEX_BUFF_SIZE);
 	}
-	last->buf[last->len + 1] = c;
+	last->buf[last->len++] = c;
+	printf("Buf : %s\n", last->buf);
 }
 
 
@@ -80,14 +81,17 @@ t_token_builder	*ft_tokenizer(char *line)
 	int				i;
 
 	if (!ft_check_pair(line, '\'') || !ft_check_pair(line, '\"'))
-		return (NULL);
+		return (printf("Error odd nb of quotes.\n"), NULL);
 
+	tokens = NULL;
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '\"')
-			ft_get_quotes(line, i);
-		
+		if (line[i] && (line[i] == '\'' || line[i] == '\"')
+			&& (ft_strfind(line + i, "\'") || ft_strfind(line + i, "\"")))
+			ft_addquotes_to_token(&tokens, line, &i);
+		else
+			ft_addchar_to_token(&tokens, line[i]);
 		i++;
 	}
 
@@ -102,11 +106,11 @@ t_token_builder	*ft_tokenizer(char *line)
 int main()
 {
 	char *test = "echo 'hello world'";
-	t_list *tokens = ft_tokenizer(test);
+	t_token_builder *tokens = ft_tokenizer(test);
 
 	while (tokens)
 	{
-		printf("Token: %s\n", ((t_ast *)tokens->content)->cmd);
+		printf("Token: %s\n", tokens->buf);
 		tokens = tokens->next;
 	}
 	return 0;

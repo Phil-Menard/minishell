@@ -46,7 +46,7 @@ typedef struct s_ast
 
 typedef struct s_token_builder
 {
-	char					buf[LEX_BUFF_SIZE];
+	char					*buf;
 	int						len;
 	struct s_token_builder	*next;
 }							t_token_builder;
@@ -54,9 +54,11 @@ typedef struct s_token_builder
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-int		ft_get_pos(char *str, int start, char c);
+/**========================================================================
+ *!                           PARSING UTILS
+ *========================================================================**/
 t_token	ft_get_token(char *str);
-char	**ft_duptab(char **tab, int *start, int end);
+int		ft_get_pos(char *str, int start, char c);
 int		ft_check_pair(char *line, char what);
 /**========================================================================
  *!                                  TREE
@@ -65,7 +67,7 @@ void	ft_free_list(t_ast *tree);
 t_ast	*ft_new_node(char *cmd, t_token type);
 void	ft_add_node_end(t_ast *tree, const char *branch, t_ast *node);
 void	ft_parse(char *line, t_env *env);
-void	ft_print_tree(t_ast *root, int space); //! a retirer
+void	ft_print_tree(t_ast *root, int space); // a retirer
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/

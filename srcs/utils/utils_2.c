@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-int	check_quote(char *str)
+/* int	check_quote(char *str)
 {
 	int	i;
 	int	quote;
@@ -35,7 +35,7 @@ char	*get_lines(char *line)
 	}
 	free(new_line);
 	return (res);
-}
+} */
 
 //find s2 in s1
 int	ft_strfind(char *s1, char *s2)
@@ -65,7 +65,7 @@ int	ft_strfind(char *s1, char *s2)
 	return (0);
 }
 
-//return the size of a 2D array
+/* //return the size of a 2D array
 int	double_arr_len(char **arr)
 {
 	int	size;
@@ -96,4 +96,4 @@ char	**prepare_line(char *line)
 	res[i] = NULL;
 	free_db_array(arr);
 	return (res);
-}
+} */

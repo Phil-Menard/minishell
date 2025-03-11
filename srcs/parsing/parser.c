@@ -35,7 +35,7 @@ void	ft_parse(char *line, t_env *env)
 // 	}
 // 	return (str);
 // }
-// update : peut etre inutile au finale... 
+//* update : peut etre inutile au finale... 
 
 
 
