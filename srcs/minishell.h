@@ -54,6 +54,7 @@ typedef struct s_token_builder
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
+t_token_builder	*ft_new_tkb(size_t len, void *buf);
 t_token_builder	*ft_get_last(t_token_builder *node);
 t_token			ft_get_token(char *str);
 int				ft_get_pos(char *str, int start, char c);

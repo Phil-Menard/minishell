@@ -73,3 +73,16 @@ t_token_builder	*ft_get_last(t_token_builder *node)
 		last = last->next;
 	return (last);
 }
+
+t_token_builder	*ft_new_tkb(size_t len, void *buf)
+{
+	t_token_builder	*new;
+
+	new = ft_calloc(sizeof(t_token_builder), 1);
+	if (!new)
+		return (NULL);
+	new->next = NULL;
+	new->len = len;
+	new->buf = buf;
+	return (new);
+}

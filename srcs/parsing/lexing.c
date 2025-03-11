@@ -4,30 +4,21 @@ void	ft_addchar_to_token(t_token_builder **builder, char c);
 //* Add all quoted text in buf into list token_builder
 void	ft_addquotes_to_token(t_token_builder **builder, char *line, int start)
 {
-	int				curs;
+	int				size;
 	t_token_builder	*last;
 
 	if (!line)
 		return ;
 
 	if (line[start] == '\'')
-		curs = ft_get_pos(line, ++start, '\'');
+		size = ft_get_pos(line, start, '\'') - start;
 	else if (line[start] == '\"')
-		curs = ft_get_pos(line, ++start, '\"');
+		size = ft_get_pos(line, start, '\"') - start;
 
 
 	last = ft_get_last(*builder);
-	last->next = ft_calloc(sizeof(t_token_builder), 1);
-	if (!last)
-		return ; // free all list
-	last = last->next;
-
-	last->buf = ft_strndup(line, start, curs - start);
-	if (!last->buf)
-		printf("strndup not work\n");
-	last->len = ft_strlen(last->buf);
-	last->next = NULL;
-	printf("addquote : %s\n", last->buf);
+	last->next = ft_new_tkb(size, ft_strndup(line, start, size));
+	printf("addquote : %s\n", last->next->buf);
 }
 
 
@@ -51,15 +42,7 @@ void	ft_addchar_to_token(t_token_builder **builder, char c)
 	}
 	last = ft_get_last(*builder);
 	if (last->len >= LEX_BUFF_SIZE)
-	{
-		last->next = ft_calloc(sizeof(t_token_builder), 1);
-		if (!last->next)
-			return ; // faire une fonction pour free toute la liste
-		last = last->next;
-		last->buf = ft_calloc(sizeof(char), LEX_BUFF_SIZE);
-		last->len = 0;
-		last->next = NULL;
-	}
+		last->next = ft_new_tkb(0, ft_calloc(sizeof(char), LEX_BUFF_SIZE));
 	last->buf[last->len++] = c;
 	printf("addchar : %s\n", last->buf);
 }
