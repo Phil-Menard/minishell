@@ -58,7 +58,6 @@ void	ft_export(char *line, t_env **env, t_env **export, int fd)
 	char	**arr;
 	int		i;
 
-	(void)env;
 	i = 1;
 	arr = ft_split(line, " ");
 	if (!arr[i])
@@ -77,6 +76,7 @@ void	ft_export(char *line, t_env **env, t_env **export, int fd)
 			i++;
 		}
 	}
+	*export = sort_export(export);
 	free_db_array(arr);
 }
 
