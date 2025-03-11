@@ -8,6 +8,11 @@ void	ft_parse(char *line, t_env *env)
 
 	if (!line)
 		return ;
+	if (!ft_check_pair(line, '\'') || !ft_check_pair(line, '\"'))
+	{
+		printf("Error odd nb of quotes.\n");
+		return ;
+	}
 	tokens = ft_tokenizer(line); // lexing
 	// create tree
 	// exec

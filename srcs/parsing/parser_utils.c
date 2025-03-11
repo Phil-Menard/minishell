@@ -63,3 +63,13 @@ int	ft_check_pair(char *line, char what)
 		return (0);
 	return (1);
 }
+
+t_token_builder	*ft_get_last(t_token_builder *node)
+{
+	t_token_builder	*last;
+
+	last = node;
+	while (last->next)
+		last = last->next;
+	return (last);
+}

@@ -7,6 +7,4 @@ il faudrait juste quitter la boucle dans le main et tout free apres
 flag Valgrind :
 valgrind --suppressions=valgrind.supp --leak-check=full --show-leak-kinds=all ./minishell
 
-fonctionne pas :
-- clear (TERM environment variable not set)
-- cc/gcc (erreur ld ?)
+- pour bosser a la maison il faut installer la lib de readline : libreadline-dev
