@@ -53,13 +53,21 @@ char	*ft_straddchar(char *str, char c)
 	char	*res;
 	int		i;
 
-	res = malloc((ft_strlen(str) + 2) * sizeof(char));
-	i = 0;
-	while (str[i])
+	if (!str)
 	{
-		res[i] = str[i];
-		i++;
+		res = ft_calloc(sizeof(char), 2);
+		if (!res)
+			return (NULL);
+		res[0] = c;
+		res[1] = '\0';
+		return (res);
 	}
+	res = malloc((ft_strlen(str) + 2) * sizeof(char));
+	if (!res)
+		return (NULL);
+	i = -1;
+	while (str[++i])
+		res[i] = str[i];
 	res[i] = c;
 	i++;
 	res[i] = '\0';

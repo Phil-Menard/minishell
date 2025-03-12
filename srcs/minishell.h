@@ -11,8 +11,6 @@
 # include <signal.h>
 # include "../libft/libft.h"
 
-# define LEX_BUFF_SIZE	200
-
 typedef struct s_env
 {
 	char			*var;
@@ -21,25 +19,16 @@ typedef struct s_env
 
 typedef enum e_token
 {
-	CMD,
+	LEAF,
 	AND,
 	OR,
 	PIPE,
-	QUOTE,
 }	t_token;
-
-typedef enum e_state
-{
-	NORMAL,
-	WHITESPACE,
-	SINGLE_QUOTES,
-	DOUBLE_QUOTES,
-}	t_state;
 
 typedef struct s_ast
 {
-	t_token				token;
-	char				*cmd;
+	t_token				token_type;
+	char				*token;
 	struct s_ast		*left;
 	struct s_ast		*right;
 }						t_ast;
@@ -54,6 +43,7 @@ typedef struct s_token_builder
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
+t_token_builder	*ft_prep_tok(char *line);
 t_token_builder	*ft_new_tkb(size_t len, void *buf);
 t_token_builder	*ft_get_last(t_token_builder *node);
 t_token			ft_get_token(char *str);
@@ -135,33 +125,20 @@ void			exec_redir(char *path, char **arg, int *fd, t_env **env);
 /**========================================================================
  *!                                 ENV
  *========================================================================**/
-<<<<<<< HEAD
 t_env			*ft_new_env_node(char *content);
 t_env			*fill_env(t_env **lst, char **envp);
 t_env			*modify_env(t_env *env, char *old_var, char *new_var);
 void			ft_env_add_back(t_env **lst, t_env *new);
 char			*get_var(t_env *env, char *content);
-t_env			*remove_env_var(t_env **lst, char *str);
+t_env			*remove_env_var(t_env **lst, char *str, int x);
 void			print_env(t_env *lst, int fd);
 int				env_size(t_env *lst);
 void			free_env_node(char *var, t_env *node);
 void			free_env(t_env *lst);
-=======
-t_env	*ft_new_env_node(char *content);
-t_env	*fill_env(t_env **lst, char **envp);
-t_env	*modify_env(t_env *env, char *old_var, char *new_var);
-void	ft_env_add_back(t_env **lst, t_env *new);
-char	*get_var(t_env *env, char *content);
-t_env	*remove_env_var(t_env **lst, char *str, int x);
-void	print_env(t_env *lst, int fd);
-int		env_size(t_env *lst);
-void	free_env_node(char *var, t_env *node);
-void	free_env(t_env *lst);
 /**========================================================================
  *!                                 EXPORT
  *========================================================================**/
-t_env	*init_export_lst(t_env **env, t_env **lst);
-void	print_t_list(t_list *lst);
->>>>>>> main
+t_env			*init_export_lst(t_env **env, t_env **lst);
+void			print_t_list(t_list *lst);
 
 #endif

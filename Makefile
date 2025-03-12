@@ -28,7 +28,7 @@ SRC = minishell.c \
 	# parsing/tree.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \
-	# parsing/parser_utils.c \
+	# parsing/lexing_utils.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))
