@@ -16,6 +16,7 @@ SRC = minishell.c \
 	execution/prep_exec_cmds.c \
 	execution/exec_cmds.c \
 	execution/export.c \
+	execution/ft_exit.c \
 	pipes/pipex.c \
 	pipes/utils_pipex.c \
 	utils/utils.c \

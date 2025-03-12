@@ -14,29 +14,26 @@ void	print_minishell(void)
 //check which cmd is entered in line, and call a builtin or execve
 void	builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **export)
 {
-	char	**arr;
-
-	arr = ft_split(line->content, " ");
-	if (ft_strncmp(arr[0], "pwd", ft_strlen(arr[0])) == 0)
+	line->cmd_split = ft_split(line->content, " ");
+	if (ft_strncmp(line->cmd_split[0], "pwd", ft_strlen(line->cmd_split[0])) == 0)
 		ft_pwd(fd[1]);
-	else if (ft_strncmp(line->content, "env", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "env", ft_strlen(line->cmd_split[0])) == 0)
 		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line->content, "echo", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "echo", ft_strlen(line->cmd_split[0])) == 0)
 		ft_echo(line->content, fd[1]);
-	else if (ft_strncmp(line->content, "cd", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "cd", ft_strlen(line->cmd_split[0])) == 0)
 		ft_cd(line->content, *env, fd[1]);
-	else if (ft_strncmp(line->content, "unset", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "unset", ft_strlen(line->cmd_split[0])) == 0)
 		ft_unset(line->content, env, export);
-	else if (ft_strncmp(line->content, "export", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "export", ft_strlen(line->cmd_split[0])) == 0)
 		ft_export(line->content, env, export, fd[1]);
-	else if (ft_strncmp(line->content, "exit", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "exit", ft_strlen(line->cmd_split[0])) == 0)
 	{
-		free_db_array(arr);
 		ft_exit(fd, line, env, export);
 	}
 	else
 		exec_cmds(line->content, fd, env);
-	free_db_array(arr);
+	free_db_array(line->cmd_split);
 }
 
 //check if line contains a pipe or not, and call the corresponding function

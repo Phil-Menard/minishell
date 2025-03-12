@@ -23,6 +23,7 @@ typedef struct s_line
 {
 	pid_t	*pids;
 	char	**arr;
+	char	**cmd_split;
 	char	*content;
 	char	*prompt;
 	char	*cmd_pipe;
