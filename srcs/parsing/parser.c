@@ -13,7 +13,7 @@ void	ft_parse(char *line, t_env *env)
 		printf("Error odd nb of quotes.\n");
 		return ;
 	}
-	tokens = ft_tokenizer(line); // lexing
+	tokens = ft_tokenizer(ft_prep_tok(line)); // lexing
 	// create tree
 	// exec
 	ft_free_list(tree);

@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //! For testing, a retirer a la fin
-void ft_print_ast(t_ast *root, int space)
+void	ft_print_ast(t_ast *root, int space)
 {
 	int i;
 
@@ -19,7 +19,7 @@ void ft_print_ast(t_ast *root, int space)
 	i = 0;
 	while (i++ < space)
 		printf(" ");
-	printf("%s\n", root->cmd);
+	printf("%s\n", root->token);
 
 	// Afficher ensuite le sous-arbre gauche
 	ft_print_ast(root->left, space);
@@ -35,7 +35,7 @@ void	ft_free_list(t_ast *tree)
 	free(tree);
 }
 
-t_ast	*ft_new_node(char *cmd, t_token token)
+t_ast	*ft_new_node(char *token, t_token token_type)
 {
 	t_ast	*node;
 
@@ -44,8 +44,8 @@ t_ast	*ft_new_node(char *cmd, t_token token)
 		return (NULL);
 	node->left = NULL;
 	node->right = NULL;
-	node->cmd = cmd;
 	node->token = token;
+	node->token = token_type;
 	return (node);
 }
 

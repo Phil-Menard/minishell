@@ -1,24 +1,5 @@
 #include "../minishell.h"
 
-//* Return a dup of tab, from tab[start] to tab[end], but start (from the call fct) is modified.
-char	**ft_duptab(char **tab, int *start, int end)
-{
-	char	**dup;
-
-	if (end < *start)
-		return (NULL);
-	dup = malloc(sizeof(char *) * (*start - end));
-	if (!dup)
-		return (NULL);
-	while (*start <= end && dup[*start])
-	{
-		dup[*start] = ft_strdup(tab[*start]);
-		start++;
-	}
-	dup[*start] = NULL;
-	return (dup);
-}
-
 //* Detect the type of token str is.
 t_token	ft_get_token(char *str)
 {
@@ -29,10 +10,10 @@ t_token	ft_get_token(char *str)
 	else if (ft_strncmp(str, "|", 1) == 0)
 		return (PIPE);
 	else
-		return (CMD);
+		return (LEAF);
 }
 
-//* Return pos of c in str, -1 if not founded.
+//* Return c index in str, -1 if not founded.
 int	ft_get_pos(char *str, int start, char c)
 {
 	if (!str || !c)
@@ -41,8 +22,7 @@ int	ft_get_pos(char *str, int start, char c)
 		start++;
 	if (str[start] == c)
 		return (start);
-	else
-		return (-1);
+	return (-1);
 }
 
 //* 1 = pair \ 0 = odd
@@ -68,6 +48,8 @@ t_token_builder	*ft_get_last(t_token_builder *node)
 {
 	t_token_builder	*last;
 
+	if (!node)
+		return (NULL);
 	last = node;
 	while (last->next)
 		last = last->next;

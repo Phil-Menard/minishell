@@ -5,37 +5,32 @@ void	ft_addquotes_to_token(t_token_builder **builder, char *line, int start)
 {
 	int				size;
 	t_token_builder	*last;
+	char			*quoted;
 
 	if (!line)
 		return ;
+	size = 0;
 	if (line[start++] == '\'')
-		size = ft_get_pos(line, start, '\'') - start;
-	else if (line[start] == '\"')
-		size = ft_get_pos(line, start, '\"') - start;
+		size = ft_get_pos(line, start, '\'');
+	else if (line[start++] == '\"')
+		size = ft_get_pos(line, start, '\"');
+	printf("quoted len: %d\n", size);
+	quoted = ft_strndup(line, start, size);
+	printf("quoted: %s\n", quoted);
 	last = ft_get_last(*builder);
-	last->next = ft_new_tkb(size, ft_strndup(line, start, size));
+	last->buf = ft_straddstr(last->buf, quoted);
+
 }
 
-//* Add char by char to buf into list token_builder
-void	ft_addchar_to_token(t_token_builder **builder, char c)
-{
-	t_token_builder	*last;
-
-	if (!*builder)
-	{
-		*builder = ft_new_tkb(1, ft_calloc(sizeof(char), LEX_BUFF_SIZE));
-		(*builder)->buf[0] = c;
-		return ;
-	}
-	last = ft_get_last(*builder);
-	if (last->len >= LEX_BUFF_SIZE)
-		last->next = ft_new_tkb(0, ft_calloc(sizeof(char), LEX_BUFF_SIZE));
-	last->buf[last->len++] = c;
-}
 
 //* State machine
 //		* Normal : add char by char to a token
 //		* Quotes : take all btw quotes and add it to a new token
+/**
+ * - si tu croises un espace en mode normal tu fait un nouveau node (et tu le skip)
+ * - tu ajoutes tout au dernier node creer
+ * 		- quotes ajoute tout au node
+*/
 t_token_builder	*ft_tokenizer(char *line)
 {
 	t_token_builder	*tokens;
@@ -43,40 +38,40 @@ t_token_builder	*ft_tokenizer(char *line)
 
 	tokens = NULL;
 	i = -1;
+	tokens = ft_new_tkb(0, NULL);
 	while (line[++i])
 	{
 		if (line[i] && (line[i] == '\'' || line[i] == '\"')
-			&& (ft_strfind(line + i, "\'") || ft_strfind(line + i, "\"")))
+			&& (!ft_strfind(line + i, "\'") || !ft_strfind(line + i, "\"")))
 		{
 			ft_addquotes_to_token(&tokens, line, i);
 			i += ft_strlen(ft_get_last(tokens)->buf) + 1;
-			if (line[i + 1] != '\0')
-				ft_get_last(tokens)->next = ft_new_tkb(0, ft_calloc(sizeof(char), LEX_BUFF_SIZE));
 		}
-		else
-			ft_addchar_to_token(&tokens, line[i]);
+		else if (line[i] && line[i] == ' ')
+		{
+			while (line[i] && line[i] == ' ')
+				i++;
+			ft_get_last(tokens)->next = ft_new_tkb(0, NULL);
+		}
+		else if (line[i])
+			ft_get_last(tokens)->buf = ft_straddchar(ft_get_last(tokens)->buf, line[i]);
+		printf("last buf: %s\n", ft_get_last(tokens)->buf);
 	}
 	return (tokens);
 }
 
-/** 
- * todo : plus qu'a concat les tokens comme il faut -> detecter le type du token (cmd, arg, pipe, and, or ?)
- * todo : les mettres dans des nodes
- * todo : s'occuper de la creation de l'ast pour mettre les nodes aux bons endroits
- * */
-
 //-------------------------TESTS---------------------------------
 
-// int	main(void)
-// {
-// 	char			*test = "echo 'hello world' peach \"!\"";
-// 	t_token_builder	*tokens = ft_tokenizer(test);
+int	main(void)
+{
+	char			*test = "echo 'hello world' peach \"!\"";
+	t_token_builder	*tokens = ft_tokenizer(test);
 
-// 	printf("str : %s\n", test);
-// 	while (tokens)
-// 	{
-// 		printf("Token: %s\n", tokens->buf);
-// 		tokens = tokens->next;
-// 	}
-// 	return 0;
-// }
+	printf("str : %s\n", test);
+	while (tokens)
+	{
+		printf("Token: %s\n", tokens->buf);
+		tokens = tokens->next;
+	}
+	return 0;
+}
