@@ -12,54 +12,60 @@ void	print_minishell(void)
 }
 
 //check which cmd is entered in line, and call a builtin or execve
-void	builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export)
+void	builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **export)
 {
 	char	**arr;
 
-	arr = ft_split(line, " ");
+	arr = ft_split(line->content, " ");
 	if (ft_strncmp(arr[0], "pwd", ft_strlen(arr[0])) == 0)
 		ft_pwd(fd[1]);
-	else if (ft_strncmp(line, "env", ft_strlen(arr[0])) == 0)
+	else if (ft_strncmp(line->content, "env", ft_strlen(arr[0])) == 0)
 		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line, "echo", ft_strlen(arr[0])) == 0)
-		ft_echo(line, fd[1]);
-	else if (ft_strncmp(line, "cd", ft_strlen(arr[0])) == 0)
-		ft_cd(line, *env, fd[1]);
-	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
-		ft_unset(line, env, export);
-	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
-		ft_export(line, env, export, fd[1]);
-	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
-		ft_exit(fd, arr, env, export);
+	else if (ft_strncmp(line->content, "echo", ft_strlen(arr[0])) == 0)
+		ft_echo(line->content, fd[1]);
+	else if (ft_strncmp(line->content, "cd", ft_strlen(arr[0])) == 0)
+		ft_cd(line->content, *env, fd[1]);
+	else if (ft_strncmp(line->content, "unset", ft_strlen(arr[0])) == 0)
+		ft_unset(line->content, env, export);
+	else if (ft_strncmp(line->content, "export", ft_strlen(arr[0])) == 0)
+		ft_export(line->content, env, export, fd[1]);
+	else if (ft_strncmp(line->content, "exit", ft_strlen(arr[0])) == 0)
+	{
+		free_db_array(arr);
+		ft_exit(fd, line, env, export);
+	}
 	else
-		exec_cmds(line, fd, env);
+		exec_cmds(line->content, fd, env);
 	free_db_array(arr);
 }
 
 //check if line contains a pipe or not, and call the corresponding function
-void	check_pipes(char *line, t_env **env, t_env **export)
+void	check_pipes(t_line *line, t_env **env, t_env **export)
 {
-	char	**arr;
 	int		*fd;
 	int		arr_size;
 
 	fd = NULL;
-	arr = prepare_line(line);
-	if (!arr[1])
+	line->cmd_pipe = NULL;
+	line->arr = prepare_line(line->content);
+	if (!line->arr[1])
 	{
-		if (ft_strncmp(arr[0], "exit", 4) == 0)
-			free_db_array(arr);
+		if (ft_strncmp(line->arr[0], "exit", 4) == 0)
+		{
+			free_db_array(line->arr);
+			line->arr = NULL;
+		}
 		fd = init_fd();
-		fd = set_fd(line, fd);
+		fd = set_fd(line->content, fd);
 		builtin_or_cmd(line, fd, env, export);
 	}
 	else
 	{
-		arr_size = double_arr_len(arr);
-		pipex(arr, env, export, arr_size);
+		arr_size = double_arr_len(line->arr);
+		pipex(line, env, export, arr_size);
 	}
-	if (arr)
-		free_db_array(arr);
+	if (line->arr)
+		free_db_array(line->arr);
 	free(fd);
 }
 
@@ -85,8 +91,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
 	t_env	*export;
-	char	*line;
-	char	*prompt_arg;
+	t_line	line;
 
 	(void) argc;
 	(void) argv;
@@ -97,15 +102,15 @@ int	main(int argc, char **argv, char **envp)
 	print_minishell();
 	while (1)
 	{
-		prompt_arg = set_prompt_arg();
-		line = readline(prompt_arg);
-		add_history(line);
-		if (ft_strlen(line) > 0)
-			check_pipes(line, &env, &export);
+		line.prompt = set_prompt_arg();
+		line.content = readline(line.prompt);
+		add_history(line.content);
+		if (ft_strlen(line.content) > 0)
+			check_pipes(&line, &env, &export);
 			// ft_parse(line, env);
 			// builtins(line, env, &exit_code);
-		free(line);
-		free(prompt_arg);
+		free(line.content);
+		free(line.prompt);
 	}
 	free_env(env);
 	free_env(export);

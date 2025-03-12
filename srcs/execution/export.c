@@ -110,7 +110,8 @@ void	ft_export(char *line, t_env **env, t_env **export, int fd)
 	free_db_array(arr);
 }
 
-//set export var from env but with 'declare -x ' at first and then between quotes
+//set export var from env but with 'declare -x ' at first and then 
+//between quotes
 char	*set_export_var(char **arr, char *env_var)
 {
 	char	*str;

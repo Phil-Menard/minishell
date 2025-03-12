@@ -62,22 +62,25 @@ void	ft_cd(char *str, t_env *env, int fd)
 	free_db_array(arr);
 }
 
-void	ft_exit(int *fd, char **arr, t_env **env, t_env **export)
+void	ft_exit(int *fd, t_line *line, t_env **env, t_env **export)
 {
-	int	i;
-
-	i = 0;
-	while (i < 2)
-	{
-		if (fd[i] != 1 && fd[i] != -1)
-			close(fd[i]);
-		i++;
-	}
-	free(fd);
-	free_db_array(arr);
+	close_multiple_fd(fd);
 	free_env(*env);
 	free_env(*export);
+	free(line->content);
+	free(line->prompt);
+	if (line->arr)
+	{
+		free_db_array(line->arr);
+		line->arr = NULL;
+	}
+	if (line->cmd_pipe)
+	{
+		free(line->cmd_pipe);
+		line->cmd_pipe = NULL;
+	}
+	else
+		ft_putstr_fd("exit\n", 1);
 	rl_clear_history();
-	ft_putstr_fd("exit\n", 1);
 	exit(EXIT_SUCCESS);
 }
