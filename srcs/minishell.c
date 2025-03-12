@@ -30,11 +30,7 @@ void	builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export)
 	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
 		ft_export(line, env, export, fd[1]);
 	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
-	{
-		free_db_array(arr);
-		close_multiple_fd(fd);
-		ft_exit();
-	}
+		ft_exit(fd, arr, env, export);
 	else
 		exec_cmds(line, fd, env);
 	free_db_array(arr);
@@ -47,10 +43,12 @@ void	check_pipes(char *line, t_env **env, t_env **export)
 	int		*fd;
 	int		arr_size;
 
-	arr = prepare_line(line);
 	fd = NULL;
+	arr = prepare_line(line);
 	if (!arr[1])
 	{
+		if (ft_strncmp(arr[0], "exit", 4) == 0)
+			free_db_array(arr);
 		fd = init_fd();
 		fd = set_fd(line, fd);
 		builtin_or_cmd(line, fd, env, export);
@@ -60,7 +58,8 @@ void	check_pipes(char *line, t_env **env, t_env **export)
 		arr_size = double_arr_len(arr);
 		pipex(arr, env, export, arr_size);
 	}
-	free_db_array(arr);
+	if (arr)
+		free_db_array(arr);
 	free(fd);
 }
 

@@ -5,6 +5,10 @@ pas mal de leak mais c'est normal, quand on fait exit on fait un exit(EXIT_SUCES
 il faudrait juste quitter la boucle dans le main et tout free apres
 
 flag Valgrind :
-valgrind --suppressions=valgrind.supp --leak-check=full --show-leak-kinds=all ./minishell
+valgrind --suppressions=valgrind.supp --leak-check=full --show-leak-kinds=all 
+--track-fds=yes ./minishell
+
+voir pipes/fd en cours (a lancer en parallele de minishell) :
+ls -l /proc/$(ps aux | grep minishell | grep -v grep | awk '{print $2}')/fd
 
 - pour bosser a la maison il faut installer la lib de readline : libreadline-dev

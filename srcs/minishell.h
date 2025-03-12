@@ -73,10 +73,11 @@ void			ft_print_tree(t_ast *root, int space); // a retirer
 void			check_pipes(char *line, t_env **env, t_env **export);
 void			ft_pwd(int fd);
 void			ft_env(t_env *env, int fd);
+void			ft_export(char *line, t_env **env, t_env **export, int fd);
 void			ft_echo(char *str, int fd);
 void			ft_cd(char *str, t_env *env, int fd);
-void			ft_unset(char *str, t_env **env);
-void			ft_exit(void);
+void			ft_unset(char *str, t_env **env, t_env **export);
+void			ft_exit(int *fd, char **arr, t_env **env, t_env **export);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
  *========================================================================**/
@@ -85,11 +86,11 @@ void			ft_execve(char *path, char **arg, t_env **env);
 char			*get_right_path(char *str);
 char			*get_next_path(char *arr, char *str);
 void			check_path_errors(char *argv, char **env, int *pipefd);
-void			builtin_or_cmd(char *line, int *fd, t_env **env);
+void			builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export);
 /**========================================================================
  *!                                 PIPES
  *========================================================================**/
-void			pipex(char **arr, t_env **env, int arr_size, pid_t *pids);
+void			pipex(char **arr, t_env **env, t_env **export, int arr_size);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR PIPES
  *========================================================================**/
@@ -135,33 +136,20 @@ void			exec_redir(char *path, char **arg, int *fd, t_env **env);
 /**========================================================================
  *!                                 ENV
  *========================================================================**/
-<<<<<<< HEAD
 t_env			*ft_new_env_node(char *content);
 t_env			*fill_env(t_env **lst, char **envp);
 t_env			*modify_env(t_env *env, char *old_var, char *new_var);
 void			ft_env_add_back(t_env **lst, t_env *new);
 char			*get_var(t_env *env, char *content);
-t_env			*remove_env_var(t_env **lst, char *str);
+t_env			*remove_env_var(t_env **lst, char *str, int x);
 void			print_env(t_env *lst, int fd);
 int				env_size(t_env *lst);
 void			free_env_node(char *var, t_env *node);
 void			free_env(t_env *lst);
-=======
-t_env	*ft_new_env_node(char *content);
-t_env	*fill_env(t_env **lst, char **envp);
-t_env	*modify_env(t_env *env, char *old_var, char *new_var);
-void	ft_env_add_back(t_env **lst, t_env *new);
-char	*get_var(t_env *env, char *content);
-t_env	*remove_env_var(t_env **lst, char *str, int x);
-void	print_env(t_env *lst, int fd);
-int		env_size(t_env *lst);
-void	free_env_node(char *var, t_env *node);
-void	free_env(t_env *lst);
 /**========================================================================
  *!                                 EXPORT
  *========================================================================**/
-t_env	*init_export_lst(t_env **env, t_env **lst);
-void	print_t_list(t_list *lst);
->>>>>>> main
+t_env			*init_export_lst(t_env **env, t_env **lst);
+void			print_t_list(t_list *lst);
 
 #endif

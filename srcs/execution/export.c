@@ -15,7 +15,7 @@ t_env	*add_var_export(t_env **export, char *line, int x)
 	if (x == 1)
 	{
 		str = ft_straddstr(str, "=\"");
-		i = 0;
+		i = 1;
 		while (line[i - 1] != '=')
 			i++;
 		temp = ft_substr(line, i, ft_strlen(line));
@@ -39,45 +39,19 @@ t_env	*add_var_env(t_env **env, char *line)
 	int		i;
 
 	arr = ft_split(line, "=");
-	str = ft_straddchar(arr[0], '=');
-	i = 0;
+	str = ft_strdup(arr[0]);
+	str = ft_straddchar(str, '=');
+	i = 1;
 	while (line[i - 1] != '=')
 		i++;
 	temp = ft_substr(line, i, ft_strlen(line));
 	str = ft_straddstr(str, temp);
 	free(temp);
-	node = ft_new_env_node(ft_strdup(str));
+	node = ft_new_env_node(str);
 	free(str);
 	free_db_array(arr);
 	ft_env_add_back(env, node);
 	return (*env);
-}
-
-void	ft_export(char *line, t_env **env, t_env **export, int fd)
-{
-	char	**arr;
-	int		i;
-
-	i = 1;
-	arr = ft_split(line, " ");
-	if (!arr[i])
-		print_env(*export, fd);
-	else
-	{
-		while (arr[i])
-		{
-			if (find_occurences(arr[i], '=') == 0)
-				*export = add_var_export(export, arr[i], 0);
-			else
-			{
-				*export = add_var_export(export, arr[i], 1);
-				*env = add_var_env(env, arr[i]);
-			}
-			i++;
-		}
-	}
-	*export = sort_export(export);
-	free_db_array(arr);
 }
 
 t_env	*sort_export(t_env **lst)
@@ -109,6 +83,33 @@ t_env	*sort_export(t_env **lst)
 	return (*lst);
 }
 
+void	ft_export(char *line, t_env **env, t_env **export, int fd)
+{
+	char	**arr;
+	int		i;
+
+	i = 1;
+	arr = ft_split(line, " ");
+	if (!arr[i])
+		print_env(*export, fd);
+	else
+	{
+		while (arr[i])
+		{
+			if (find_occurences(arr[i], '=') == 0)
+				*export = add_var_export(export, arr[i], 0);
+			else
+			{
+				*export = add_var_export(export, arr[i], 1);
+				*env = add_var_env(env, arr[i]);
+			}
+			i++;
+		}
+	}
+	*export = sort_export(export);
+	free_db_array(arr);
+}
+
 //set export var from env but with 'declare -x ' at first and then between quotes
 char	*set_export_var(char **arr, char *env_var)
 {
@@ -133,6 +134,7 @@ t_env	*init_export_lst(t_env **env, t_env **lst)
 	t_env	*env_current;
 	t_env	*lst_current;
 	char	**arr;
+	char	*content;
 
 	env_current = *env;
 	lst_current = *lst;
@@ -141,7 +143,9 @@ t_env	*init_export_lst(t_env **env, t_env **lst)
 		arr = ft_split(env_current->var, "=");
 		if (strncmp(arr[0], "_", 1) != 0)
 		{
-			lst_current = ft_new_env_node(set_export_var(arr, env_current->var));
+			content = set_export_var(arr, env_current->var);
+			lst_current = ft_new_env_node(content);
+			free(content);
 			ft_env_add_back(lst, lst_current);
 		}
 		free_db_array(arr);

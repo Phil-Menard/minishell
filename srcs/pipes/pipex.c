@@ -32,11 +32,7 @@ void	builtin_or_cmd_pipes(char *line, int *fd, t_env **env, t_env **export)
 	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
 		ft_export(line, env, export, fd[1]);
 	else if (ft_strncmp(arr[0], "exit", ft_strlen(arr[0])) == 0)
-	{
-		free_db_array(arr);
-		close_multiple_fd(fd);
-		ft_exit();
-	}
+		ft_exit(fd, arr, env, export);
 	else
 		exec_cmds_pipes(line, env);
 	free_db_array(arr);
