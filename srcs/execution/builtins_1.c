@@ -67,8 +67,10 @@ void	ft_exit(int *fd, t_line *line, t_env **env, t_env **export)
 	close_multiple_fd(fd);
 	free_env(*env);
 	free_env(*export);
-	free(line->content);
-	free(line->prompt);
+	if (line->content)
+		free(line->content);
+	if (line->prompt)
+		free(line->prompt);
 	if (line->arr)
 	{
 		free_db_array(line->arr);

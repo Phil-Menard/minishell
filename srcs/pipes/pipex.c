@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //same as exec_cmd but for pipes
-void	exec_cmds_pipes(t_line *line, t_env **env)
+void	exec_cmds_pipes(t_line *line, t_env **env, t_env **export)
 {
 	char	*path;
 	char	**arg;
@@ -12,15 +12,24 @@ void	exec_cmds_pipes(t_line *line, t_env **env)
 	arg = fill_arg(path, cmd);
 	free(line->cmd_pipe);
 	line->cmd_pipe = NULL;
+	free(line->content);
+	free(line->prompt);
+	free_db_array(line->arr);
+	free(line->pids);
+	free_env(*export);
 	ft_execve(path, arg, env);
 }
 
-void	end_child_process(char **arr, t_line *line)
+void	free_child_process(t_line *line, t_env **env, t_env **export)
 {
-	free_db_array(arr);
 	free(line->cmd_pipe);
 	line->cmd_pipe = NULL;
-	exit(EXIT_SUCCESS);
+	free(line->content);
+	free(line->prompt);
+	free_db_array(line->arr);
+	free(line->pids);
+	free_env(*export);
+	free_env(*env);
 }
 
 //same as builtin_or_cmd but for pipes
@@ -44,13 +53,15 @@ void	builtin_or_cmd_pipes(t_line *line, int *fd, t_env **env, t_env **export)
 		ft_export(line->cmd_pipe, env, export, fd[1]);
 	else if (ft_strncmp(arr[0], "exit", ft_strlen(arr[0])) == 0)
 	{
-		free(line->pids);
 		free_db_array(arr);
 		ft_exit(fd, line, env, export);
 	}
 	else
-		exec_cmds_pipes(line, env);
-	end_child_process(arr, line);
+		exec_cmds_pipes(line, env, export);
+	free_db_array(arr);
+	close_multiple_fd(fd);
+	free_child_process(line, env, export);
+	exit(EXIT_SUCCESS);
 }
 
 void	pipe_and_fork(int *pipefd, int *pids)

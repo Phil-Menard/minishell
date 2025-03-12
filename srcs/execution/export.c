@@ -23,7 +23,7 @@ t_env	*add_var_export(t_env **export, char *line, int x)
 		free(temp);
 		str = ft_straddchar(str, '\"');
 	}
-	node = ft_new_env_node(ft_strdup(str));
+	node = ft_new_env_node(str);
 	free(str);
 	free_db_array(arr);
 	ft_env_add_back(export, node);
