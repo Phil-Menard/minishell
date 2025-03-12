@@ -54,6 +54,7 @@ void	builtin_or_cmd_pipes(t_line *line, int *fd, t_env **env, t_env **export)
 	else if (ft_strncmp(arr[0], "exit", ft_strlen(arr[0])) == 0)
 	{
 		free_db_array(arr);
+		free(line->pids);
 		ft_exit(fd, line, env, export);
 	}
 	else
