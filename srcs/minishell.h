@@ -43,7 +43,7 @@ typedef struct s_token_builder
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-t_token_builder	*ft_prep_tok(char *line);
+t_token_builder	*ft_tokenizer(char *line);
 t_token_builder	*ft_new_tkb(size_t len, void *buf);
 t_token_builder	*ft_get_last(t_token_builder *node);
 t_token			ft_get_token(char *str);
