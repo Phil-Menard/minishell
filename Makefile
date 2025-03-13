@@ -27,6 +27,7 @@ SRC = minishell.c \
 	redirections/redirections.c \
 	env/init_env.c \
 	env/utils_env.c \
+	env/utils_env_2.c \
 	# parsing/tree.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \

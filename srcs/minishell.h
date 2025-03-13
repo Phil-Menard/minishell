@@ -161,6 +161,7 @@ void			print_env(t_env *lst, int fd);
 int				env_size(t_env *lst);
 void			free_env_node(char *var, t_env *node);
 void			free_env(t_env *lst);
+t_env			*add_var_env(t_env **env, char *line);
 /**========================================================================
  *!                                 EXPORT
  *========================================================================**/
