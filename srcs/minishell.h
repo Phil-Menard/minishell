@@ -9,6 +9,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <limits.h>
 # include "../libft/libft.h"
 
 # define LEX_BUFF_SIZE	200
@@ -122,6 +123,9 @@ int				double_arr_len(char **arr);
 char			*ft_straddchar(char *str, char c);
 int				find_occurences(char *str, char c);
 char			**prepare_line(char *line);
+int				ft_str_isalpha(char *str);
+long int		ft_atol(char *nptr);
+char			*ft_ltoa(long int n);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

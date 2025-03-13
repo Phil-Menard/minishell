@@ -21,6 +21,7 @@ SRC = minishell.c \
 	pipes/utils_pipex.c \
 	utils/utils.c \
 	utils/utils_2.c \
+	utils/utils_3.c \
 	utils/utils_fd.c \
 	redirections/prepare_redir.c \
 	redirections/redirections.c \
