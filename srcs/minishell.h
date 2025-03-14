@@ -153,7 +153,7 @@ void			exec_redir(char *path, char **arg, int *fd, t_env **env);
  *========================================================================**/
 t_env			*ft_new_env_node(char *content);
 t_env			*fill_env(t_env **lst, char **envp);
-t_env			*modify_env(t_env *env, char *old_var, char *new_var);
+t_env			*modify_env(t_env *env, char *var_name, char *content);
 void			ft_env_add_back(t_env **lst, t_env *new);
 char			*get_var(t_env *env, char *content);
 t_env			*remove_env_var(t_env **lst, char *str, int x);
@@ -167,5 +167,6 @@ t_env			*add_var_env(t_env **env, char *line);
  *========================================================================**/
 t_env			*init_export_lst(t_env **env, t_env **lst);
 void			print_t_list(t_list *lst);
+int				var_already_exist(t_env **export, char *str);
 
 #endif

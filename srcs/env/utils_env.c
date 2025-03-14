@@ -11,7 +11,7 @@ void	print_env(t_env *lst, int fd)
 }
 
 //find variable and update it, arr[0] is variable name
-t_env	*modify_env(t_env *env, char *old_var, char *new_var)
+t_env	*modify_env(t_env *env, char *var_name, char *content)
 {
 	t_env	*current;
 	char	**arr;
@@ -20,10 +20,10 @@ t_env	*modify_env(t_env *env, char *old_var, char *new_var)
 	while (current)
 	{
 		arr = ft_split(current->var, "=");
-		if (ft_strncmp(arr[0], old_var, ft_strlen(arr[0])) == 0)
+		if (ft_strncmp(arr[0], var_name, ft_strlen(arr[0])) == 0)
 		{
 			free(current->var);
-			current->var = ft_join_mid(old_var, '=', new_var);
+			current->var = ft_join_mid(var_name, '=', content);
 			free_db_array(arr);
 			break ;
 		}
