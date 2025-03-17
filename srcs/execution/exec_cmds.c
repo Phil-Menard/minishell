@@ -28,13 +28,13 @@ void	ft_execve(char *path, char **arg, t_env **env)
 	arr_env = lst_to_arr(env);
 	if (execve(path, arg, arr_env) == -1)
 	{
+		perror(arg[0]);
 		if (path)
 			free(path);
 		if (arg)
 			free_db_array(arg);
 		if (arr_env)
 			free_db_array(arr_env);
-		perror("execve");
 		exit(EXIT_FAILURE);
 	}
 }

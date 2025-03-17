@@ -1,7 +1,16 @@
 #include "../minishell.h"
 
+/*
+< & > = 0
+< & >> = 4
+< = 1
+> = 2
+>> = 3
+*/
+
+
 //check if there is a redirection
-int	is_redirected(char *str)
+/* int	is_redirected(char *str)
 {
 	if (find_occurences(str, '<') == 1)
 	{
@@ -21,7 +30,7 @@ int	is_redirected(char *str)
 	}
 	else
 		return (-1);
-}
+} */
 
 //return line without redirection
 char	*str_without_redir(char *str)
@@ -63,12 +72,15 @@ char	*get_infile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (find_occurences(arr[i], '<') > 0)
+		if (find_occurences(arr[i], '<') == 1)
 		{
 			i++;
+			if (res)
+			{
+				free(res);
+				res = NULL;
+			}
 			res = ft_strdup(arr[i]);
-			free_db_array(arr);
-			return (res);
 		}
 		i++;
 	}
