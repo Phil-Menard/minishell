@@ -10,25 +10,27 @@ LIBFT_DIR = libft
 
 # Fichiers sources
 SRC = minishell.c \
-	execution/ft_echo.c \
-	execution/builtins_1.c \
-	execution/builtins_2.c \
-	execution/prep_exec_cmds.c \
+	builtins/ft_cd.c \
+	builtins/ft_echo.c \
+	builtins/ft_env.c \
+	builtins/ft_exit.c \
+	builtins/ft_export.c \
+	builtins/ft_pwd.c \
+	builtins/ft_unset.c \
+	execution/exec_cmds_prep.c \
 	execution/exec_cmds.c \
-	execution/export.c \
-	execution/ft_exit.c \
-	pipes/pipex.c \
-	pipes/utils_pipex.c \
+	execution/pipex.c \
+	execution/utils_pipex.c \
 	utils/utils.c \
 	utils/utils_2.c \
 	utils/utils_3.c \
 	utils/utils_fd.c \
+	utils/utils_fd_2.c \
 	utils/utils_export.c \
 	redirections/prepare_redir.c \
 	redirections/redirections.c \
 	env/init_env.c \
 	env/utils_env.c \
-	env/utils_env_2.c \
 	# parsing/tree.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \

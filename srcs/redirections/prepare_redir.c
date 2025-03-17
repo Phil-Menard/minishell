@@ -77,27 +77,29 @@ char	*get_infile(char *str)
 }
 
 //get outfile name
-char	*get_outfile(char *str)
+char	**get_outfile(char *str)
 {
 	char	**arr;
-	char	*res;
+	char	**res;
 	int		i;
+	int		j;
 
 	arr = ft_split(str, " ");
 	i = 0;
-	res = NULL;
+	j = 0;
+	res = malloc((find_occurences(str, '>') + 1) * sizeof(char *));
 	while (arr[i])
 	{
 		if (find_occurences(arr[i], '>') > 0)
 		{
 			i++;
-			res = ft_strdup(arr[i]);
-			free_db_array(arr);
-			return (res);
+			res[j] = ft_strdup(arr[i]);
+			j++;
 		}
 		i++;
 	}
 	free_db_array(arr);
+	res[j] = NULL;
 	return (res);
 }
 

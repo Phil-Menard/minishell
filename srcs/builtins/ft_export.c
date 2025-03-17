@@ -67,7 +67,7 @@ void	ft_export(char *line, t_env **env, t_env **export, int fd)
 	i = 1;
 	arr = ft_split(line, " ");
 	if (!arr[i])
-		print_env(*export, fd);
+		ft_env(*export, fd);
 	else
 	{
 		while (arr[i])

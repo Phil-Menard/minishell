@@ -1,25 +1,5 @@
 #include "../minishell.h"
 
-void	ft_pwd(int fd)
-{
-	char	*path;
-
-	path = getcwd(NULL, 0);
-	path = ft_straddchar(path, '\n');
-	if (path)
-	{
-		ft_putstr_fd(path, fd);
-		free(path);
-	}
-	else
-		perror("path error");
-}
-
-void	ft_env(t_env *env, int fd)
-{
-	print_env(env, fd);
-}
-
 //get OLDPWD var from env and print it in good fd
 char	*cd_oldpwd(t_env *env, int fd)
 {
