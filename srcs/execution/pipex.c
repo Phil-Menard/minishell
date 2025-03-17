@@ -37,19 +37,20 @@ void	builtin_or_cmd_pipes(t_line *line, int *fd, t_env **env, t_env **export)
 {
 	line->cmd_pipe = ft_strdup(line->arr[line->i]);
 	line->cmd_split = ft_split(line->cmd_pipe, " ");
-	if (ft_strncmp(line->cmd_split[0], "pwd", ft_strlen(line->cmd_split[0])) == 0)
+	line->size_cmd = ft_strlen(line->cmd_split[0]);
+	if (ft_strncmp(line->cmd_split[0], "pwd", line->size_cmd) == 0)
 		ft_pwd(fd[1]);
-	else if (ft_strncmp(line->cmd_split[0], "env", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->cmd_split[0], "env", line->size_cmd) == 0)
 		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line->cmd_split[0], "echo", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->cmd_split[0], "echo", line->size_cmd) == 0)
 		ft_echo(line->cmd_pipe, fd[1]);
-	else if (ft_strncmp(line->cmd_split[0], "cd", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->cmd_split[0], "cd", line->size_cmd) == 0)
 		ft_cd(line->cmd_pipe, *env, fd[1]);
-	else if (ft_strncmp(line->cmd_split[0], "unset", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->cmd_split[0], "unset", line->size_cmd) == 0)
 		ft_unset(line->cmd_pipe, env, export);
-	else if (ft_strncmp(line->cmd_pipe, "export", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->cmd_pipe, "export", line->size_cmd) == 0)
 		ft_export(line->cmd_pipe, env, export, fd[1]);
-	else if (ft_strncmp(line->cmd_split[0], "exit", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->cmd_split[0], "exit", line->size_cmd) == 0)
 	{
 		free_db_array(line->cmd_split);
 		free(line->pids);
@@ -59,8 +60,6 @@ void	builtin_or_cmd_pipes(t_line *line, int *fd, t_env **env, t_env **export)
 		exec_cmds_pipes(line, env, export);
 	free_db_array(line->cmd_split);
 	close_multiple_fd(fd);
-	free_child_process(line, env, export);
-	exit(EXIT_SUCCESS);
 }
 
 void	pipe_and_fork(int *pipefd, int *pids)
@@ -94,6 +93,8 @@ void	pipex(t_line *line, t_env **env, t_env **export, int arr_size)
 			outfile_dups(fd, pipefd, line->i, arr_size);
 			close_previous_fd(previous_fd);
 			builtin_or_cmd_pipes(line, fd, env, export);
+			free_child_process(line, env, export);
+			exit(EXIT_SUCCESS);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
 	}

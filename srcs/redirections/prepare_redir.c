@@ -1,37 +1,5 @@
 #include "../minishell.h"
 
-/*
-< & > = 0
-< & >> = 4
-< = 1
-> = 2
->> = 3
-*/
-
-
-//check if there is a redirection
-/* int	is_redirected(char *str)
-{
-	if (find_occurences(str, '<') == 1)
-	{
-		if (find_occurences(str, '>') == 1)
-			return (0);
-		else if (find_occurences(str, '>') == 2)
-			return (4);
-		else
-			return (1);
-	}
-	else if (find_occurences(str, '>') > 0)
-	{
-		if (find_occurences(str, '>') == 1)
-			return (2);
-		else
-			return (3);
-	}
-	else
-		return (-1);
-} */
-
 //return line without redirection
 char	*str_without_redir(char *str)
 {

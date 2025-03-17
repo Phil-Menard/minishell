@@ -29,6 +29,7 @@ typedef struct s_line
 	char	*prompt;
 	char	*cmd_pipe;
 	int		i;
+	int		size_cmd;
 }				t_line;
 
 typedef enum e_token
@@ -95,11 +96,10 @@ void			ft_exit(int *fd, t_line *line, t_env **env, t_env **export);
  *========================================================================**/
 void			exec_cmds(char *str, int *fd, t_env **env);
 void			ft_execve(char *path, char **arg, t_env **env);
-void			builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **export);
+void			builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **exp);
 char			*get_right_path(char *str);
 char			*get_next_path(char *arr, char *str);
 void			check_path_errors(char *argv, char **env, int *pipefd);
-void			builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **export);
 /**========================================================================
  *!                                 PIPES
  *========================================================================**/
@@ -111,7 +111,7 @@ void			close_previous_fd(int previous_fd);
 void			wait_childs(pid_t *pids, int arr_size);
 void			outfile_dups(int *fd, int *pipefd, int i, int arr_size);
 void			post_cmd(int *pipefd, int *previous_fd, int *fd);
-void			end_pipex(int *pipefd, pid_t *pids, int arr_size, int previous_fd);
+void			end_pipex(int *pipefd, pid_t *pids, int arr_size, int prev_fd);
 /**========================================================================
  *!                               UTILS
  *========================================================================**/

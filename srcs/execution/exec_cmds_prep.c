@@ -74,7 +74,6 @@ void	exec_cmds(char *str, int *fd, t_env **env)
 	int		id;
 
 	redirection = is_redirected(str);
-	printf("redirection : %d\n", redirection);
 	if (redirection >= 0)
 		prepare_redir(str, redirection, fd, env);
 	else

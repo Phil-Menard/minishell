@@ -40,23 +40,26 @@ void	ft_execve(char *path, char **arg, t_env **env)
 }
 
 //check which cmd is entered in line, and call a builtin or execve
-void	builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **export)
+void	builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **exp)
 {
+	int	size;
+
 	line->cmd_split = ft_split(line->content, " ");
-	if (ft_strncmp(line->cmd_split[0], "pwd", ft_strlen(line->cmd_split[0])) == 0)
+	size = ft_strlen(line->cmd_split[0]);
+	if (ft_strncmp(line->cmd_split[0], "pwd", size) == 0)
 		ft_pwd(fd[1]);
-	else if (ft_strncmp(line->content, "env", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->content, "env", size) == 0)
 		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line->content, "echo", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->content, "echo", size) == 0)
 		ft_echo(line->content, fd[1]);
-	else if (ft_strncmp(line->content, "cd", ft_strlen(line->cmd_split[0])) == 0)
+	else if (ft_strncmp(line->content, "cd", size) == 0)
 		ft_cd(line->content, *env, fd[1]);
-	else if (ft_strncmp(line->content, "unset", ft_strlen(line->cmd_split[0])) == 0)
-		ft_unset(line->content, env, export);
-	else if (ft_strncmp(line->content, "export", ft_strlen(line->cmd_split[0])) == 0)
-		ft_export(line->content, env, export, fd[1]);
-	else if (ft_strncmp(line->content, "exit", ft_strlen(line->cmd_split[0])) == 0)
-		ft_exit(fd, line, env, export);
+	else if (ft_strncmp(line->content, "unset", size) == 0)
+		ft_unset(line->content, env, exp);
+	else if (ft_strncmp(line->content, "export", size) == 0)
+		ft_export(line->content, env, exp, fd[1]);
+	else if (ft_strncmp(line->content, "exit", size) == 0)
+		ft_exit(fd, line, env, exp);
 	else
 		exec_cmds(line->content, fd, env);
 	close_multiple_fd(fd);
