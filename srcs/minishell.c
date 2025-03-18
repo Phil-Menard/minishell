@@ -11,33 +11,33 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-//check if line contains a pipe or not, and call the corresponding function
-void	check_pipes(t_line *line, t_env **env, t_env **export)
+//check if vars contains a pipe or not, and call the corresponding function
+void	check_pipes(t_var *vars, t_env **env, t_env **export)
 {
 	int		*fd;
 	int		arr_size;
 
 	fd = NULL;
-	line->cmd_pipe = NULL;
-	line->arr = prepare_line(line->content);
-	if (!line->arr[1])
+	vars->cmd_pipe = NULL;
+	vars->arr = prepare_line(vars->content);
+	if (!vars->arr[1])
 	{
-		if (ft_strncmp(line->arr[0], "exit", 4) == 0)
+		if (ft_strncmp(vars->arr[0], "exit", 4) == 0)
 		{
-			free_db_array(line->arr);
-			line->arr = NULL;
+			free_db_array(vars->arr);
+			vars->arr = NULL;
 		}
-		fd = init_and_set_fd(line->content);
+		fd = init_and_set_fd(vars->content);
 		if (fd[0] > -1)
-			builtin_or_cmd(line, fd, env, export);
+			builtin_or_cmd(vars, fd, env, export);
 	}
 	else
 	{
-		arr_size = double_arr_len(line->arr);
-		pipex(line, env, export, arr_size);
+		arr_size = double_arr_len(vars->arr);
+		pipex(vars, env, export, arr_size);
 	}
-	if (line->arr)
-		free_db_array(line->arr);
+	if (vars->arr)
+		free_db_array(vars->arr);
 }
 
 char	*set_prompt_arg(void)
@@ -62,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
 	t_env	*export;
-	t_line	line;
+	t_var	vars;;
 
 	(void) argc;
 	(void) argv;
@@ -73,15 +73,15 @@ int	main(int argc, char **argv, char **envp)
 	print_minishell();
 	while (1)
 	{
-		line.prompt = set_prompt_arg();
-		line.content = readline(line.prompt);
-		add_history(line.content);
-		if (ft_strlen(line.content) > 0)
-			check_pipes(&line, &env, &export);
-			// ft_parse(line, env);
-			// builtins(line, env, &exit_code);
-		free(line.content);
-		free(line.prompt);
+		vars.prompt = set_prompt_arg();
+		vars.content = readline(vars.prompt);
+		add_history(vars.content);
+		if (ft_strlen(vars.content) > 0)
+			check_pipes(&vars, &env, &export);
+			// ft_parse(vars, env);
+			// builtins(vars, env, &exit_code);
+		free(vars.content);
+		free(vars.prompt);
 	}
 	free_env(env);
 	free_env(export);

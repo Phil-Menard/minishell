@@ -83,18 +83,17 @@ char	**get_outfile(char *str)
 	return (res);
 }
 
-void	prepare_redir(char *str, int redirection, int *fd, t_env **env)
+void	prepare_redir(t_var *vars, int redirection, int *fd, t_env **env)
 {
-	char	*path;
 	char	**arg;
 	char	*line;
 
-	line = str_without_redir(str);
-	path = get_right_path(line);
-	arg = fill_arg(path, line);
+	line = str_without_redir(vars->content);
+	vars->path = get_right_path(line);
+	arg = fill_arg(vars->path, line);
 	free(line);
 	if (redirection >= 0)
-		exec_redir(path, arg, fd, env);
+		exec_redir(vars, arg, fd, env);
 	free_db_array(arg);
-	free(path);
+	free(vars->path);
 }

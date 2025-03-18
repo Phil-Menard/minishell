@@ -20,7 +20,7 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-typedef struct s_line
+typedef struct s_var
 {
 	pid_t	*pids;
 	char	**arr;
@@ -28,9 +28,10 @@ typedef struct s_line
 	char	*content;
 	char	*prompt;
 	char	*cmd_pipe;
+	char	*path;
 	int		i;
 	int		size_cmd;
-}				t_line;
+}				t_var;
 
 typedef enum e_token
 {
@@ -83,27 +84,27 @@ void			ft_print_tree(t_ast *root, int space); // a retirer
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/
-void			check_pipes(t_line *line, t_env **env, t_env **export);
+void			check_pipes(t_var *vars, t_env **env, t_env **export);
 void			ft_pwd(int fd);
 void			ft_env(t_env *env, int fd);
 void			ft_export(char *line, t_env **env, t_env **export, int fd);
 void			ft_echo(char *str, int fd);
 void			ft_cd(char *str, t_env *env, int fd);
 void			ft_unset(char *str, t_env **env, t_env **export);
-void			ft_exit(int *fd, t_line *line, t_env **env, t_env **export);
+void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
  *========================================================================**/
-void			exec_cmds(char *str, int *fd, t_env **env);
-void			ft_execve(char *path, char **arg, t_env **env);
-void			builtin_or_cmd(t_line *line, int *fd, t_env **env, t_env **exp);
+void			exec_cmds(t_var *vars, int *fd, t_env **env);
+void			ft_execve(t_var *vars, char **arg, t_env **env);
+void			builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
 char			*get_right_path(char *str);
 char			*get_next_path(char *arr, char *str);
 void			check_path_errors(char *argv, char **env, int *pipefd);
 /**========================================================================
  *!                                 PIPES
  *========================================================================**/
-void			pipex(t_line *line, t_env **env, t_env **export, int arr_size);
+void			pipex(t_var *vars, t_env **env, t_env **export, int arr_size);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR PIPES
  *========================================================================**/
@@ -140,16 +141,16 @@ int				is_infile_valid(int fd, char *infile);
  *!                      CHECK QUOTES WHEN NEW LINE
  *========================================================================**/
 int				check_quote(char *str);
-char			*get_lines(char *line);
+char			*get_vars(char *line);
 /**========================================================================
  *!                            REDIRECTIONS
  *========================================================================**/
 int				is_redirected(char *str);
-void			prepare_redir(char *str, int redirection, int *fd, t_env **env);
+void			prepare_redir(t_var *vars, int redirection, int *fd, t_env **env);
 char			*str_without_redir(char *str);
 char			*get_infile(char *str);
 char			**get_outfile(char *str);
-void			exec_redir(char *path, char **arg, int *fd, t_env **env);
+void			exec_redir(t_var *vars, char **arg, int *fd, t_env **env);
 /**========================================================================
  *!                                 ENV
  *========================================================================**/
