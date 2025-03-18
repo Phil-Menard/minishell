@@ -66,29 +66,28 @@ char	*get_right_path(char *str)
 	return (NULL);
 }
 
-void	exec_cmds(t_var *vars, int *fd, t_env **env)
+void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	char	**arg;
 	int		redirection;
 	int		id;
 
 	redirection = is_redirected(vars->content);
 	if (redirection >= 0)
-		prepare_redir(vars, redirection, fd, env);
+		prepare_redir(vars, fd, env, export);
 	else
 	{
 		vars->path = get_right_path(vars->content);
-		arg = fill_arg(vars->path, vars->content);
+		vars->arg = fill_arg(vars->path, vars->content);
 		id = fork();
 		if (id == 0)
-			ft_execve(vars, arg, env);
+			ft_execve(vars, env, export, fd);
 		else
 		{
 			wait(NULL);
 			if (vars->path)
 				free(vars->path);
-			if (arg)
-				free_db_array(arg);
+			if (vars->arg)
+				free_db_array(vars->arg);
 		}
 	}
 }

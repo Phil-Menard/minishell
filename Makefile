@@ -27,6 +27,7 @@ SRC = minishell.c \
 	utils/utils_fd.c \
 	utils/utils_fd_2.c \
 	utils/utils_export.c \
+	utils/utils_free.c \
 	redirections/prepare_redir.c \
 	redirections/redirections.c \
 	env/init_env.c \

@@ -62,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
 	t_env	*export;
-	t_var	vars;;
+	t_var	vars;
 
 	(void) argc;
 	(void) argv;
@@ -70,6 +70,7 @@ int	main(int argc, char **argv, char **envp)
 	export = NULL;
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
+	vars.arg = NULL;
 	print_minishell();
 	while (1)
 	{

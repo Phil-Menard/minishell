@@ -25,6 +25,7 @@ typedef struct s_var
 	pid_t	*pids;
 	char	**arr;
 	char	**cmd_split;
+	char	**arg;
 	char	*content;
 	char	*prompt;
 	char	*cmd_pipe;
@@ -95,8 +96,8 @@ void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
  *========================================================================**/
-void			exec_cmds(t_var *vars, int *fd, t_env **env);
-void			ft_execve(t_var *vars, char **arg, t_env **env);
+void			exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export);
+void			ft_execve(t_var *vars, t_env **env, t_env **export, int *fd);
 void			builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
 char			*get_right_path(char *str);
 char			*get_next_path(char *arr, char *str);
@@ -128,6 +129,8 @@ char			**prepare_line(char *line);
 int				ft_str_isalpha(char *str);
 long int		ft_atol(char *nptr);
 char			*ft_ltoa(long int n);
+void			free_vars(t_var *vars);
+void			free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/
@@ -146,11 +149,11 @@ char			*get_vars(char *line);
  *!                            REDIRECTIONS
  *========================================================================**/
 int				is_redirected(char *str);
-void			prepare_redir(t_var *vars, int redirection, int *fd, t_env **env);
+void			prepare_redir(t_var *vars, int *fd, t_env **env, t_env **export);
 char			*str_without_redir(char *str);
 char			*get_infile(char *str);
 char			**get_outfile(char *str);
-void			exec_redir(t_var *vars, char **arg, int *fd, t_env **env);
+void			exec_redir(t_var *vars, int *fd, t_env **env, t_env **export);
 /**========================================================================
  *!                                 ENV
  *========================================================================**/

@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //execve with correct redirection
-void	exec_redir(t_var *vars, char **arg, int *fd, t_env **env)
+void	exec_redir(t_var *vars, int *fd, t_env **env, t_env **export)
 {
 	int	id;
 
@@ -23,7 +23,7 @@ void	exec_redir(t_var *vars, char **arg, int *fd, t_env **env)
 			}
 			close(fd[1]);
 		}
-		ft_execve(vars, arg, env);
+		ft_execve(vars, env, export, fd);
 	}
 	else
 		wait(NULL);

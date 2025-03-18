@@ -21,18 +21,16 @@ char	**lst_to_arr(t_env **env)
 	return (arr);
 }
 
-void	ft_execve(t_var *vars, char **arg, t_env **env)
+void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
 {
 	char	**arr_env;
 
 	arr_env = lst_to_arr(env);
-	if (execve(vars->path, arg, arr_env) == -1)
+	if (vars->arg == NULL || execve(vars->path, vars->arg, arr_env) == -1)
 	{
-		perror(arg[0]);
-		if (vars->path)
-			free(vars->path);
-		if (arg)
-			free_db_array(arg);
+		ft_putstr_fd(vars->content, 1);
+		ft_putstr_fd(": command not found\n", 1);
+		free_and_close(vars, env, export, fd);
 		if (arr_env)
 			free_db_array(arr_env);
 		exit(EXIT_FAILURE);
@@ -61,7 +59,7 @@ void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
 	else if (ft_strncmp(vars->content, "exit", size) == 0)
 		ft_exit(fd, vars, env, exp);
 	else
-		exec_cmds(vars, fd, env);
+		exec_cmds(vars, fd, env, exp);
 	close_multiple_fd(fd);
 	free_db_array(vars->cmd_split);
 }

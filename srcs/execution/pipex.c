@@ -1,14 +1,13 @@
 #include "../minishell.h"
 
 //same as exec_cmd but for pipes
-void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export)
+void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 {
-	char	**arg;
 	char	*cmd;
 
 	cmd = str_without_redir(vars->cmd_pipe);
 	vars->path = get_right_path(cmd);
-	arg = fill_arg(vars->path, cmd);
+	vars->arg = fill_arg(vars->path, cmd);
 	free(vars->cmd_pipe);
 	vars->cmd_pipe = NULL;
 	free(vars->content);
@@ -16,7 +15,7 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export)
 	free_db_array(vars->arr);
 	free(vars->pids);
 	free_env(*export);
-	ft_execve(vars, arg, env);
+	ft_execve(vars, env, export, fd);
 }
 
 void	free_child_process(t_var *vars, t_env **env, t_env **export)
@@ -56,7 +55,7 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 		ft_exit(fd, vars, env, export);
 	}
 	else
-		exec_cmds_pipes(vars, env, export);
+		exec_cmds_pipes(vars, env, export, fd);
 	free_db_array(vars->cmd_split);
 	close_multiple_fd(fd);
 }
