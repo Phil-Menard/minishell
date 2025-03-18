@@ -68,7 +68,7 @@ void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	nb = 0;
 	if (vars->cmd_split[1] && ft_str_isalpha(vars->cmd_split[1]) == 0
 		&& vars->cmd_split[2])
-		ft_putstr_fd("minishell: exit: too many arguments\n", 1);
+		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 1);
 	else
 	{
 		if (vars->cmd_split[1])

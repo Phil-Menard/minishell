@@ -149,7 +149,7 @@ char			*get_vars(char *line);
  *!                            REDIRECTIONS
  *========================================================================**/
 int				is_redirected(char *str);
-void			prepare_redir(t_var *vars, int *fd, t_env **env, t_env **export);
+void			prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp);
 char			*str_without_redir(char *str);
 char			*get_infile(char *str);
 char			**get_outfile(char *str);
@@ -173,5 +173,7 @@ t_env			*add_var_env(t_env **env, char *line);
 t_env			*init_export_lst(t_env **env, t_env **lst);
 void			print_t_list(t_list *lst);
 int				var_already_exist(t_env **export, char *str);
+t_env			*add_var_export(t_env **export, t_env **env, char *line);
+t_env			*assign_var_export(t_env **export, t_env **env, char *line);
 
 #endif

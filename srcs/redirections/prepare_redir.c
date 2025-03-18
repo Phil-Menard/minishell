@@ -83,7 +83,7 @@ char	**get_outfile(char *str)
 	return (res);
 }
 
-void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **export)
+void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 {
 	char	*line;
 
@@ -91,7 +91,7 @@ void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **export)
 	vars->path = get_right_path(line);
 	vars->arg = fill_arg(vars->path, line);
 	free(line);
-	exec_redir(vars, fd, env, export);
+	exec_redir(vars, fd, env, exp);
 	free_db_array(vars->arg);
 	free(vars->path);
 }

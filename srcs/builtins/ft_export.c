@@ -1,35 +1,5 @@
 #include "../minishell.h"
 
-//add var to export, x == 1 means there is a value to variable
-t_env	*add_var_export(t_env **export, char *line, int x)
-{
-	t_env	*node;
-	char	**arr;
-	char	*str;
-	char	*temp;
-	int		i;
-
-	arr = ft_split(line, "=");
-	str = ft_strdup("declare -x ");
-	str = ft_straddstr(str, arr[0]);
-	if (x == 1)
-	{
-		str = ft_straddstr(str, "=\"");
-		i = 1;
-		while (line[i - 1] != '=')
-			i++;
-		temp = ft_substr(line, i, ft_strlen(line));
-		str = ft_straddstr(str, temp);
-		free(temp);
-		str = ft_straddchar(str, '\"');
-	}
-	node = ft_new_env_node(str);
-	free(str);
-	free_db_array(arr);
-	ft_env_add_back(export, node);
-	return (*export);
-}
-
 t_env	*sort_export(t_env **lst)
 {
 	t_env	*current;
@@ -59,6 +29,7 @@ t_env	*sort_export(t_env **lst)
 	return (*lst);
 }
 
+//if no args, print export, otherwise add/update var(s) in export and env
 void	ft_export(char *line, t_env **env, t_env **export, int fd)
 {
 	char	**arr;
@@ -73,10 +44,10 @@ void	ft_export(char *line, t_env **env, t_env **export, int fd)
 		while (arr[i])
 		{
 			if (find_occurences(arr[i], '=') == 0)
-				*export = add_var_export(export, arr[i], 0);
+				*export = add_var_export(export, env, arr[i]);
 			else
 			{
-				*export = add_var_export(export, arr[i], 1);
+				*export = assign_var_export(export, env, arr[i]);
 				*env = add_var_env(env, arr[i]);
 			}
 			i++;
@@ -88,7 +59,7 @@ void	ft_export(char *line, t_env **env, t_env **export, int fd)
 
 //set export var from env but with 'declare -x ' at first and then 
 //between quotes
-char	*set_export_var(char **arr, char *env_var)
+char	*set_export_var_from_env(char **arr, char *env_var)
 {
 	char	*str;
 	int		i;
@@ -106,6 +77,7 @@ char	*set_export_var(char **arr, char *env_var)
 	return (str);
 }
 
+//init export
 t_env	*init_export_lst(t_env **env, t_env **lst)
 {
 	t_env	*env_current;
@@ -120,7 +92,7 @@ t_env	*init_export_lst(t_env **env, t_env **lst)
 		arr = ft_split(env_current->var, "=");
 		if (strncmp(arr[0], "_", 1) != 0)
 		{
-			content = set_export_var(arr, env_current->var);
+			content = set_export_var_from_env(arr, env_current->var);
 			lst_current = ft_new_env_node(content);
 			free(content);
 			ft_env_add_back(lst, lst_current);

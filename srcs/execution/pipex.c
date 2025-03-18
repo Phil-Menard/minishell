@@ -8,13 +8,17 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 	cmd = str_without_redir(vars->cmd_pipe);
 	vars->path = get_right_path(cmd);
 	vars->arg = fill_arg(vars->path, cmd);
-	free(vars->cmd_pipe);
-	vars->cmd_pipe = NULL;
-	free(vars->content);
-	free(vars->prompt);
-	free_db_array(vars->arr);
+	free(cmd);
+	if (vars->arg)
+	{
+		free(vars->cmd_pipe);
+		vars->cmd_pipe = NULL;
+		free(vars->content);
+		free(vars->prompt);
+		free_db_array(vars->arr);
+		free_env(*export);
+	}
 	free(vars->pids);
-	free_env(*export);
 	ft_execve(vars, env, export, fd);
 }
 
