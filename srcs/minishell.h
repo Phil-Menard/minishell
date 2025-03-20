@@ -80,7 +80,7 @@ void			ft_pwd(int fd);
 void			ft_env(t_env *env, int fd);
 void			ft_export(char *line, t_env **env, t_env **export, int fd);
 void			ft_echo(char *str, int fd);
-void			ft_cd(char *str, t_env *env, int fd);
+void			ft_cd(char *str, t_env **env, int fd);
 void			ft_unset(char *str, t_env **env, t_env **export);
 void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
@@ -165,5 +165,8 @@ void			print_t_list(t_list *lst);
 int				var_already_exist(t_env **export, char *str);
 t_env			*add_var_export(t_env **export, t_env **env, char *line);
 t_env			*assign_var_export(t_env **export, t_env **env, char *line);
-
+/**========================================================================
+ *!                                 SIGNALS
+ *========================================================================**/
+void	set_signal_action(void);
 #endif
