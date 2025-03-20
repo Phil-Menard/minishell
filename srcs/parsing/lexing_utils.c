@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //* Detect the type of token str is.
-t_token	ft_get_token(char *str)
+t_token	get_token(char *str)
 {
 	if (ft_strncmp(str, "&&", 2) == 0)
 		return (AND);
@@ -14,7 +14,7 @@ t_token	ft_get_token(char *str)
 }
 
 //* Return c index in str, -1 if not founded.
-int	ft_get_pos(char *str, int start, char c)
+int	get_pos(char *str, int start, char c)
 {
 	if (!str || !c)
 		return (-1);
@@ -26,7 +26,7 @@ int	ft_get_pos(char *str, int start, char c)
 }
 
 //* 1 = pair \ 0 = odd
-int	ft_check_pair(char *line, char what)
+int	check_pair(char *line, char what)
 {
 	int	count;
 	int	i;
@@ -44,7 +44,7 @@ int	ft_check_pair(char *line, char what)
 	return (1);
 }
 
-t_token_builder	*ft_get_last(t_token_builder *node)
+t_token_builder	*get_last(t_token_builder *node)
 {
 	t_token_builder	*last;
 
@@ -56,7 +56,7 @@ t_token_builder	*ft_get_last(t_token_builder *node)
 	return (last);
 }
 
-t_token_builder	*ft_new_tkb(size_t len, void *buf)
+t_token_builder	*new_tkb(size_t len, void *buf)
 {
 	t_token_builder	*new;
 

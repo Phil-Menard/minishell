@@ -43,20 +43,20 @@ typedef struct s_token_builder
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-t_token_builder	*ft_tokenizer(char *line);
-t_token_builder	*ft_new_tkb(size_t len, void *buf);
-t_token_builder	*ft_get_last(t_token_builder *node);
-t_token			ft_get_token(char *str);
-int				ft_get_pos(char *str, int start, char c);
-int				ft_check_pair(char *line, char what);
+t_token_builder	*tokenizer(char *line);
+t_token_builder	*new_tkb(size_t len, void *buf);
+t_token_builder	*get_last(t_token_builder *node);
+t_token			get_token(char *str);
+int				get_pos(char *str, int start, char c);
+int				check_pair(char *line, char what);
 /**========================================================================
  *!                                  TREE
  *========================================================================**/
-void			ft_free_list(t_ast *tree);
-t_ast			*ft_new_node(char *cmd, t_token type);
-void			ft_add_node_end(t_ast *tree, const char *branch, t_ast *node);
-void			ft_parse(char *line, t_env *env);
-void			ft_print_tree(t_ast *root, int space); // a retirer
+void			free_list(t_ast *tree);
+t_ast			*new_node(char *cmd, t_token type);
+void			add_node_end(t_ast *tree, const char *branch, t_ast *node);
+void			parsing(char *line, t_env *env);
+void			print_tree(t_ast *root, int space); // a retirer
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/

@@ -100,6 +100,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		prompt_arg = set_prompt_arg();
 		line = readline(prompt_arg);
+		// check for nb of quotes
+		// or all the while into a func
 		add_history(line);
 		if (ft_strlen(line) > 0)
 			check_pipes(line, &env, &export);

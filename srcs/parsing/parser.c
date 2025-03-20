@@ -1,24 +1,29 @@
 # include "../minishell.h"
 
-void	ft_parse(char *line, t_env *env)
+/**
+ * 			- no need to handle special char with \ and odd nb of quotes
+ * todo:	- handle var in " "
+ */
+
+void	parsing(char *line, t_env *env)
 {
 	t_ast			*tree;
 	t_token_builder	*tokens;
 
 	if (!line)
 		return ;
-	if (!ft_check_pair(line, '\'') || !ft_check_pair(line, '\"'))
+	if (!check_pair(line, '\'') || !check_pair(line, '\"'))
 	{
 		printf("Error odd nb of quotes.\n");
 		return ;
 	}
-	tokens = ft_tokenizer(line); // lexing
+	tokens = tokenizer(line); // lexing
 	// create tree
 	// exec
-	ft_free_list(tree);
+	free_list(tree);
 }
 
-void	ft_create_tree(t_ast *tree, char **split, int i_arg)
+void	create_tree(t_ast *tree, char **split, int i_arg)
 {
 
 }
