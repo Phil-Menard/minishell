@@ -41,9 +41,9 @@ void	post_cmd(int *pipefd, int *previous_fd, int *fd)
 }
 
 //regroups every functions called at the end of pipex
-void	end_pipex(int *pipefd, pid_t *pids, int arr_size, int previous_fd)
+void	end_pipex(int *pipefd, pid_t *pids, int arr_size, int prev_fd)
 {
 	close(pipefd[0]);
 	wait_childs(pids, arr_size);
-	close_previous_fd(previous_fd);
+	close_previous_fd(prev_fd);
 }

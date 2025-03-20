@@ -1,17 +1,31 @@
 #include "../minishell.h"
 
-void	print_env(t_env *lst, int fd)
+t_env	*add_var_env(t_env **env, char *line)
 {
-	while (lst != NULL)
-	{
-		ft_putstr_fd(lst->var, fd);
-		ft_putchar_fd('\n', fd);
-		lst = lst->next;
-	}
+	t_env	*node;
+	char	**arr;
+	char	*str;
+	char	*temp;
+	int		i;
+
+	arr = ft_split(line, "=");
+	str = ft_strdup(arr[0]);
+	str = ft_straddchar(str, '=');
+	i = 1;
+	while (line[i - 1] != '=')
+		i++;
+	temp = ft_substr(line, i, ft_strlen(line));
+	str = ft_straddstr(str, temp);
+	free(temp);
+	node = ft_new_env_node(str);
+	free(str);
+	free_db_array(arr);
+	ft_env_add_back(env, node);
+	return (*env);
 }
 
 //find variable and update it, arr[0] is variable name
-t_env	*modify_env(t_env *env, char *old_var, char *new_var)
+t_env	*modify_env(t_env *env, char *var_name, char *content)
 {
 	t_env	*current;
 	char	**arr;
@@ -20,10 +34,10 @@ t_env	*modify_env(t_env *env, char *old_var, char *new_var)
 	while (current)
 	{
 		arr = ft_split(current->var, "=");
-		if (ft_strncmp(arr[0], old_var, ft_strlen(arr[0])) == 0)
+		if (ft_strncmp(arr[0], var_name, ft_strlen(arr[0])) == 0)
 		{
 			free(current->var);
-			current->var = ft_join_mid(old_var, '=', new_var);
+			current->var = ft_join_mid(var_name, '=', content);
 			free_db_array(arr);
 			break ;
 		}

@@ -11,57 +11,33 @@ void	print_minishell(void)
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
 }
 
-//check which cmd is entered in line, and call a builtin or execve
-void	builtin_or_cmd(char *line, int *fd, t_env **env, t_env **export)
+//check if vars contains a pipe or not, and call the corresponding function
+void	check_pipes(t_var *vars, t_env **env, t_env **export)
 {
-	char	**arr;
-
-	arr = ft_split(line, " ");
-	if (ft_strncmp(arr[0], "pwd", ft_strlen(arr[0])) == 0)
-		ft_pwd(fd[1]);
-	else if (ft_strncmp(line, "env", ft_strlen(arr[0])) == 0)
-		ft_env(*env, fd[1]);
-	else if (ft_strncmp(line, "echo", ft_strlen(arr[0])) == 0)
-		ft_echo(line, fd[1]);
-	else if (ft_strncmp(line, "cd", ft_strlen(arr[0])) == 0)
-		ft_cd(line, *env, fd[1]);
-	else if (ft_strncmp(line, "unset", ft_strlen(arr[0])) == 0)
-		ft_unset(line, env, export);
-	else if (ft_strncmp(line, "export", ft_strlen(arr[0])) == 0)
-		ft_export(line, env, export, fd[1]);
-	else if (ft_strncmp(line, "exit", ft_strlen(arr[0])) == 0)
-	{
-		free_db_array(arr);
-		close_multiple_fd(fd);
-		ft_exit();
-	}
-	else
-		exec_cmds(line, fd, env);
-	free_db_array(arr);
-}
-
-//check if line contains a pipe or not, and call the corresponding function
-void	check_pipes(char *line, t_env **env, t_env **export)
-{
-	char	**arr;
 	int		*fd;
 	int		arr_size;
 
-	arr = prepare_line(line);
 	fd = NULL;
-	if (!arr[1])
+	vars->cmd_pipe = NULL;
+	vars->arr = prepare_line(vars->content);
+	if (!vars->arr[1])
 	{
-		fd = init_fd();
-		fd = set_fd(line, fd);
-		builtin_or_cmd(line, fd, env, export);
+		if (ft_strncmp(vars->arr[0], "exit", 4) == 0)
+		{
+			free_db_array(vars->arr);
+			vars->arr = NULL;
+		}
+		fd = init_and_set_fd(vars->content);
+		if (fd[0] > -1)
+			builtin_or_cmd(vars, fd, env, export);
 	}
 	else
 	{
-		arr_size = double_arr_len(arr);
-		pipex(arr, env, export, arr_size);
+		arr_size = double_arr_len(vars->arr);
+		pipex(vars, env, export, arr_size);
 	}
-	free_db_array(arr);
-	free(fd);
+	if (vars->arr)
+		free_db_array(vars->arr);
 }
 
 char	*set_prompt_arg(void)
@@ -86,8 +62,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
 	t_env	*export;
-	char	*line;
-	char	*prompt_arg;
+	t_var	vars;
 
 	(void) argc;
 	(void) argv;
@@ -95,20 +70,19 @@ int	main(int argc, char **argv, char **envp)
 	export = NULL;
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
+	vars.arg = NULL;
 	print_minishell();
 	while (1)
 	{
-		prompt_arg = set_prompt_arg();
-		line = readline(prompt_arg);
-		// check for nb of quotes
-		// or all the while into a func
-		add_history(line);
-		if (ft_strlen(line) > 0)
-			check_pipes(line, &env, &export);
-			// ft_parse(line, env);
-			// builtins(line, env, &exit_code);
-		free(line);
-		free(prompt_arg);
+		vars.prompt = set_prompt_arg();
+		vars.content = readline(vars.prompt);
+		add_history(vars.content);
+		if (ft_strlen(vars.content) > 0)
+			check_pipes(&vars, &env, &export);
+			// ft_parse(vars, env);
+			// builtins(vars, env, &exit_code);
+		free(vars.content);
+		free(vars.prompt);
 	}
 	free_env(env);
 	free_env(export);

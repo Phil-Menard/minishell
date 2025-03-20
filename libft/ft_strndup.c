@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 11:51:34 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/03/11 23:26:33 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/03/12 11:04:52 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

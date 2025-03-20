@@ -1,28 +1,5 @@
 #include "../minishell.h"
 
-//check if there is a redirection
-int	is_redirected(char *str)
-{
-	if (find_occurences(str, '<') == 1)
-	{
-		if (find_occurences(str, '>') == 1)
-			return (0);
-		else if (find_occurences(str, '>') == 2)
-			return (4);
-		else
-			return (1);
-	}
-	else if (find_occurences(str, '>') > 0)
-	{
-		if (find_occurences(str, '>') == 1)
-			return (2);
-		else
-			return (3);
-	}
-	else
-		return (-1);
-}
-
 //return line without redirection
 char	*str_without_redir(char *str)
 {
@@ -63,12 +40,15 @@ char	*get_infile(char *str)
 	res = NULL;
 	while (arr[i])
 	{
-		if (find_occurences(arr[i], '<') > 0)
+		if (find_occurences(arr[i], '<') == 1)
 		{
 			i++;
+			if (res)
+			{
+				free(res);
+				res = NULL;
+			}
 			res = ft_strdup(arr[i]);
-			free_db_array(arr);
-			return (res);
 		}
 		i++;
 	}
@@ -77,42 +57,41 @@ char	*get_infile(char *str)
 }
 
 //get outfile name
-char	*get_outfile(char *str)
+char	**get_outfile(char *str)
 {
 	char	**arr;
-	char	*res;
+	char	**res;
 	int		i;
+	int		j;
 
 	arr = ft_split(str, " ");
 	i = 0;
-	res = NULL;
+	j = 0;
+	res = malloc((find_occurences(str, '>') + 1) * sizeof(char *));
 	while (arr[i])
 	{
 		if (find_occurences(arr[i], '>') > 0)
 		{
 			i++;
-			res = ft_strdup(arr[i]);
-			free_db_array(arr);
-			return (res);
+			res[j] = ft_strdup(arr[i]);
+			j++;
 		}
 		i++;
 	}
 	free_db_array(arr);
+	res[j] = NULL;
 	return (res);
 }
 
-void	prepare_redir(char *str, int redirection, int *fd, t_env **env)
+void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 {
-	char	*path;
-	char	**arg;
 	char	*line;
 
-	line = str_without_redir(str);
-	path = get_right_path(line);
-	arg = fill_arg(path, line);
+	line = str_without_redir(vars->content);
+	vars->path = get_right_path(line);
+	vars->arg = fill_arg(vars->path, line);
 	free(line);
-	if (redirection >= 0)
-		exec_redir(path, arg, fd, env);
-	free_db_array(arg);
-	free(path);
+	exec_redir(vars, fd, env, exp);
+	free_db_array(vars->arg);
+	free(vars->path);
 }
