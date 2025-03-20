@@ -41,21 +41,43 @@ void	echo_loop(char *str, int i, int fd, int option)
 		ft_putchar_fd('\n', fd);
 }
 
+//check if arg is only -n (multiple n can be written) or different
+int	check_arg(char *str)
+{
+	int	i;
+
+	if (str[0] != '-')
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (i);
+}
+
 void	ft_echo(char *str, int fd)
 {
-	int		i;
-	int		option;
+	char	**arr;
 	char	*line;
+	int		i;
+	int		j;
+	int		option;
 
 	option = 0;
-	if (ft_strncmp(str, "echo -n", 7) == 0)
+	arr = ft_split(str, " ");
+	j = check_arg(arr[1]);
+	if (j > 0)
 	{
-		i = 8;
+		i = 6 + j;
 		option = 1;
 	}
 	else
 		i = 5;
 	line = str_without_redir(str);
 	echo_loop(line, i, fd, option);
+	free_db_array(arr);
 	free(line);
 }
