@@ -47,7 +47,7 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	else if (ft_strncmp(vars->cmd_split[0], "echo", vars->size_cmd) == 0)
 		ft_echo(vars->cmd_pipe, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "cd", vars->size_cmd) == 0)
-		ft_cd(vars->cmd_pipe, *env, fd[1]);
+		ft_cd(vars->cmd_pipe, env, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "unset", vars->size_cmd) == 0)
 		ft_unset(vars->cmd_pipe, env, export);
 	else if (ft_strncmp(vars->cmd_pipe, "export", vars->size_cmd) == 0)

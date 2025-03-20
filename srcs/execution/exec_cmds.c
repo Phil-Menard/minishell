@@ -51,7 +51,7 @@ void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
 	else if (ft_strncmp(vars->content, "echo", size) == 0)
 		ft_echo(vars->content, fd[1]);
 	else if (ft_strncmp(vars->content, "cd", size) == 0)
-		ft_cd(vars->content, *env, fd[1]);
+		ft_cd(vars->content, env, fd[1]);
 	else if (ft_strncmp(vars->content, "unset", size) == 0)
 		ft_unset(vars->content, env, exp);
 	else if (ft_strncmp(vars->content, "export", size) == 0)

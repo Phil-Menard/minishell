@@ -90,7 +90,7 @@ void			ft_pwd(int fd);
 void			ft_env(t_env *env, int fd);
 void			ft_export(char *line, t_env **env, t_env **export, int fd);
 void			ft_echo(char *str, int fd);
-void			ft_cd(char *str, t_env *env, int fd);
+void			ft_cd(char *str, t_env **env, int fd);
 void			ft_unset(char *str, t_env **env, t_env **export);
 void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
