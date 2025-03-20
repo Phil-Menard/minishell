@@ -72,6 +72,7 @@ int	main(int argc, char **argv, char **envp)
 	init_export_lst(&env, &export);
 	vars.arg = NULL;
 	print_minishell();
+	set_signal_action();
 	while (1)
 	{
 		vars.prompt = set_prompt_arg();
