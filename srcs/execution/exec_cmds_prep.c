@@ -13,56 +13,58 @@ char	**fill_arg(char *path, char *argv)
 	return (arg);
 }
 
-char	*get_next_path(char *arr, char *str)
+char	*get_next_path(char *arr, char *str, t_var *vars)
 {
 	char	*path;
-	char	*cmd;
-	char	**args;
 
 	if (ft_strrchr(str, '/') != NULL)
 	{
-		args = ft_split(str, " ");
-		cmd = ft_strdup(args[0]);
-		free_db_array(args);
-		if (access(cmd, X_OK) != 0)
+		if (access(str, X_OK) != 0)
 		{
 			ft_putstr_fd(str, 2);
 			ft_putstr_fd(": No such file or directory\n", 2);
-			exit(EXIT_FAILURE);
+			vars->exit_statut = 127;
 		}
-		return (cmd);
+		return (str);
 	}
-	args = ft_split(str, " ");
-	cmd = ft_strdup(args[0]);
-	free_db_array(args);
-	path = ft_join_mid(arr, '/', cmd);
-	free(cmd);
+	path = ft_join_mid(arr, '/', str);
 	return (path);
 }
 
 //find correct path to execute cmd
-char	*get_right_path(char *str)
+char	*get_right_path(char *str, t_var *vars)
 {
 	int		i;
 	char	*path;
 	char	**arr;
+	char	**split_cmd;
 
-	i = 0;
 	arr = ft_split(getenv("PATH"), ":");
+	split_cmd = ft_split(str, " ");
 	i = 0;
 	while (arr[i])
 	{
-		path = get_next_path(arr[i], str);
+		path = get_next_path(arr[i], split_cmd[0], vars);
 		if (access(path, X_OK) == 0)
 		{
 			free_db_array(arr);
+			free_db_array(split_cmd);
 			return (path);
 		}
 		free(path);
+		if (ft_strrchr(split_cmd[0], '/') != NULL)
+			break;
 		i++;
+	}
+	vars->exit_statut = 127;
+	if (ft_strrchr(split_cmd[0], '/') == NULL)
+	{
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": command not found\n", 2);
 	}
 	if (arr)
 		free_db_array(arr);
+	free_db_array(split_cmd);
 	return (NULL);
 }
 
@@ -76,18 +78,24 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
-		vars->path = get_right_path(vars->content);
-		vars->arg = fill_arg(vars->path, vars->content);
-		id = fork();
-		if (id == 0)
-			ft_execve(vars, env, export, fd);
-		else
+		vars->path = get_right_path(vars->content, vars);
+		if (vars->path)
 		{
-			wait(NULL);
-			if (vars->path)
-				free(vars->path);
-			if (vars->arg)
-				free_db_array(vars->arg);
+			vars->arg = fill_arg(vars->path, vars->content);
+			id = fork();
+			if (id == 0)
+				ft_execve(vars, env, export, fd);
+			else
+			{
+				waitpid(id, &vars->exit_statut, 0);
+				printf("status : %d\n", WEXITSTATUS(vars->exit_statut));
+				if (vars->path)
+					free(vars->path);
+				if (vars->arg)
+					free_db_array(vars->arg);
+			}
 		}
+		else
+			printf("status : %d\n", vars->exit_statut);
 	}
 }

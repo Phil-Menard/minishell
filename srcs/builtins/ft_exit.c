@@ -15,11 +15,6 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 		free_db_array(vars->arr);
 		vars->arr = NULL;
 	}
-	if (vars->cmd_pipe)
-	{
-		free(vars->cmd_pipe);
-		vars->cmd_pipe = NULL;
-	}
 	else
 		ft_putstr_fd("exit\n", 1);
 }
