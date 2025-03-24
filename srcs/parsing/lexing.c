@@ -10,12 +10,14 @@ static void	space_handler(t_token_builder *tokens, char *line, int *i)
 }
 
 //* for double quotes, cpy quoted and take value (if) var
-static char	*double_quotes(char *str, int start, int size)
+static char	*quotes(char *str, int start)
 {
 	char	*res;
 	char	*var;
+	int		size;
 	int		iv;
 
+	size = get_pos(str, start, '\"');
 	res = ft_calloc(sizeof(char), size);
 	if (!res)
 		return (NULL);
@@ -26,14 +28,22 @@ static char	*double_quotes(char *str, int start, int size)
 			iv = start + 1;
 			while (str[iv] && iv < size
 				&& (str[iv] <= 9 || str[iv] >= 13))
-				var = ft_straddchar(var, str[iv]);
+			{
+				printf("var[%d] = %c\n", iv, str[iv]);
+				var = ft_straddchar(var, str[iv++]); //pb pour recup la var
+			}
+			printf("var = %s = %s\n", var, getenv(var));
 			res = ft_straddstr(res, getenv(var));
 			start = iv;
 			free(var);
 			var = NULL;
 		}
-		res = ft_straddchar(res, str[start]);
+		res = ft_straddchar(res, str[start++]);
 	}
+	if (res)
+		printf("res = %s\n", res);
+	else
+		printf("no res\n");
 	return (res);
 }
 
@@ -47,18 +57,25 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 
 	if (!line)
 		return (0);
+	last = get_last(*builder);
+	if (!last)
+		return (0);
 	size = 0;
+
 	if (line[start - 1] == '\'')
+	{
 		size = get_pos(line, start, '\'') - start;
+		quoted = ft_strndup(line, start, size);
+	}
 	else if (line[start - 1] == '\"')
-		size = get_pos(line, start, '\"') - start;
-	quoted = ft_strndup(line, start, size); // func for handle "$VAR"
+	{
+		quoted = quotes(line, start);
+		size = ft_strlen(quoted);
+	}
 	if (!quoted)
 		return (0);
-	last = get_last(*builder)->buf;
-	if (!last)
-		return (free(quoted), quoted = NULL, 0);
-	last = ft_straddstr(last, quoted);
+
+	last->buf = ft_straddstr(last->buf, quoted);
 	return (free(quoted), size);
 }
 
@@ -96,7 +113,7 @@ t_token_builder	*tokenizer(char *line)
 
 int	main(void)
 {
-	char			*test = "            <Makefile \"grep echo \"e abc | \" |a";
+	char			*test = "            <Makefile \"grep echo \"e abc | \"$test |a\"";
 
 	if (!check_pair(test, '\'') || !check_pair(test, '\"'))
 	{
