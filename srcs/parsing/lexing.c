@@ -17,8 +17,9 @@ static char	*quotes(char *str, int start)
 	int		size;
 	int		iv;
 
+	var = NULL;
 	size = get_pos(str, start, '\"');
-	res = ft_calloc(sizeof(char), size);
+	res = ft_calloc(sizeof(char), (size - start));
 	if (!res)
 		return (NULL);
 	while (str[start] && start < size)
@@ -26,24 +27,16 @@ static char	*quotes(char *str, int start)
 		if (str[start] == '$')
 		{
 			iv = start + 1;
-			while (str[iv] && iv < size
+			while (str[iv] && iv < size && str[iv] != ' '
 				&& (str[iv] <= 9 || str[iv] >= 13))
-			{
-				printf("var[%d] = %c\n", iv, str[iv]);
 				var = ft_straddchar(var, str[iv++]); //pb pour recup la var
-			}
-			printf("var = %s = %s\n", var, getenv(var));
 			res = ft_straddstr(res, getenv(var));
-			start = iv;
+			start = ft_strlen(getenv(var)) + iv;
 			free(var);
 			var = NULL;
 		}
 		res = ft_straddchar(res, str[start++]);
 	}
-	if (res)
-		printf("res = %s\n", res);
-	else
-		printf("no res\n");
 	return (res);
 }
 
@@ -75,7 +68,9 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 	if (!quoted)
 		return (0);
 
+	printf("prout\n");
 	last->buf = ft_straddstr(last->buf, quoted);
+	printf("prout2\n");
 	return (free(quoted), size);
 }
 
@@ -120,10 +115,10 @@ int	main(void)
 		printf("Error odd nb of quotes.\n");
 		return 1;
 	}
+	printf("str : %s\n", test);
 	t_token_builder	*tokens = tokenizer(test);
 	t_token_builder	*tmp;
 
-	printf("str : %s\n", test);
 	while (tokens)
 	{
 		printf("Token: %s\n", tokens->buf);
