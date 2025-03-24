@@ -9,9 +9,12 @@ static void	space_handler(t_token_builder *tokens, char *line, int *i)
 		get_last(tokens)->next = new_tkb(0, NULL);
 }
 
+//* for double quotes, cpy quoted and take value (if) var
 static char	*double_quotes(char *str, int start, int size)
 {
 	char	*res;
+	char	*var;
+	int		iv;
 
 	res = ft_calloc(sizeof(char), size);
 	if (!res)
@@ -20,10 +23,18 @@ static char	*double_quotes(char *str, int start, int size)
 	{
 		if (str[start] == '$')
 		{
-			
+			iv = start + 1;
+			while (str[iv] && iv < size
+				&& (str[iv] <= 9 || str[iv] >= 13))
+				var = ft_straddchar(var, str[iv]);
+			res = ft_straddstr(res, getenv(var));
+			start = iv;
+			free(var);
+			var = NULL;
 		}
 		res = ft_straddchar(res, str[start]);
 	}
+	return (res);
 }
 
 //* Add all quoted text in buf into list token_builder.
@@ -83,7 +94,7 @@ t_token_builder	*tokenizer(char *line)
 
 // To test lexing : cc -g -Wall -Wextra -Werror ../../libft/*.c ../utils/utils_2.c ../utils/utils.c lexing.c lexing_utils.c
 
-/* int	main(void)
+int	main(void)
 {
 	char			*test = "            <Makefile \"grep echo \"e abc | \" |a";
 
@@ -107,4 +118,4 @@ t_token_builder	*tokenizer(char *line)
 		tmp = NULL;
 	}
 	return 0;
-} */
+}
