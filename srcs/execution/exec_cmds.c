@@ -28,8 +28,6 @@ void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
 	arr_env = lst_to_arr(env);
 	if (vars->arg == NULL || execve(vars->path, vars->arg, arr_env) == -1)
 	{
-		// ft_putstr_fd(vars->content, 1);
-		// ft_putstr_fd(": command not found\n", 1);
 		free_and_close(vars, env, export, fd);
 		if (arr_env)
 			free_db_array(arr_env);

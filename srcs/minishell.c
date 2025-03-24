@@ -37,6 +37,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	}
 	if (vars->arr)
 		free_db_array(vars->arr);
+	printf("status : %d\n", vars->exit_statut);
 }
 
 char	*set_prompt_arg(void)

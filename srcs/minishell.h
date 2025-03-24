@@ -111,10 +111,10 @@ void			pipex(t_var *vars, t_env **env, t_env **export, int arr_size);
  *!                      UTILS FUNCTIONS FOR PIPES
  *========================================================================**/
 void			close_previous_fd(int previous_fd);
-void			wait_childs(pid_t *pids, int arr_size);
+void			wait_childs(t_var *vars, int arr_size);
 void			outfile_dups(int *fd, int *pipefd, int i, int arr_size);
 void			post_cmd(int *pipefd, int *previous_fd, int *fd);
-void			end_pipex(int *pipefd, pid_t *pids, int arr_size, int prev_fd);
+void			end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd);
 /**========================================================================
  *!                               UTILS
  *========================================================================**/

@@ -25,27 +25,32 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 
 	cmd = str_without_redir(vars->content);
 	vars->path = get_right_path(cmd, vars);
-	vars->arg = fill_arg(vars->path, cmd);
-	free(cmd);
-	if (vars->arg)
+	if (vars->path)
 	{
-		free(vars->content);
-		vars->content = NULL;
-		free(vars->prompt);
-		free_db_array(vars->arr);
-		free_env(*export);
+		vars->arg = fill_arg(vars->path, cmd);
+		free(cmd);
+		if (vars->arg)
+		{
+			free(vars->content);
+			vars->content = NULL;
+			free(vars->prompt);
+			free_db_array(vars->arr);
+			free_env(*export);
+		}
+		free(vars->pids);
+		vars->pids = NULL;
+		ft_execve(vars, env, export, fd);
 	}
-	free(vars->pids);
-	vars->pids = NULL;
-	ft_execve(vars, env, export, fd);
+	free(cmd);
 	close_multiple_fd(fd);
 	free_child_process(vars, env, export);
-	exit(127);
+	exit(vars->exit_statut);
 }
 
 //same as builtin_or_cmd but for pipes
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
+	vars->exit_statut = 0;
 	vars->content = ft_strdup(vars->arr[vars->i]);
 	vars->cmd_split = ft_split(vars->content, " ");
 	vars->size_cmd = ft_strlen(vars->cmd_split[0]);
@@ -69,7 +74,6 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	}
 	else
 		exec_cmds_pipes(vars, env, export, fd);
-	free_db_array(vars->cmd_split);
 	close_multiple_fd(fd);
 }
 
@@ -105,9 +109,9 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 			close_previous_fd(previous_fd);
 			builtin_or_cmd_pipes(vars, fd, env, export);
 			free_child_process(vars, env, export);
-			exit(EXIT_SUCCESS);
+			exit(vars->exit_statut);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
 	}
-	end_pipex(pipefd, vars->pids, arr_size, previous_fd);
+	end_pipex(pipefd, vars, arr_size, previous_fd);
 }

@@ -88,14 +88,11 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 			else
 			{
 				waitpid(id, &vars->exit_statut, 0);
-				printf("status : %d\n", WEXITSTATUS(vars->exit_statut));
 				if (vars->path)
 					free(vars->path);
 				if (vars->arg)
 					free_db_array(vars->arg);
 			}
 		}
-		else
-			printf("status : %d\n", vars->exit_statut);
 	}
 }

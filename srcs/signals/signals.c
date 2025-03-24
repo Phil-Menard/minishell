@@ -19,4 +19,5 @@ void	set_signal_action(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sigint_handler;
 	sigaction(SIGINT, &act, NULL);
+	signal(SIGPIPE, SIG_IGN);
 }
