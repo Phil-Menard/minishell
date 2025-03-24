@@ -7,17 +7,24 @@ void	close_previous_fd(int previous_fd)
 }
 
 //wait for every child processes to finish
-void	wait_childs(pid_t *pids, int arr_size)
+void	wait_childs(t_var *vars, int arr_size)
 {
-	int		j;
+	int	j;
+	int	exit_code;
 
 	j = 0;
 	while (j < arr_size)
 	{
-		waitpid(pids[j], NULL, 0);
+		waitpid(vars->pids[j], &vars->exit_statut, 0);
+		if (WIFEXITED(vars->exit_statut))
+		{
+			exit_code = WEXITSTATUS(vars->exit_statut);
+			printf("exit_code : %d\n", exit_code);
+		}
 		j++;
 	}
-	free(pids);
+	vars->exit_statut = exit_code;
+	free(vars->pids);
 }
 
 //regroups dups2 in pipex
@@ -41,9 +48,9 @@ void	post_cmd(int *pipefd, int *previous_fd, int *fd)
 }
 
 //regroups every functions called at the end of pipex
-void	end_pipex(int *pipefd, pid_t *pids, int arr_size, int prev_fd)
+void	end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd)
 {
 	close(pipefd[0]);
-	wait_childs(pids, arr_size);
+	wait_childs(vars, arr_size);
 	close_previous_fd(prev_fd);
 }

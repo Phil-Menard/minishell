@@ -20,11 +20,6 @@ void	free_vars(t_var *vars)
 		free_db_array(vars->arr);
 		vars->arr = NULL;
 	}
-	if (vars->cmd_pipe)
-	{
-		free(vars->cmd_pipe);
-		vars->cmd_pipe = NULL;
-	}
 }
 
 void	free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd)

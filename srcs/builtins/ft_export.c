@@ -30,15 +30,15 @@ t_env	*sort_export(t_env **lst)
 }
 
 //if no args, print export, otherwise add/update var(s) in export and env
-void	ft_export(char *line, t_env **env, t_env **export, int fd)
+void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 {
 	char	**arr;
 	int		i;
 
 	i = 1;
-	arr = ft_split(line, " ");
+	arr = ft_split(vars->content, " ");
 	if (!arr[i])
-		ft_env(*export, fd);
+		ft_env(*export, vars, fd);
 	else
 	{
 		while (arr[i])

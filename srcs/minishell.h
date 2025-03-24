@@ -7,6 +7,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
 # include <limits.h>
@@ -26,10 +27,10 @@ typedef struct s_var
 	char	**arg;
 	char	*content;
 	char	*prompt;
-	char	*cmd_pipe;
 	char	*path;
 	int		i;
 	int		size_cmd;
+	int		exit_statut;
 }				t_var;
 
 typedef enum e_token
@@ -76,9 +77,9 @@ void			print_tree(t_ast *root, int space); // a retirer
  *!                           EXECUTION BUILTINS
  *========================================================================**/
 void			check_pipes(t_var *vars, t_env **env, t_env **export);
-void			ft_pwd(int fd);
-void			ft_env(t_env *env, int fd);
-void			ft_export(char *line, t_env **env, t_env **export, int fd);
+void			ft_pwd(t_var *vars, int fd);
+void			ft_env(t_env *env, t_var *vars, int fd);
+void			ft_export(t_var *vars, t_env **env, t_env **export, int fd);
 void			ft_echo(char *str, int fd);
 void			ft_cd(char *str, t_env **env, int fd);
 void			ft_unset(char *str, t_env **env, t_env **export);
@@ -89,8 +90,8 @@ void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 void			exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export);
 void			ft_execve(t_var *vars, t_env **env, t_env **export, int *fd);
 void			builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
-char			*get_right_path(char *str);
-char			*get_next_path(char *arr, char *str);
+char			*get_right_path(char *str, t_var *vars);
+char			*get_next_path(char *arr, char *str, t_var *vars);
 void			check_path_errors(char *argv, char **env, int *pipefd);
 /**========================================================================
  *!                                 PIPES
@@ -100,10 +101,10 @@ void			pipex(t_var *vars, t_env **env, t_env **export, int arr_size);
  *!                      UTILS FUNCTIONS FOR PIPES
  *========================================================================**/
 void			close_previous_fd(int previous_fd);
-void			wait_childs(pid_t *pids, int arr_size);
+void			wait_childs(t_var *vars, int arr_size);
 void			outfile_dups(int *fd, int *pipefd, int i, int arr_size);
 void			post_cmd(int *pipefd, int *previous_fd, int *fd);
-void			end_pipex(int *pipefd, pid_t *pids, int arr_size, int prev_fd);
+void			end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd);
 /**========================================================================
  *!                               UTILS
  *========================================================================**/
