@@ -18,24 +18,23 @@ static char	*quotes(char *str, int start)
 	int		iv;
 
 	var = NULL;
+	res = NULL;
 	size = get_pos(str, start, '\"');
-	res = ft_calloc(sizeof(char), (size - start));
-	if (!res)
-		return (NULL);
-	while (str[start] && start < size)
+	while (str[start] && start < size) //peut etre start ?
 	{
 		if (str[start] == '$')
 		{
 			iv = start + 1;
 			while (str[iv] && iv < size && str[iv] != ' '
 				&& (str[iv] <= 9 || str[iv] >= 13))
-				var = ft_straddchar(var, str[iv++]); //pb pour recup la var
+				var = ft_straddchar(var, str[iv++]);
 			res = ft_straddstr(res, getenv(var));
-			start = ft_strlen(getenv(var)) + iv;
+			start = iv; //pb incrementation
 			free(var);
 			var = NULL;
 		}
-		res = ft_straddchar(res, str[start++]);
+		else
+			res = ft_straddchar(res, str[start++]);
 	}
 	return (res);
 }
@@ -54,7 +53,6 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 	if (!last)
 		return (0);
 	size = 0;
-
 	if (line[start - 1] == '\'')
 	{
 		size = get_pos(line, start, '\'') - start;
@@ -67,10 +65,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 	}
 	if (!quoted)
 		return (0);
-
-	printf("prout\n");
 	last->buf = ft_straddstr(last->buf, quoted);
-	printf("prout2\n");
 	return (free(quoted), size);
 }
 

@@ -66,7 +66,7 @@ int	ft_strfind(char *s1, char *s2)
 }
 
 //return the size of a 2D array
-/* int	double_arr_len(char **arr)
+int	double_arr_len(char **arr)
 {
 	int	size;
 
@@ -96,4 +96,4 @@ char	**prepare_line(char *line)
 	res[i] = NULL;
 	free_db_array(arr);
 	return (res);
-} */
+}
