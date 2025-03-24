@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	ft_pwd(int fd)
+void	ft_pwd(t_var *vars, int fd)
 {
 	char	*path;
 
@@ -10,7 +10,11 @@ void	ft_pwd(int fd)
 	{
 		ft_putstr_fd(path, fd);
 		free(path);
+		vars->exit_statut = 0;
 	}
 	else
+	{
 		perror("path error");
+		vars->exit_statut = 1;
+	}
 }

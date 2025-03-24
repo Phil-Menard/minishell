@@ -18,7 +18,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	int		arr_size;
 
 	fd = NULL;
-	vars->cmd_pipe = NULL;
 	vars->arr = prepare_line(vars->content);
 	if (!vars->arr[1])
 	{
@@ -38,6 +37,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	}
 	if (vars->arr)
 		free_db_array(vars->arr);
+	printf("status : %d\n", vars->exit_statut);
 }
 
 char	*set_prompt_arg(void)
@@ -70,8 +70,10 @@ int	main(int argc, char **argv, char **envp)
 	export = NULL;
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
+	vars.exit_statut = 0;
 	vars.arg = NULL;
 	print_minishell();
+	set_signal_action();
 	while (1)
 	{
 		vars.prompt = set_prompt_arg();

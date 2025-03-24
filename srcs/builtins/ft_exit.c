@@ -15,11 +15,6 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 		free_db_array(vars->arr);
 		vars->arr = NULL;
 	}
-	if (vars->cmd_pipe)
-	{
-		free(vars->cmd_pipe);
-		vars->cmd_pipe = NULL;
-	}
 	else
 		ft_putstr_fd("exit\n", 1);
 }
@@ -39,11 +34,15 @@ long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 {
 	long int	nb;
 	char		*content;
+	int			i;
 
-	nb = ft_atol(vars->cmd_split[1]);
+	i = 0;
+	while (vars->cmd_split[1][i] == '0')
+		i++;
+	nb = ft_atol(vars->cmd_split[1] + i);
 	content = ft_ltoa(nb);
-	if (ft_strncmp(vars->cmd_split[1], content,
-			ft_strlen(vars->cmd_split[1])) != 0)
+	if (ft_strncmp(vars->cmd_split[1] + i, content,
+			ft_strlen(vars->cmd_split[1] + i)) != 0)
 	{
 		if (ft_strncmp(vars->cmd_split[1], "-9223372036854775808",
 				ft_strlen(vars->cmd_split[1])) != 0)

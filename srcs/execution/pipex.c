@@ -1,57 +1,71 @@
 #include "../minishell.h"
 
+void	free_child_process(t_var *vars, t_env **env, t_env **export)
+{
+	if (vars->content)
+	{
+		free(vars->content);
+		vars->content = NULL;
+	}
+	if (vars->cmd_split)
+		free_db_array(vars->cmd_split);
+	free(vars->prompt);
+	if (vars->arr)
+		free_db_array(vars->arr);
+	if(vars->pids)
+		free(vars->pids);
+	free_env(*export);
+	free_env(*env);
+}
+
 //same as exec_cmd but for pipes
 void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 {
 	char	*cmd;
 
-	cmd = str_without_redir(vars->cmd_pipe);
-	vars->path = get_right_path(cmd);
-	vars->arg = fill_arg(vars->path, cmd);
-	free(cmd);
-	if (vars->arg)
+	cmd = str_without_redir(vars->content);
+	vars->path = get_right_path(cmd, vars);
+	if (vars->path)
 	{
-		free(vars->cmd_pipe);
-		vars->cmd_pipe = NULL;
-		free(vars->content);
-		free(vars->prompt);
-		free_db_array(vars->arr);
-		free_env(*export);
+		vars->arg = fill_arg(vars->path, cmd);
+		free(cmd);
+		if (vars->arg)
+		{
+			free(vars->content);
+			vars->content = NULL;
+			free(vars->prompt);
+			free_db_array(vars->arr);
+			free_env(*export);
+		}
+		free(vars->pids);
+		vars->pids = NULL;
+		ft_execve(vars, env, export, fd);
 	}
-	free(vars->pids);
-	ft_execve(vars, env, export, fd);
-}
-
-void	free_child_process(t_var *vars, t_env **env, t_env **export)
-{
-	free(vars->cmd_pipe);
-	vars->cmd_pipe = NULL;
-	free(vars->content);
-	free(vars->prompt);
-	free_db_array(vars->arr);
-	free(vars->pids);
-	free_env(*export);
-	free_env(*env);
+	free(cmd);
+	close_multiple_fd(fd);
+	free_child_process(vars, env, export);
+	exit(vars->exit_statut);
 }
 
 //same as builtin_or_cmd but for pipes
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	vars->cmd_pipe = ft_strdup(vars->arr[vars->i]);
-	vars->cmd_split = ft_split(vars->cmd_pipe, " ");
+	vars->exit_statut = 0;
+	vars->content = ft_strdup(vars->arr[vars->i]);
+	vars->cmd_split = ft_split(vars->content, " ");
 	vars->size_cmd = ft_strlen(vars->cmd_split[0]);
 	if (ft_strncmp(vars->cmd_split[0], "pwd", vars->size_cmd) == 0)
-		ft_pwd(fd[1]);
+		ft_pwd(vars, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "env", vars->size_cmd) == 0)
-		ft_env(*env, fd[1]);
+		ft_env(*env, vars, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "echo", vars->size_cmd) == 0)
-		ft_echo(vars->cmd_pipe, fd[1]);
+		ft_echo(vars->content, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "cd", vars->size_cmd) == 0)
-		ft_cd(vars->cmd_pipe, *env, fd[1]);
+		ft_cd(vars->content, env, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "unset", vars->size_cmd) == 0)
-		ft_unset(vars->cmd_pipe, env, export);
-	else if (ft_strncmp(vars->cmd_pipe, "export", vars->size_cmd) == 0)
-		ft_export(vars->cmd_pipe, env, export, fd[1]);
+		ft_unset(vars->content, env, export);
+	else if (ft_strncmp(vars->content, "export", vars->size_cmd) == 0)
+		ft_export(vars, env, export, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "exit", vars->size_cmd) == 0)
 	{
 		free_db_array(vars->cmd_split);
@@ -60,7 +74,6 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	}
 	else
 		exec_cmds_pipes(vars, env, export, fd);
-	free_db_array(vars->cmd_split);
 	close_multiple_fd(fd);
 }
 
@@ -96,9 +109,9 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 			close_previous_fd(previous_fd);
 			builtin_or_cmd_pipes(vars, fd, env, export);
 			free_child_process(vars, env, export);
-			exit(EXIT_SUCCESS);
+			exit(vars->exit_statut);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
 	}
-	end_pipex(pipefd, vars->pids, arr_size, previous_fd);
+	end_pipex(pipefd, vars, arr_size, previous_fd);
 }
