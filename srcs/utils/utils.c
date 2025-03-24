@@ -29,7 +29,7 @@ char	*ft_join_mid(char *s1, char slash, char *s2)
 	return (ptr);
 }
 
-//add s2 after s1
+//add s2 after s1 (kind of realloc)
 char	*ft_straddstr(char *s1, char *s2)
 {
 	char	*res;
@@ -47,7 +47,7 @@ char	*ft_straddstr(char *s1, char *s2)
 	}
 }
 
-//add a char at the end of s1
+//add a char at the end of s1 (kind of realloc)
 char	*ft_straddchar(char *str, char c)
 {
 	char	*res;
@@ -88,6 +88,7 @@ void	free_db_array(char **arr)
 	free(arr);
 }
 
+//* Return number of occurences
 int	find_occurences(char *str, char c)
 {
 	int	i;
