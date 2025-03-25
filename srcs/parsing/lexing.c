@@ -13,7 +13,7 @@ static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
 }
 
 //* for double quotes, cpy quoted and take value (if) var
-static char	*quotes(char *str, int start)
+static char	*quotes(char *str, int start, t_env *env)
 {
 	char	*res;
 	char	*var;
@@ -31,7 +31,7 @@ static char	*quotes(char *str, int start)
 			while (str[iv] && iv < size && str[iv] != ' '
 				&& (str[iv] <= 9 || str[iv] >= 13))
 				var = ft_straddchar(var, str[iv++]);
-			res = ft_straddstr(res, getenv(var));
+			res = ft_straddstr(res, ft_getenv(env, var));
 			start = iv; //pb incrementation
 			free(var);
 			var = NULL;
@@ -44,7 +44,7 @@ static char	*quotes(char *str, int start)
 
 //* Add all quoted text in buf into list token_builder.
 //* Return size of quoted text.
-static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t start)
+static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t start, t_env *env)
 {
 	int				size;
 	char			*quoted;
@@ -64,7 +64,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t s
 	}
 	else if (line[start - 1] == '\"')
 	{
-		quoted = quotes(line, start);
+		quoted = quotes(line, start, env);
 		size = ft_strlen(quoted);
 	}
 	if (!quoted)
@@ -76,7 +76,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t s
 //* State machine
 //		* Normal : add char by char to token, split on spaces
 //		* Quotes : take all btw quotes and add it to token
-t_token_builder	*tokenizer(char *line)
+t_token_builder	*tokenizer(char *line, t_env *env)
 {
 	t_token_builder	*tokens;
 	t_token_builder	*last;
@@ -95,18 +95,12 @@ t_token_builder	*tokenizer(char *line)
 		{
 			i++;
 			if (++quote_count % 2 != 0)
-				i += addquotes_to_token(&tokens, line, i);
+				i += addquotes_to_token(&tokens, line, i, env);
 		}
 		else if (line[i] && line[i] == ' ')
 			space_handler(tokens, line, &i);
 		else if (line[i])
-		{
-			printf("size : %zu\n", ft_strlen(line));
-			printf("line : %s\n", line);
-			printf("line[%zu] = %c\n", i, line[i]);
-			last->buf = ft_straddchar(last->buf, line[i]);
-			i++;
-		}
+			last->buf = ft_straddchar(last->buf, line[i++]);
 	}
 	return (tokens);
 }
@@ -115,7 +109,7 @@ t_token_builder	*tokenizer(char *line)
 
 // To test lexing : cc -g -Wall -Wextra -Werror ../../libft/*.c ../utils/utils_2.c ../utils/utils.c lexing.c lexing_utils.c
 
-int	main(void)
+/* int	main(void)
 {
 	char			*test = "            <Makefile \"grep echo \"e abc | \"$PWD |a\" | ls";
 	t_token_builder	*tokens;
@@ -126,7 +120,6 @@ int	main(void)
 		printf("Error odd nb of quotes.\n");
 		return 1;
 	}
-	printf("str : %s\n", test);
 	tokens = tokenizer(test);
 	while (tokens)
 	{
@@ -139,4 +132,4 @@ int	main(void)
 		tmp = NULL;
 	}
 	return 0;
-}
+} */
