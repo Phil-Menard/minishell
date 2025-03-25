@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //routine de gestin SIGINT
-void	sigint_handler(int signal)
+void	sig_handler(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -17,7 +17,7 @@ void	set_signal_action(void)
 	struct sigaction	act;
 
 	ft_bzero(&act, sizeof(act));
-	act.sa_handler = &sigint_handler;
+	act.sa_handler = &sig_handler;
 	sigaction(SIGINT, &act, NULL);
-	signal(SIGPIPE, SIG_IGN);
+	sigaction(SIGPIPE, &act, NULL);
 }

@@ -2,10 +2,10 @@
 
 void	free_child_process(t_var *vars, t_env **env, t_env **export)
 {
-	if (vars->content)
+	if (vars->line)
 	{
-		free(vars->content);
-		vars->content = NULL;
+		free(vars->line);
+		vars->line = NULL;
 	}
 	if (vars->cmd_split)
 		free_db_array(vars->cmd_split);
@@ -23,7 +23,7 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 {
 	char	*cmd;
 
-	cmd = str_without_redir(vars->content);
+	cmd = str_without_redir(vars->line);
 	vars->path = get_right_path(cmd, vars);
 	if (vars->path)
 	{
@@ -31,8 +31,8 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 		free(cmd);
 		if (vars->arg)
 		{
-			free(vars->content);
-			vars->content = NULL;
+			free(vars->line);
+			vars->line = NULL;
 			free(vars->prompt);
 			free_db_array(vars->arr);
 			free_env(*export);
@@ -51,20 +51,20 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
 	vars->exit_statut = 0;
-	vars->content = ft_strdup(vars->arr[vars->i]);
-	vars->cmd_split = ft_split(vars->content, " ");
+	vars->line = ft_strdup(vars->arr[vars->i]);
+	vars->cmd_split = ft_split(vars->line, " ");
 	vars->size_cmd = ft_strlen(vars->cmd_split[0]);
 	if (ft_strncmp(vars->cmd_split[0], "pwd", vars->size_cmd) == 0)
 		ft_pwd(vars, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "env", vars->size_cmd) == 0)
 		ft_env(*env, vars, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "echo", vars->size_cmd) == 0)
-		ft_echo(vars->content, fd[1]);
+		ft_echo(vars->line, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "cd", vars->size_cmd) == 0)
-		ft_cd(vars->content, env, fd[1]);
+		ft_cd(vars->line, env, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "unset", vars->size_cmd) == 0)
-		ft_unset(vars->content, env, export);
-	else if (ft_strncmp(vars->content, "export", vars->size_cmd) == 0)
+		ft_unset(vars->line, env, export);
+	else if (ft_strncmp(vars->line, "export", vars->size_cmd) == 0)
 		ft_export(vars, env, export, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "exit", vars->size_cmd) == 0)
 	{

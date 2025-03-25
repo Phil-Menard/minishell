@@ -6,8 +6,8 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	close_multiple_fd(fd);
 	free_env(*env);
 	free_env(*export);
-	if (vars->content)
-		free(vars->content);
+	if (vars->line)
+		free(vars->line);
 	if (vars->prompt)
 		free(vars->prompt);
 	if (vars->arr)

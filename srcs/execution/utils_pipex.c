@@ -17,10 +17,7 @@ void	wait_childs(t_var *vars, int arr_size)
 	{
 		waitpid(vars->pids[j], &vars->exit_statut, 0);
 		if (WIFEXITED(vars->exit_statut))
-		{
 			exit_code = WEXITSTATUS(vars->exit_statut);
-			printf("exit_code : %d\n", exit_code);
-		}
 		j++;
 	}
 	vars->exit_statut = exit_code;
