@@ -9,21 +9,35 @@ static void	space_handler(t_token_builder *tokens, char *line, int *i)
 		get_last(tokens)->next = new_tkb(0, NULL);
 }
 
-static char	*double_quotes(char *str, int start, int size)
+//* for double quotes, cpy quoted and take value (if) var
+static char	*quotes(char *str, int start)
 {
 	char	*res;
+	char	*var;
+	int		size;
+	int		iv;
 
-	res = ft_calloc(sizeof(char), size);
+	var = NULL;
+	size = get_pos(str, start, '\"');
+	res = ft_calloc(sizeof(char), (size - start));
 	if (!res)
 		return (NULL);
 	while (str[start] && start < size)
 	{
 		if (str[start] == '$')
 		{
-			
+			iv = start + 1;
+			while (str[iv] && iv < size && str[iv] != ' '
+				&& (str[iv] <= 9 || str[iv] >= 13))
+				var = ft_straddchar(var, str[iv++]); //pb pour recup la var
+			res = ft_straddstr(res, getenv(var));
+			start = ft_strlen(getenv(var)) + iv;
+			free(var);
+			var = NULL;
 		}
-		res = ft_straddchar(res, str[start]);
+		res = ft_straddchar(res, str[start++]);
 	}
+	return (res);
 }
 
 //* Add all quoted text in buf into list token_builder.
@@ -36,18 +50,27 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 
 	if (!line)
 		return (0);
+	last = get_last(*builder);
+	if (!last)
+		return (0);
 	size = 0;
+
 	if (line[start - 1] == '\'')
+	{
 		size = get_pos(line, start, '\'') - start;
+		quoted = ft_strndup(line, start, size);
+	}
 	else if (line[start - 1] == '\"')
-		size = get_pos(line, start, '\"') - start;
-	quoted = ft_strndup(line, start, size); // func for handle "$VAR"
+	{
+		quoted = quotes(line, start);
+		size = ft_strlen(quoted);
+	}
 	if (!quoted)
 		return (0);
-	last = get_last(*builder)->buf;
-	if (!last)
-		return (free(quoted), quoted = NULL, 0);
-	last = ft_straddstr(last, quoted);
+
+	printf("prout\n");
+	last->buf = ft_straddstr(last->buf, quoted);
+	printf("prout2\n");
 	return (free(quoted), size);
 }
 
@@ -83,19 +106,19 @@ t_token_builder	*tokenizer(char *line)
 
 // To test lexing : cc -g -Wall -Wextra -Werror ../../libft/*.c ../utils/utils_2.c ../utils/utils.c lexing.c lexing_utils.c
 
-/* int	main(void)
+int	main(void)
 {
-	char			*test = "            <Makefile \"grep echo \"e abc | \" |a";
+	char			*test = "            <Makefile \"grep echo \"e abc | \"$test |a\"";
 
 	if (!check_pair(test, '\'') || !check_pair(test, '\"'))
 	{
 		printf("Error odd nb of quotes.\n");
 		return 1;
 	}
+	printf("str : %s\n", test);
 	t_token_builder	*tokens = tokenizer(test);
 	t_token_builder	*tmp;
 
-	printf("str : %s\n", test);
 	while (tokens)
 	{
 		printf("Token: %s\n", tokens->buf);
@@ -107,4 +130,4 @@ t_token_builder	*tokenizer(char *line)
 		tmp = NULL;
 	}
 	return 0;
-} */
+}
