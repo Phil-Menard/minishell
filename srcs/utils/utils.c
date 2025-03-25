@@ -61,7 +61,6 @@ char	*ft_straddchar(char *str, char c)
 		if (!res)
 			return (NULL);
 		res[0] = c;
-		res[1] = '\0';
 		return (res);
 	}
 	res = ft_calloc(sizeof(char), ft_strlen(str) + 2);
@@ -72,7 +71,6 @@ char	*ft_straddchar(char *str, char c)
 		res[i] = str[i];
 	res[i] = c;
 	i++;
-	res[i] = '\0';
 	free(str);
 	return (res);
 }

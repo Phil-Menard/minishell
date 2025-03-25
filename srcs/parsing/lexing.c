@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 // part of tokenizer
-static void	space_handler(t_token_builder *tokens, char *line, int *i)
+static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
 {
 	t_token_builder	*last;
 
@@ -44,7 +44,7 @@ static char	*quotes(char *str, int start)
 
 //* Add all quoted text in buf into list token_builder.
 //* Return size of quoted text.
-static size_t	addquotes_to_token(t_token_builder **builder, char *line, int start)
+static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t start)
 {
 	int				size;
 	char			*quoted;
@@ -80,13 +80,13 @@ t_token_builder	*tokenizer(char *line)
 {
 	t_token_builder	*tokens;
 	t_token_builder	*last;
-	int				i;
+	size_t			i;
 	int				quote_count;
 
 	i = 0;
 	quote_count = 0;
 	tokens = new_tkb(0, NULL);
-	while (line[i])
+	while (line[i] && i < ft_strlen(line))
 	{
 		last = get_last(tokens);
 		if (!last)
@@ -103,7 +103,7 @@ t_token_builder	*tokenizer(char *line)
 		{
 			printf("size : %zu\n", ft_strlen(line));
 			printf("line : %s\n", line);
-			printf("line[%d] = %c\n", i, line[i]);
+			printf("line[%zu] = %c\n", i, line[i]);
 			last->buf = ft_straddchar(last->buf, line[i]);
 			i++;
 		}
