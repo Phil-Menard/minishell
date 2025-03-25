@@ -36,6 +36,8 @@ char	*ft_straddstr(char *s1, char *s2)
 
 	if (s1 == NULL)
 	{
+		if (s2 == NULL)
+			return (NULL);
 		res = ft_strdup(s2);
 		return (res);
 	}
@@ -62,7 +64,7 @@ char	*ft_straddchar(char *str, char c)
 		res[1] = '\0';
 		return (res);
 	}
-	res = malloc((ft_strlen(str) + 2) * sizeof(char));
+	res = ft_calloc(sizeof(char), ft_strlen(str) + 2);
 	if (!res)
 		return (NULL);
 	i = -1;

@@ -3,10 +3,13 @@
 // part of tokenizer
 static void	space_handler(t_token_builder *tokens, char *line, int *i)
 {
+	t_token_builder	*last;
+
+	last = get_last(tokens);
 	while (line[*i] && line[*i] == ' ')
 		(*i)++;
-	if (tokens->buf != NULL)
-		get_last(tokens)->next = new_tkb(0, NULL);
+	if (tokens->buf != NULL) // to avoid create a null node when begin by space
+		last->next = new_tkb(0, NULL);
 }
 
 //* for double quotes, cpy quoted and take value (if) var
@@ -18,24 +21,23 @@ static char	*quotes(char *str, int start)
 	int		iv;
 
 	var = NULL;
+	res = NULL;
 	size = get_pos(str, start, '\"');
-	res = ft_calloc(sizeof(char), (size - start));
-	if (!res)
-		return (NULL);
-	while (str[start] && start < size)
+	while (str[start] && start < size) //peut etre start ?
 	{
 		if (str[start] == '$')
 		{
 			iv = start + 1;
 			while (str[iv] && iv < size && str[iv] != ' '
 				&& (str[iv] <= 9 || str[iv] >= 13))
-				var = ft_straddchar(var, str[iv++]); //pb pour recup la var
+				var = ft_straddchar(var, str[iv++]);
 			res = ft_straddstr(res, getenv(var));
-			start = ft_strlen(getenv(var)) + iv;
+			start = iv; //pb incrementation
 			free(var);
 			var = NULL;
 		}
-		res = ft_straddchar(res, str[start++]);
+		else
+			res = ft_straddchar(res, str[start++]);
 	}
 	return (res);
 }
@@ -54,7 +56,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 	if (!last)
 		return (0);
 	size = 0;
-
+	quoted = NULL;
 	if (line[start - 1] == '\'')
 	{
 		size = get_pos(line, start, '\'') - start;
@@ -67,10 +69,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 	}
 	if (!quoted)
 		return (0);
-
-	printf("prout\n");
 	last->buf = ft_straddstr(last->buf, quoted);
-	printf("prout2\n");
 	return (free(quoted), size);
 }
 
@@ -80,6 +79,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 t_token_builder	*tokenizer(char *line)
 {
 	t_token_builder	*tokens;
+	t_token_builder	*last;
 	int				i;
 	int				quote_count;
 
@@ -88,6 +88,9 @@ t_token_builder	*tokenizer(char *line)
 	tokens = new_tkb(0, NULL);
 	while (line[i])
 	{
+		last = get_last(tokens);
+		if (!last)
+			return (NULL);
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			i++;
@@ -97,7 +100,13 @@ t_token_builder	*tokenizer(char *line)
 		else if (line[i] && line[i] == ' ')
 			space_handler(tokens, line, &i);
 		else if (line[i])
-			get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
+		{
+			printf("size : %zu\n", ft_strlen(line));
+			printf("line : %s\n", line);
+			printf("line[%d] = %c\n", i, line[i]);
+			last->buf = ft_straddchar(last->buf, line[i]);
+			i++;
+		}
 	}
 	return (tokens);
 }
@@ -108,7 +117,9 @@ t_token_builder	*tokenizer(char *line)
 
 int	main(void)
 {
-	char			*test = "            <Makefile \"grep echo \"e abc | \"$test |a\"";
+	char			*test = "            <Makefile \"grep echo \"e abc | \"$PWD |a\" | ls";
+	t_token_builder	*tokens;
+	t_token_builder	*tmp;
 
 	if (!check_pair(test, '\'') || !check_pair(test, '\"'))
 	{
@@ -116,9 +127,7 @@ int	main(void)
 		return 1;
 	}
 	printf("str : %s\n", test);
-	t_token_builder	*tokens = tokenizer(test);
-	t_token_builder	*tmp;
-
+	tokens = tokenizer(test);
 	while (tokens)
 	{
 		printf("Token: %s\n", tokens->buf);

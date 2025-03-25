@@ -1,42 +1,5 @@
 #include "../minishell.h"
 
-/* int	check_quote(char *str)
-{
-	int	i;
-	int	quote;
-
-	quote = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '"')
-			quote++;
-		i++;
-	}
-	return (quote);
-}
-
-//return lines until right number of auotes are provided
-char	*get_lines(char *line)
-{
-	char	*new_line;
-	char	*temp;
-	char	*res;
-
-	new_line = readline(">");
-	res = ft_join_mid(line, '\n', new_line);
-	while (check_quote(new_line) % 2 == 0)
-	{
-		temp = ft_strdup(res);
-		free(res);
-		new_line = readline(">");
-		res = ft_join_mid(temp, '\n', new_line);
-		free(temp);
-	}
-	free(new_line);
-	return (res);
-} */
-
 //find s2 in s1
 int	ft_strfind(char *s1, char *s2)
 {
@@ -96,4 +59,12 @@ char	**prepare_line(char *line)
 	res[i] = NULL;
 	free_db_array(arr);
 	return (res);
+}
+
+void	quit(char *msg, int exit_status, t_var *vars)
+{
+	if (msg)
+		ft_putstr_fd(msg, 2);
+	vars->exit_statut = exit_status;
+	exit(vars->exit_statut);
 }
