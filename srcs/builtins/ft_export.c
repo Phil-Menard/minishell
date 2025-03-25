@@ -36,7 +36,7 @@ void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 	int		i;
 
 	i = 1;
-	arr = ft_split(vars->content, " ");
+	arr = ft_split(vars->line, " ");
 	if (!arr[i])
 		ft_env(*export, vars, fd);
 	else

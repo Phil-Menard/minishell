@@ -7,7 +7,7 @@ char	*cd_oldpwd(t_env *env, int fd, int *x)
 	char	*path;
 
 	path = NULL;
-	path = get_var(env, "OLDPWD");
+	path = ft_getenv(env, "OLDPWD");
 	if (!path)
 	{
 		*x = 1;
@@ -32,7 +32,7 @@ void	set_oldpwd(t_env **env, int x)
 		cwd = NULL;
 		oldpwd = NULL;
 		cwd = getcwd(NULL, 0);
-		oldpwd = get_var(*env, "OLDPWD");
+		oldpwd = ft_getenv(*env, "OLDPWD");
 		if (!oldpwd)
 		{
 			temp = ft_strjoin("OLDPWD=", getenv("OLDPWD"));
@@ -56,7 +56,7 @@ char	*set_path_dir(char *arr, t_env **env, int fd)
 	path = NULL;
 	x = 0;
 	if (arr == NULL)
-		path = get_var(*env, "HOME");
+		path = ft_getenv(*env, "HOME");
 	else if (ft_strncmp(arr, "-", 1) == 0)
 	{
 		if (ft_strlen(arr) == 1)

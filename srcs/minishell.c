@@ -18,7 +18,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	int		arr_size;
 
 	fd = NULL;
-	vars->arr = prepare_line(vars->content);
+	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
 	{
 		if (ft_strncmp(vars->arr[0], "exit", 4) == 0)
@@ -26,7 +26,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 			free_db_array(vars->arr);
 			vars->arr = NULL;
 		}
-		fd = init_and_set_fd(vars->content);
+		fd = init_and_set_fd(vars->line);
 		if (fd[0] > -1)
 			builtin_or_cmd(vars, fd, env, export);
 	}
@@ -77,13 +77,13 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		vars.prompt = set_prompt_arg();
-		vars.content = readline(vars.prompt);
-		add_history(vars.content);
-		if (ft_strlen(vars.content) > 0)
+		vars.line = readline(vars.prompt);
+		add_history(vars.line);
+		if (ft_strlen(vars.line) > 0)
 			check_pipes(&vars, &env, &export);
 			// ft_parse(vars, env);
 			// builtins(vars, env, &exit_code);
-		free(vars.content);
+		free(vars.line);
 		free(vars.prompt);
 	}
 	free_env(env);

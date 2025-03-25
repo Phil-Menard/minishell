@@ -87,14 +87,14 @@ void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 {
 	char	*line;
 
-	line = str_without_redir(vars->content);
-	free(vars->content);
-	vars->content = ft_strdup(line);
+	line = str_without_redir(vars->line);
+	free(vars->line);
+	vars->line = ft_strdup(line);
 	free(line);
-	vars->path = get_right_path(vars->content, vars);
+	vars->path = get_right_path(vars->line, vars);
 	if (vars->path || (vars->exit_statut != 2 && !vars->path))
 	{
-		vars->arg = fill_arg(vars->path, vars->content);
+		vars->arg = fill_arg(vars->path, vars->line);
 		exec_redir(vars, fd, env, exp);
 		if (vars->arg)
 			free_db_array(vars->arg);

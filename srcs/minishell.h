@@ -25,7 +25,7 @@ typedef struct s_var
 	char	**arr;
 	char	**cmd_split;
 	char	**arg;
-	char	*content;
+	char	*line;
 	char	*prompt;
 	char	*path;
 	int		i;
@@ -153,7 +153,7 @@ t_env			*ft_new_env_node(char *content);
 t_env			*fill_env(t_env **lst, char **envp);
 t_env			*modify_env(t_env *env, char *var_name, char *content);
 void			ft_env_add_back(t_env **lst, t_env *new);
-char			*get_var(t_env *env, char *content);
+char			*ft_getenv(t_env *env, char *content);
 t_env			*remove_env_var(t_env **lst, char *str, int x);
 int				env_size(t_env *lst);
 void			free_env_node(char *var, t_env *node);

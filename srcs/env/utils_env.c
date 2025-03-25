@@ -48,7 +48,7 @@ t_env	*modify_env(t_env *env, char *var_name, char *content)
 }
 
 //get the value of content (content = $VAR)
-char	*get_var(t_env *env, char *content)
+char	*ft_getenv(t_env *env, char *content)
 {
 	t_env	*current;
 	char	**arr;

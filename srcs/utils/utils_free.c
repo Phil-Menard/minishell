@@ -8,10 +8,10 @@ void	free_vars(t_var *vars)
 		free_db_array(vars->arg);
 		vars->arg = NULL;
 	}
-	if (vars->content)
+	if (vars->line)
 	{
-		free(vars->content);
-		vars->content = NULL;
+		free(vars->line);
+		vars->line = NULL;
 	}
 	if (vars->prompt)
 		free(vars->prompt);

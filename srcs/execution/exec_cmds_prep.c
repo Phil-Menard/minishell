@@ -73,15 +73,15 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 	int		redirection;
 	int		id;
 
-	redirection = is_redirected(vars->content);
+	redirection = is_redirected(vars->line);
 	if (redirection >= 0)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
-		vars->path = get_right_path(vars->content, vars);
+		vars->path = get_right_path(vars->line, vars);
 		if (vars->path)
 		{
-			vars->arg = fill_arg(vars->path, vars->content);
+			vars->arg = fill_arg(vars->path, vars->line);
 			id = fork();
 			if (id == 0)
 				ft_execve(vars, env, export, fd);
