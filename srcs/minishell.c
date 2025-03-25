@@ -29,6 +29,8 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 		fd = init_and_set_fd(vars->line);
 		if (fd[0] > -1)
 			builtin_or_cmd(vars, fd, env, export);
+		else
+			close_multiple_fd(fd);
 	}
 	else
 	{
