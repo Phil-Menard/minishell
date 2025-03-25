@@ -36,6 +36,8 @@ char	*ft_straddstr(char *s1, char *s2)
 
 	if (s1 == NULL)
 	{
+		if (s2 == NULL)
+			return (NULL);
 		res = ft_strdup(s2);
 		return (res);
 	}

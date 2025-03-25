@@ -122,6 +122,7 @@ long int		ft_atol(char *nptr);
 char			*ft_ltoa(long int n);
 void			free_vars(t_var *vars);
 void			free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
+void			quit(char *msg, int exit_status, t_var *vars);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

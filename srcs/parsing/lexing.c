@@ -53,6 +53,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, int star
 	if (!last)
 		return (0);
 	size = 0;
+	quoted = NULL;
 	if (line[start - 1] == '\'')
 	{
 		size = get_pos(line, start, '\'') - start;
