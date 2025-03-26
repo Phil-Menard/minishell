@@ -41,6 +41,7 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 		quit("Unclosed quotes\n", 2, vars);
 	tokens = tokenizer(vars->line, *env); // lexing
 	free(vars->line);
+	vars->line = NULL;
 	vars->line = list_to_string(tokens);
 	if (vars->line)
 		check_pipes(vars, env, export);

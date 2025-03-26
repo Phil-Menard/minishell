@@ -13,16 +13,16 @@ t_token	get_token(char *str)
 		return (LEAF);
 }
 
-//* Return c index in str, -1 if not founded.
-int	get_pos(char *str, int start, char c)
+//* Return c index in str, 0 if not founded.
+size_t	get_pos(char *str, size_t start, char c)
 {
 	if (!str || !c)
-		return (-1);
+		return (0);
 	while (str[start] && str[start] != c)
 		start++;
 	if (str[start] == c)
 		return (start);
-	return (-1);
+	return (0);
 }
 
 //* 1 = pair \ 0 = odd

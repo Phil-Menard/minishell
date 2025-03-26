@@ -1,41 +1,52 @@
 #include "../minishell.h"
 
-// part of tokenizer
-static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
+static void printlist(t_token_builder *tokens)
 {
-	t_token_builder	*last;
+	while (tokens)
+	{
+		if (tokens->buf)
+			printf("%s", tokens->buf);
+		if (tokens->next)
+			printf(",");
+		tokens = tokens->next;
+	}
+	printf("\n");
+}
 
-	last = get_last(tokens);
-	while (line[*i] && line[*i] == ' ')
-		(*i)++;
-	if (tokens->buf != NULL) // to avoid create a null node when begin by space
-		last->next = new_tkb(0, NULL);
+// add var to res
+static void addvar(char **res, char *str, size_t *start, t_env *env)
+{
+	char	*var;
+	char	*var_content;
+
+	var = NULL;
+	var_content = NULL;
+	(*start)++;
+	while (str[*start] && str[*start] != '\"'
+		&& str[*start] != ' ' && (str[*start] <= 9 || str[*start] >= 13))
+	{
+		var = ft_straddchar(var, str[*start]);
+		printf("line[%zu] = %c\n", *start, str[*start]);
+		(*start)++;
+	}
+	var_content = ft_getenv(env, var);
+	*res = ft_straddstr(*res, var_content);
+	free(var_content);
+	var_content = NULL;
+	free(var);
+	var = NULL;
 }
 
 //* for double quotes, cpy quoted and take value (if) var
-static char	*quotes(char *str, int start, t_env *env)
+static char	*quotes(char *str, size_t start, t_env *env)
 {
 	char	*res;
-	char	*var;
-	int		size;
-	int		iv;
 
-	var = NULL;
 	res = NULL;
-	size = get_pos(str, start, '\"');
-	while (str[start] && start < size) //peut etre start ?
+	while (str[start] && start < get_pos(str, start, '\"'))
 	{
 		if (str[start] == '$')
-		{
-			iv = start + 1;
-			while (str[iv] && iv < size && str[iv] != ' '
-				&& (str[iv] <= 9 || str[iv] >= 13))
-				var = ft_straddchar(var, str[iv++]);
-			res = ft_straddstr(res, ft_getenv(env, var));
-			start = iv; //pb incrementation
-			free(var);
-			var = NULL;
-		}
+			addvar(&res, str, &start, env);
 		else
 			res = ft_straddchar(res, str[start++]);
 	}
@@ -46,7 +57,7 @@ static char	*quotes(char *str, int start, t_env *env)
 //* Return size of quoted text.
 static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t start, t_env *env)
 {
-	int		size;
+	size_t		size;
 	char	*quoted;
 
 	if (!line)
@@ -69,6 +80,18 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t s
 	return (free(quoted), size);
 }
 
+// part of tokenizer
+static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
+{
+	t_token_builder	*last;
+
+	last = get_last(tokens);
+	while (line[*i] && line[*i] == ' ')
+		(*i)++;
+	if (tokens->buf != NULL) // to avoid create a null node when begin by space
+		last->next = new_tkb(0, NULL);
+}
+
 //* State machine
 //		* Normal : add char by char to token, split on spaces
 //		* Quotes : take all btw quotes and add it to token
@@ -76,13 +99,15 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 {
 	t_token_builder	*tokens;
 	size_t			i;
-	int				quote_count;
+	size_t			quote_count;
 
 	i = 0;
 	quote_count = 0;
 	tokens = new_tkb(0, NULL);
+	printf("line : %s\n", line);
 	while (line[i] && i < ft_strlen(line))
 	{
+		printf("line[%zu] = %c\n", i, line[i]);
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			i++;
@@ -92,7 +117,13 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 		else if (line[i] && line[i] == ' ')
 			space_handler(tokens, line, &i);
 		else if (line[i])
-			get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
+		{
+			if (line[i] == '$')
+				addvar(&get_last(tokens)->buf, line, &i, env);
+			else
+				get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
+		}
+		printlist(tokens);
 	}
 	return (tokens);
 }
