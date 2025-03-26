@@ -17,6 +17,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	int		*fd;
 	int		arr_size;
 
+	printf("vars->line : %s\n", vars->line);
 	fd = NULL;
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
@@ -80,9 +81,7 @@ int	main(int argc, char **argv, char **envp)
 		vars.line = readline(vars.prompt);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
-			check_pipes(&vars, &env, &export);
-			// ft_parse(vars, env);
-			// builtins(vars, env, &exit_code);
+			parsing(&env, &vars, &export);
 		free(vars.line);
 		free(vars.prompt);
 	}

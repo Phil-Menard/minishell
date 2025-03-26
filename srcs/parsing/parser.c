@@ -4,13 +4,13 @@
  * 			- no need to handle special char with \
  */
 
-char	*list_to_string(t_token_builder *tokens)
+static char	*list_to_string(t_token_builder *tokens)
 {
 	char			*res;
 	t_token_builder	*tmp;
 
 	res = NULL;
-	while (tokens)
+	while (tokens->next)
 	{
 		res = ft_straddstr(res, tokens->buf);
 		res = ft_straddchar(res, ' ');
@@ -24,23 +24,25 @@ char	*list_to_string(t_token_builder *tokens)
 	return (res);
 }
 
-void	parsing(t_env *env, t_var *vars)
+void	parsing(t_env **env, t_var *vars, t_env **export)
 {
-	t_ast			*tree;
+	// t_ast			*tree;
 	t_token_builder	*tokens;
 
 	if (!vars->line)
 		return ;
 	if (!check_pair(vars->line, '\'') || !check_pair(vars->line, '\"'))
 		quit("Unclosed quotes\n", 2, vars);
-	tokens = tokenizer(vars->line, env); // lexing
-	
+	tokens = tokenizer(vars->line, *env); // lexing
+	free(vars->line);
+	vars->line = list_to_string(tokens);
+	check_pipes(vars, env, export);
 	// create tree
 	// exec
-	free_list(tree);
+	// free_list(tree);
 }
 
-void	create_tree(t_ast *tree, char **split, int i_arg)
+/* static void	create_tree(t_ast *tree, char **split, int i_arg)
 {
 
-}
+} */

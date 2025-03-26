@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-//! For testing, a retirer a la fin
+/* //! For testing, a retirer a la fin
 void	print_ast(t_ast *root, int space)
 {
 	int i;
@@ -23,7 +23,7 @@ void	print_ast(t_ast *root, int space)
 
 	// Afficher ensuite le sous-arbre gauche
 	print_ast(root->left, space);
-}
+} */
 
 // recursively free the tree
 void	free_list(t_ast *tree)
