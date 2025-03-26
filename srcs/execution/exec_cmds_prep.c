@@ -32,17 +32,19 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 }
 
 //find correct path to execute cmd
-char	*get_right_path(char *str, t_var *vars)
+char	*get_right_path(char *str, t_var *vars, t_env **env)
 {
-	int		i;
-	char	*path;
 	char	**arr;
 	char	**split_cmd;
+	char	*path;
+	int		i;
 
-	arr = ft_split(getenv("PATH"), ":");
+	arr = NULL;
+	if (ft_getenv(*env, "PATH"))
+		arr = ft_split(ft_getenv(*env, "PATH"), ":");
 	split_cmd = ft_split(str, " ");
 	i = 0;
-	while (arr[i])
+	while (arr && arr[i])
 	{
 		path = get_next_path(arr[i], split_cmd[0], vars);
 		if (access(path, X_OK) == 0)
@@ -51,9 +53,9 @@ char	*get_right_path(char *str, t_var *vars)
 			free_db_array(split_cmd);
 			return (path);
 		}
-		free(path);
 		if (ft_strrchr(split_cmd[0], '/') != NULL)
 			break;
+		free(path);
 		i++;
 	}
 	vars->exit_statut = 127;
@@ -78,7 +80,7 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
-		vars->path = get_right_path(vars->line, vars);
+		vars->path = get_right_path(vars->line, vars, env);
 		if (vars->path)
 		{
 			vars->arg = fill_arg(vars->path, vars->line);

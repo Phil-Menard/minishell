@@ -54,11 +54,6 @@ void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
 		ft_export(vars, env, exp, fd[1]);
 	else if (ft_strncmp(vars->line, "exit", vars->size_cmd) == 0)
 		ft_exit(fd, vars, env, exp);
-	else if (ft_strncmp(vars->line, "$?", vars->size_cmd) == 0)
-	{
-		ft_putstr_fd(ft_itoa(vars->exit_statut), fd[1]);
-		ft_putstr_fd("\n", fd[1]);
-	}
 	else
 		exec_cmds(vars, fd, env, exp);
 	close_multiple_fd(fd);

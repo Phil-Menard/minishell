@@ -16,8 +16,9 @@ ls -l /proc/$(ps aux | grep minishell | grep -v grep | awk '{print $2}')/fd
 le return de la fonction getenv() n'a pas besoin d'etre free
 
 - gerer les chemins absolus
-- leaks tokenizer et invalid read of size pour list_to_string
 - leaks pour execve si commande pas bonne
 - gerer infile qd chevrons colles
+
 - $VAR a gerer sans quotes
 - < "Makefile" gr"ep echo" | "rev"  --> verif si au moins 1 token est une commande
+- leaks tokenizer et invalid read of size pour list_to_string

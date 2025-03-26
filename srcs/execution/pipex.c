@@ -24,7 +24,7 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 	char	*cmd;
 
 	cmd = str_without_redir(vars->line);
-	vars->path = get_right_path(cmd, vars);
+	vars->path = get_right_path(cmd, vars, env);
 	if (vars->path)
 	{
 		vars->arg = fill_arg(vars->path, cmd);

@@ -91,7 +91,7 @@ void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 	free(vars->line);
 	vars->line = ft_strdup(line);
 	free(line);
-	vars->path = get_right_path(vars->line, vars);
+	vars->path = get_right_path(vars->line, vars, env);
 	if (vars->path || (vars->exit_statut != 2 && !vars->path))
 	{
 		vars->arg = fill_arg(vars->path, vars->line);
