@@ -59,7 +59,7 @@ typedef struct s_token_builder
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-t_token_builder	*tokenizer(char *line);
+t_token_builder	*tokenizer(char *line, t_env *env);
 t_token_builder	*new_tkb(size_t len, void *buf);
 t_token_builder	*get_last(t_token_builder *node);
 t_token			get_token(char *str);
@@ -71,8 +71,7 @@ int				check_pair(char *line, char what);
 void			free_list(t_ast *tree);
 t_ast			*new_node(char *cmd, t_token type);
 void			add_node_end(t_ast *tree, const char *branch, t_ast *node);
-void			parsing(char *line, t_env *env);
-void			print_tree(t_ast *root, int space); // a retirer
+void			parsing(t_env *env, t_var *vars);
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/
