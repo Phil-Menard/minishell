@@ -17,7 +17,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	int		*fd;
 	int		arr_size;
 
-	printf("vars->line : %s\n", vars->line);
 	fd = NULL;
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])

@@ -10,7 +10,7 @@ static char	*list_to_string(t_token_builder *tokens)
 	t_token_builder	*tmp;
 
 	res = NULL;
-	while (tokens->next)
+	while (tokens && tokens->buf)
 	{
 		res = ft_straddstr(res, tokens->buf);
 		res = ft_straddchar(res, ' ');
@@ -20,6 +20,12 @@ static char	*list_to_string(t_token_builder *tokens)
 		tmp->buf = NULL;
 		free(tmp);
 		tmp = NULL;
+	}
+	if (tokens && tokens->buf == NULL)
+	{
+		free(tokens->buf);
+		free(tokens);
+		tokens = NULL;
 	}
 	return (res);
 }
@@ -36,7 +42,8 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 	tokens = tokenizer(vars->line, *env); // lexing
 	free(vars->line);
 	vars->line = list_to_string(tokens);
-	check_pipes(vars, env, export);
+	if (vars->line)
+		check_pipes(vars, env, export);
 	// create tree
 	// exec
 	// free_list(tree);

@@ -46,14 +46,10 @@ static char	*quotes(char *str, int start, t_env *env)
 //* Return size of quoted text.
 static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t start, t_env *env)
 {
-	int				size;
-	char			*quoted;
-	t_token_builder	*last;
+	int		size;
+	char	*quoted;
 
 	if (!line)
-		return (0);
-	last = get_last(*builder);
-	if (!last)
 		return (0);
 	size = 0;
 	quoted = NULL;
@@ -69,7 +65,7 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t s
 	}
 	if (!quoted)
 		return (0);
-	last->buf = ft_straddstr(last->buf, quoted);
+	get_last(*builder)->buf = ft_straddstr(get_last(*builder)->buf, quoted);
 	return (free(quoted), size);
 }
 
@@ -79,7 +75,6 @@ static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t s
 t_token_builder	*tokenizer(char *line, t_env *env)
 {
 	t_token_builder	*tokens;
-	t_token_builder	*last;
 	size_t			i;
 	int				quote_count;
 
@@ -88,9 +83,6 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 	tokens = new_tkb(0, NULL);
 	while (line[i] && i < ft_strlen(line))
 	{
-		last = get_last(tokens);
-		if (!last)
-			return (NULL);
 		if (line[i] == '\'' || line[i] == '\"')
 		{
 			i++;
@@ -100,7 +92,7 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 		else if (line[i] && line[i] == ' ')
 			space_handler(tokens, line, &i);
 		else if (line[i])
-			last->buf = ft_straddchar(last->buf, line[i++]);
+			get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
 	}
 	return (tokens);
 }
