@@ -25,7 +25,7 @@ typedef struct s_var
 	char	**arr;
 	char	**cmd_split;
 	char	**arg;
-	char	**cmd;
+	char	*cmd;
 	char	*line;
 	char	*prompt;
 	char	*path;
@@ -123,6 +123,7 @@ char			*ft_ltoa(long int n);
 void			free_vars(t_var *vars);
 void			free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 void			quit(char *msg, int exit_status, t_var *vars);
+void			init_vars(t_var *vars);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

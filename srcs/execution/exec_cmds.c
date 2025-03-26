@@ -57,5 +57,11 @@ void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
 	else
 		exec_cmds(vars, fd, env, exp);
 	close_multiple_fd(fd);
-	free_db_array(vars->cmd_split);
+	if (ft_strrchr(vars->line, '/') != NULL)
+	{
+		free(vars->cmd);
+		vars->cmd = NULL;
+	}
+	if (ft_strncmp(vars->line, "exit", vars->size_cmd) != 0)
+		free_vars(vars);
 }

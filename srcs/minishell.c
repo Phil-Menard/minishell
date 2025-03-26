@@ -72,19 +72,20 @@ int	main(int argc, char **argv, char **envp)
 	export = NULL;
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
-	vars.exit_statut = 0;
-	vars.arg = NULL;
+	init_vars(&vars);
 	print_minishell();
 	set_signal_action();
 	while (1)
 	{
+		vars.cmd = NULL;
+		vars.path = NULL;
 		vars.prompt = set_prompt_arg();
 		vars.line = readline(vars.prompt);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
 			parsing(&env, &vars, &export);
-		free(vars.line);
-		free(vars.prompt);
+		// free(vars.line);
+		// free(vars.prompt);
 	}
 	free_env(env);
 	free_env(export);

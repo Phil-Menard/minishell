@@ -84,3 +84,18 @@ char	*ft_ltoa(long int n)
 	}
 	return (res);
 }
+
+void	init_vars(t_var *vars)
+{
+	vars->arg = NULL;
+	vars->arr = NULL;
+	vars->cmd = NULL;
+	vars->cmd_split = NULL;
+	vars->exit_statut = 0;
+	vars->i = 0;
+	vars->line = NULL;
+	vars->path = NULL;
+	vars->pids = NULL;
+	vars->prompt = NULL;
+	vars->size_cmd = 0;
+}

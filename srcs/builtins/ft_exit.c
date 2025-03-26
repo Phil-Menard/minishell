@@ -6,17 +6,8 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	close_multiple_fd(fd);
 	free_env(*env);
 	free_env(*export);
-	if (vars->line)
-		free(vars->line);
-	if (vars->prompt)
-		free(vars->prompt);
-	if (vars->arr)
-	{
-		free_db_array(vars->arr);
-		vars->arr = NULL;
-	}
-	else
-		ft_putstr_fd("exit\n", 1);
+	free_vars(vars);
+	ft_putstr_fd("exit\n", 1);
 }
 
 void	arg_not_numeric(int *fd, t_var *vars, t_env **env, t_env **export)
@@ -80,8 +71,6 @@ void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 			}
 			nb = set_nb_exit(fd, vars, env, export);
 		}
-		if (vars->cmd_split)
-			free_db_array(vars->cmd_split);
 		free_before_exit(fd, vars, env, export);
 		exit(nb);
 	}
