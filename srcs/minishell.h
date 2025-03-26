@@ -71,7 +71,7 @@ int				check_pair(char *line, char what);
 void			free_list(t_ast *tree);
 t_ast			*new_node(char *cmd, t_token type);
 void			add_node_end(t_ast *tree, const char *branch, t_ast *node);
-void			parsing(t_env *env, t_var *vars);
+void			parsing(t_env **env, t_var *vars, t_env **export);
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/

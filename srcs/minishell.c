@@ -82,9 +82,7 @@ int	main(int argc, char **argv, char **envp)
 		vars.line = readline(vars.prompt);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
-			check_pipes(&vars, &env, &export);
-			// ft_parse(vars, env);
-			// builtins(vars, env, &exit_code);
+			parsing(&env, &vars, &export);
 		free(vars.line);
 		free(vars.prompt);
 	}

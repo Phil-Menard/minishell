@@ -33,10 +33,10 @@ SRC = minishell.c \
 	env/init_env.c \
 	env/utils_env.c \
 	signals/signals.c \
+	parsing/parser.c \
+	parsing/lexing.c \
+	parsing/lexing_utils.c \
 	# parsing/tree.c \
-	# parsing/parser.c \
-	# parsing/lexing.c \
-	# parsing/lexing_utils.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))
