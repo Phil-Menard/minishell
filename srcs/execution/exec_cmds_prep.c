@@ -73,8 +73,6 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 		free(path);
 		i++;
 	}
-	free(vars->cmd);
-	vars->cmd = NULL;
 	vars->exit_statut = 127;
 	if (ft_strrchr(vars->cmd, '/') == NULL)
 	{
@@ -104,13 +102,7 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 			if (id == 0)
 				ft_execve(vars, env, export, fd);
 			else
-			{
 				waitpid(id, &vars->exit_statut, 0);
-				/* if (vars->path)
-					free(vars->path);
-				if (vars->arg)
-					free_db_array(vars->arg); */
-			}
 		}
 	}
 }
