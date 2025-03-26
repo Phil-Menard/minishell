@@ -1,60 +1,108 @@
 #include "../minishell.h"
 
-char	**lst_to_arr(t_env **env)
+//prepare double array for execve
+char	**fill_arg(char *path, char *line)
 {
-	t_env	*current;
-	char	**arr;
-	int		size;
-	int		i;
+	char	**arg;
 
-	current = *env;
-	size = env_size(*env);
-	arr = malloc((size + 1) * sizeof(char *));
-	i = 0;
-	while (current)
+	if (!path)
+		return (NULL);
+	arg = NULL;
+	arg = ft_split(line, " ");
+	free(arg[0]);
+	arg[0] = ft_strdup(path);
+	return (arg);
+}
+
+char	*get_next_path(char *arr, char *str, t_var *vars)
+{
+	char	*path;
+
+	if (ft_strrchr(str, '/') != NULL)
 	{
-		arr[i] = ft_strdup(current->var);
-		i++;
-		current = current->next;
+		if (access(str, X_OK) != 0)
+		{
+			ft_putstr_fd(str, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			vars->exit_statut = 127;
+		}
+		return (str);
 	}
-	arr[i] = NULL;
+	path = ft_join_mid(arr, '/', str);
+	return (path);
+}
+
+//set arr variable for get_right_path
+char	**set_arr(t_env **env)
+{
+	char	**arr;
+	char	*temp;
+
+	arr = NULL;
+	temp = NULL;
+	temp = ft_getenv(*env, "PATH");
+	if (temp)
+		arr = ft_split(temp, ":");
+	free(temp);
 	return (arr);
 }
 
-void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
+//find correct path to execute cmd
+char	*get_right_path(char *str, t_var *vars, t_env **env)
 {
-	char	**arr_env;
+	char	**arr;
+	char	**split_cmd;
+	char	*path;
+	int		i;
 
-	arr_env = lst_to_arr(env);
-	if (vars->arg == NULL || execve(vars->path, vars->arg, arr_env) == -1)
+	arr = set_arr(env);
+	split_cmd = ft_split(str, " ");
+	vars->cmd = ft_strdup(split_cmd[0]);
+	free_db_array(split_cmd);
+	i = 0;
+	while (arr && arr[i])
 	{
-		free_and_close(vars, env, export, fd);
-		if (arr_env)
-			free_db_array(arr_env);
-		exit(2);
+		path = get_next_path(arr[i], vars->cmd, vars);
+		if (access(path, X_OK) == 0)
+		{
+			free_db_array(arr);
+			return (path);
+		}
+		else if (ft_strrchr(vars->cmd, '/') != NULL)
+			break;
+		free(path);
+		i++;
 	}
+	vars->exit_statut = 127;
+	if (ft_strrchr(vars->cmd, '/') == NULL)
+	{
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": command not found\n", 2);
+	}
+	if (arr)
+		free_db_array(arr);
+	return (NULL);
 }
 
-//check which cmd is entered in vars, and call a builtin or execve
-void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
+void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	vars->cmd_split = ft_split(vars->line, " ");
-	vars->size_cmd = ft_strlen(vars->cmd_split[0]);
-	if (ft_strncmp(vars->cmd_split[0], "pwd", vars->size_cmd) == 0)
-		ft_pwd(vars, fd[1]);
-	else if (ft_strncmp(vars->line, "env", vars->size_cmd) == 0)
-		ft_env(*env, vars, fd[1]);
-	else if (ft_strncmp(vars->line, "echo", vars->size_cmd) == 0)
-		ft_echo(vars->line, fd[1]);
-	else if (ft_strncmp(vars->line, "cd", vars->size_cmd) == 0)
-		ft_cd(vars->line, env, fd[1]);
-	else if (ft_strncmp(vars->line, "unset", vars->size_cmd) == 0)
-		ft_unset(vars->line, env, exp);
-	else if (ft_strncmp(vars->line, "export", vars->size_cmd) == 0)
-		ft_export(vars, env, exp, fd[1]);
-	else if (ft_strncmp(vars->line, "exit", vars->size_cmd) == 0)
-		ft_exit(fd, vars, env, exp);
+	int		redirection;
+	int		id;
+
+	redirection = is_redirected(vars->line);
+	if (redirection >= 0)
+		prepare_redir(vars, fd, env, export);
 	else
-		exec_cmds(vars, fd, env, exp);
-	close_multiple_fd(fd);
+	{
+		vars->path = get_right_path(vars->line, vars, env);
+		if (vars->path)
+		{
+			vars->arg = fill_arg(vars->path, vars->line);
+			id = fork();
+			if (id == 0)
+				ft_execve(vars, env, export, fd);
+			else
+				waitpid(id, &vars->exit_statut, 0);
+		}
+	}
 }

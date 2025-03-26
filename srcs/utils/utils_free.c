@@ -1,5 +1,6 @@
 #include "../minishell.h"
 
+//set all variables with char * or char ** to NULL
 void	nullify_arg_vars(t_var *vars)
 {
 	vars->arg = NULL;
@@ -12,6 +13,7 @@ void	nullify_arg_vars(t_var *vars)
 	vars->prompt = NULL;
 }
 
+//free all variables from t_var and set them to NULL
 void	free_vars(t_var *vars)
 {
 	if (vars->cmd_split != NULL)
@@ -36,6 +38,7 @@ void	free_vars(t_var *vars)
 	nullify_arg_vars(vars);
 }
 
+//set all variables in t_var to NULL or 0
 void	init_vars(t_var *vars)
 {
 	nullify_arg_vars(vars);

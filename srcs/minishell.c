@@ -35,19 +35,20 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	printf("status : %d\n", vars->exit_statut);
 }
 
-char	*set_prompt_arg(void)
+char	*set_prompt_arg(t_env **env)
 {
 	char	*prompt_arg;
 	char	*user_name;
 	char	*pwd;
 	char	*dollar_sign;
 
-	user_name = getenv("USER");
+	user_name = ft_getenv(*env, "USER");
 	dollar_sign = ft_strdup("$ ");
 	prompt_arg = ft_strjoin(user_name, ":");
 	pwd = getcwd(NULL, 0);
 	prompt_arg = ft_straddstr(prompt_arg, pwd);
 	prompt_arg = ft_straddstr(prompt_arg, dollar_sign);
+	free(user_name);
 	free(dollar_sign);
 	free(pwd);
 	return (prompt_arg);
@@ -70,9 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	set_signal_action();
 	while (1)
 	{
-		vars.cmd = NULL;
-		vars.path = NULL;
-		vars.prompt = set_prompt_arg();
+		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
