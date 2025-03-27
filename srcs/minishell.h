@@ -80,9 +80,9 @@ void			check_pipes(t_var *vars, t_env **env, t_env **export);
 void			ft_pwd(t_var *vars, int fd);
 void			ft_env(t_env *env, t_var *vars, int fd);
 void			ft_export(t_var *vars, t_env **env, t_env **export, int fd);
-void			ft_echo(char *str, int fd);
-void			ft_cd(char *str, t_env **env, int fd);
-void			ft_unset(char *str, t_env **env, t_env **export);
+void			ft_echo(char *str, int fd, t_var *vars);
+void			ft_cd(char *str, t_env **env, int fd, t_var *vars);
+void			ft_unset(char *str, t_env **env, t_env **export, t_var *vars);
 void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS

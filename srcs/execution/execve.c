@@ -45,11 +45,11 @@ void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
 	else if (ft_strncmp(vars->line, "env", vars->size_cmd) == 0)
 		ft_env(*env, vars, fd[1]);
 	else if (ft_strncmp(vars->line, "echo", vars->size_cmd) == 0)
-		ft_echo(vars->line, fd[1]);
+		ft_echo(vars->line, fd[1], vars);
 	else if (ft_strncmp(vars->line, "cd", vars->size_cmd) == 0)
-		ft_cd(vars->line, env, fd[1]);
+		ft_cd(vars->line, env, fd[1], vars);
 	else if (ft_strncmp(vars->line, "unset", vars->size_cmd) == 0)
-		ft_unset(vars->line, env, exp);
+		ft_unset(vars->line, env, exp, vars);
 	else if (ft_strncmp(vars->line, "export", vars->size_cmd) == 0)
 		ft_export(vars, env, exp, fd[1]);
 	else if (ft_strncmp(vars->line, "exit", vars->size_cmd) == 0)

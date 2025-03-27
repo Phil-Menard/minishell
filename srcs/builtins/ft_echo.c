@@ -50,7 +50,7 @@ int	check_arg(char *str)
 	return (i);
 }
 
-void	ft_echo(char *str, int fd)
+void	ft_echo(char *str, int fd, t_var *vars)
 {
 	char	**arr;
 	char	*line;
@@ -72,4 +72,5 @@ void	ft_echo(char *str, int fd)
 	echo_loop(line, i, fd, option);
 	free_db_array(arr);
 	free(line);
+	vars->exit_statut = 0;
 }

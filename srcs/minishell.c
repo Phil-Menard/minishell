@@ -34,9 +34,12 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	}
 	else
 	{
+		free(vars->line);
+		vars->line = NULL;
 		arr_size = double_arr_len(vars->arr);
 		pipex(vars, env, export, arr_size);
 	}
+	free_vars(vars);
 	printf("status : %d\n", vars->exit_statut);
 }
 
@@ -81,9 +84,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
 			parsing(&env, &vars, &export);
-		if (vars.line)
-			free_vars(&vars);
-		else
+		if (!vars.line)
 			free(vars.prompt);
 	}
 	free_env(env);

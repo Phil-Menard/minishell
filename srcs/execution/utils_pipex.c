@@ -21,7 +21,6 @@ void	wait_childs(t_var *vars, int arr_size)
 		j++;
 	}
 	vars->exit_statut = exit_code;
-	free(vars->pids);
 }
 
 //regroups dups2 in pipex
@@ -49,5 +48,6 @@ void	end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd)
 {
 	close(pipefd[0]);
 	wait_childs(vars, arr_size);
+	free(vars->pids);
 	close_previous_fd(prev_fd);
 }

@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void	ft_unset(char *str, t_env **env, t_env **export)
+void	ft_unset(char *str, t_env **env, t_env **export, t_var *vars)
 {
 	char	**arr;
 	int		i;
@@ -16,4 +16,5 @@ void	ft_unset(char *str, t_env **env, t_env **export)
 		i++;
 	}
 	free_db_array(arr);
+	vars->exit_statut = 0;
 }

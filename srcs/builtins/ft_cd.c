@@ -53,6 +53,7 @@ void	cd_print_invalid(char *arr, int fd, int *x)
 	ft_putstr_fd("minishell: cd: ", fd);
 	ft_putstr_fd(arr, fd);
 	ft_putstr_fd(": invalid option\n", fd);
+
 }
 
 //set path for chdir
@@ -85,11 +86,12 @@ char	*set_path_dir(char *arr, t_env **env, int fd)
 	return (path);
 }
 
-void	ft_cd(char *str, t_env **env, int fd)
+void	ft_cd(char *str, t_env **env, int fd, t_var *vars)
 {
 	char	**arr;
 	char	*path;
 
+	(void) vars;
 	path = NULL;
 	arr = ft_split(str, " ");
 	if (double_arr_len(arr) > 2 && fd == 1)
