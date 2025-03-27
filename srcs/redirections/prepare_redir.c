@@ -96,9 +96,5 @@ void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 	{
 		vars->arg = fill_arg(vars->path, vars->line);
 		exec_redir(vars, fd, env, exp);
-		// if (vars->arg)
-		// 	free_db_array(vars->arg);
-		// if (vars->path)
-		// 	free(vars->path);
 	}
 }

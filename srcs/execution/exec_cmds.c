@@ -69,7 +69,7 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 			return (path);
 		}
 		else if (ft_strrchr(vars->cmd, '/') != NULL)
-			break;
+			break ;
 		free(path);
 		i++;
 	}

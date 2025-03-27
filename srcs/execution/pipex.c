@@ -12,7 +12,7 @@ void	free_child_process(t_var *vars, t_env **env, t_env **export)
 	free(vars->prompt);
 	if (vars->arr)
 		free_db_array(vars->arr);
-	if(vars->pids)
+	if (vars->pids)
 		free(vars->pids);
 	free_env(*export);
 	free_env(*env);

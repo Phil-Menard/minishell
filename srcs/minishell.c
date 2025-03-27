@@ -14,10 +14,15 @@ void	print_minishell(void)
 //check if vars contains a pipe or not, and call the corresponding function
 void	check_pipes(t_var *vars, t_env **env, t_env **export)
 {
+	char	*temp;
 	int		*fd;
 	int		arr_size;
 
 	fd = NULL;
+	temp = parse_redirections(vars->line);
+	free(vars->line);
+	vars->line = ft_strdup(temp);
+	free(temp);
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
 	{

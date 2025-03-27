@@ -133,6 +133,7 @@ int				*init_and_set_fd(char *line);
 void			close_multiple_fd(int *fd);
 int				set_previous_fd(int *fd, int previous_fd);
 int				is_infile_valid(int fd, char *infile);
+char			*parse_redirections(char *line);
 /**========================================================================
  *!                      CHECK QUOTES WHEN NEW LINE
  *========================================================================**/
@@ -171,5 +172,5 @@ t_env			*assign_var_export(t_env **export, t_env **env, char *line);
 /**========================================================================
  *!                                 SIGNALS
  *========================================================================**/
-void	set_signal_action(void);
+void			set_signal_action(void);
 #endif

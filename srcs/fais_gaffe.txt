@@ -22,3 +22,10 @@ le return de la fonction getenv() n'a pas besoin d'etre free
 - $VAR a gerer sans quotes
 - < "Makefile" gr"ep echo" | "rev"  --> verif si au moins 1 token est une commande
 - leaks tokenizer et invalid read of size pour list_to_string
+
+- <Makefile grep @ > > out
+throw this error :	bash: syntax error near unexpected token `>'
+- ls >
+throw this error :	bash: syntax error near unexpected token `newline'
+
+_=/usr/bin/valgrind doit etre _=/usr/bin/env
