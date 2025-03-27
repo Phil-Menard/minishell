@@ -31,7 +31,6 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 		vars->pids = NULL;
 		ft_execve(vars, env, export, fd);
 	}
-	free(vars->pids);
 	free(cmd);
 }
 
