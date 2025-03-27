@@ -20,21 +20,21 @@ void	free_vars(t_var *vars)
 		free_db_array(vars->cmd_split);
 	if (vars->arg)
 		free_db_array(vars->arg);
-	if (ft_strrchr(vars->line, '/') != NULL)
-		free(vars->cmd);
 	if (vars->line)
 		free(vars->line);
 	if (vars->prompt)
 		free(vars->prompt);
 	if (vars->arr)
 		free_db_array(vars->arr);
-	if (vars->path && vars->cmd)
+	if (vars->path && ft_strncmp(vars->path, vars->cmd, ft_strlen(vars->path)) == 0)
+		free(vars->path);
+	else
 	{
 		free(vars->path);
 		free(vars->cmd);
 	}
-	if (!vars->path && vars->cmd)
-		free(vars->cmd);
+	// if (!vars->path && vars->cmd)
+	// 	free(vars->cmd);
 	nullify_arg_vars(vars);
 }
 
