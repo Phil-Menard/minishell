@@ -88,7 +88,7 @@ static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
 	last = get_last(tokens);
 	while (line[*i] && line[*i] == ' ')
 		(*i)++;
-	if (tokens->buf != NULL) // to avoid create a null node when begin by space
+	if (tokens->buf != NULL) // to avoid creating a null node when begin by space
 		last->next = new_tkb(0, NULL);
 }
 
