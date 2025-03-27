@@ -34,6 +34,9 @@ int	var_already_exist(t_env **export, char *str)
 }
 
 //check if variable name from export is valid
+//0 is invalid
+//1 is valid
+//2 is valid and is '_' variable
 int	check_valid_identifier(char *line)
 {
 	char	*str;
@@ -58,7 +61,7 @@ int	check_valid_identifier(char *line)
 }
 
 //add var to export, without assigning it
-t_env	*add_var_export(t_env **export, t_env **env, char *line)
+t_env	*add_var_export(t_env **export, t_env **env, char *line, t_var *vars)
 {
 	t_env	*node;
 	char	*str;
@@ -70,6 +73,7 @@ t_env	*add_var_export(t_env **export, t_env **env, char *line)
 		ft_putstr_fd("minishell: export : '", 1);
 		ft_putstr_fd(line, 1);
 		ft_putstr_fd("': not a valid identifier\n", 1);
+		vars->exit_statut = 1;
 	}
 	else
 	{
@@ -82,18 +86,19 @@ t_env	*add_var_export(t_env **export, t_env **env, char *line)
 		node = ft_new_env_node(str);
 		ft_env_add_back(export, node);
 		free(str);
+		vars->exit_statut = 0;
 	}
 	return (*export);
 }
 
-t_env	*assign_var_export(t_env **export, t_env **env, char *line)
+t_env	*assign_var_export(t_env **export, t_env **env, char *line, t_var *vars)
 {
 	t_env	*current;
 	char	**arr;
 	int		index;
 
 	arr = ft_split(line, "=");
-	*export = add_var_export(export, env, arr[0]);
+	*export = add_var_export(export, env, arr[0], vars);
 	current = *export;
 	index = find_index_var(export, arr[0]);
 	while (index-- > 0)

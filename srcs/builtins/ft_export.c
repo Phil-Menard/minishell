@@ -44,10 +44,10 @@ void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 		while (arr[i])
 		{
 			if (find_occurences(arr[i], '=') == 0)
-				*export = add_var_export(export, env, arr[i]);
+				*export = add_var_export(export, env, arr[i], vars);
 			else
 			{
-				*export = assign_var_export(export, env, arr[i]);
+				*export = assign_var_export(export, env, arr[i], vars);
 				*env = add_var_env(env, arr[i]);
 			}
 			i++;
