@@ -93,6 +93,8 @@ void			builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
 char			*get_right_path(char *str, t_var *vars, t_env **env);
 char			*get_next_path(char *arr, char *str, t_var *vars);
 void			check_path_errors(char *argv, char **env, int *pipefd);
+char			**set_arr_right_path(t_env **env);
+void			end_right_path(t_var *vars, char *str, char **arr);
 /**========================================================================
  *!                                 PIPES
  *========================================================================**/
