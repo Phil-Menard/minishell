@@ -25,6 +25,7 @@ typedef struct s_var
 	char	**arr;
 	char	**cmd_split;
 	char	**arg;
+	char	*cmd;
 	char	*line;
 	char	*prompt;
 	char	*path;
@@ -89,7 +90,7 @@ void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 void			exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export);
 void			ft_execve(t_var *vars, t_env **env, t_env **export, int *fd);
 void			builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
-char			*get_right_path(char *str, t_var *vars);
+char			*get_right_path(char *str, t_var *vars, t_env **env);
 char			*get_next_path(char *arr, char *str, t_var *vars);
 void			check_path_errors(char *argv, char **env, int *pipefd);
 /**========================================================================
@@ -122,6 +123,7 @@ char			*ft_ltoa(long int n);
 void			free_vars(t_var *vars);
 void			free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 void			quit(char *msg, int exit_status, t_var *vars);
+void			init_vars(t_var *vars);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

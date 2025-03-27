@@ -17,7 +17,7 @@ SRC = minishell.c \
 	builtins/ft_export.c \
 	builtins/ft_pwd.c \
 	builtins/ft_unset.c \
-	execution/exec_cmds_prep.c \
+	execution/execve.c \
 	execution/exec_cmds.c \
 	execution/pipex.c \
 	execution/utils_pipex.c \

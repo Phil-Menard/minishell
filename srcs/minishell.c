@@ -21,11 +21,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
 	{
-		if (ft_strncmp(vars->arr[0], "exit", 4) == 0)
-		{
-			free_db_array(vars->arr);
-			vars->arr = NULL;
-		}
 		fd = init_and_set_fd(vars->line);
 		if (fd[0] > -1)
 			builtin_or_cmd(vars, fd, env, export);
@@ -37,24 +32,23 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 		arr_size = double_arr_len(vars->arr);
 		pipex(vars, env, export, arr_size);
 	}
-	if (vars->arr)
-		free_db_array(vars->arr);
 	printf("status : %d\n", vars->exit_statut);
 }
 
-char	*set_prompt_arg(void)
+char	*set_prompt_arg(t_env **env)
 {
 	char	*prompt_arg;
 	char	*user_name;
 	char	*pwd;
 	char	*dollar_sign;
 
-	user_name = getenv("USER");
+	user_name = ft_getenv(*env, "USER");
 	dollar_sign = ft_strdup("$ ");
 	prompt_arg = ft_strjoin(user_name, ":");
 	pwd = getcwd(NULL, 0);
 	prompt_arg = ft_straddstr(prompt_arg, pwd);
 	prompt_arg = ft_straddstr(prompt_arg, dollar_sign);
+	free(user_name);
 	free(dollar_sign);
 	free(pwd);
 	return (prompt_arg);
@@ -72,19 +66,20 @@ int	main(int argc, char **argv, char **envp)
 	export = NULL;
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
-	vars.exit_statut = 0;
-	vars.arg = NULL;
+	init_vars(&vars);
 	print_minishell();
 	set_signal_action();
 	while (1)
 	{
-		vars.prompt = set_prompt_arg();
+		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
 			parsing(&env, &vars, &export);
-		free(vars.line);
-		free(vars.prompt);
+		if (vars.line)
+			free_vars(&vars);
+		else
+			free(vars.prompt);
 	}
 	free_env(env);
 	free_env(export);
