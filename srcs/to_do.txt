@@ -6,3 +6,6 @@
 throw this error :	bash: syntax error near unexpected token `>'
 - ls >
 throw this error :	bash: syntax error near unexpected token `newline'
+
+
+METTRE TOKEN COMMANDE DANS VARS->CMD (char **)
