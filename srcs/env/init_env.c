@@ -48,6 +48,8 @@ t_env	*fill_env(t_env **lst, char **envp)
 		ft_env_add_back(lst, node);
 		i++;
 	}
+	node = ft_new_env_node("?=");
+	ft_env_add_back(lst, node);
 	return (node);
 }
 

@@ -36,7 +36,7 @@ int	*find_files(int *fd, char *infile, char **outfile, int redir)
 	{
 		fd[0] = open(infile, O_RDONLY);
 		if (fd[0] == -1)
-			perror("prout");
+			perror(infile);
 		else if (redir == 0)
 			fd[1] = set_fd_out(fd[1], outfile, redir);
 	}
@@ -48,7 +48,7 @@ int	*find_files(int *fd, char *infile, char **outfile, int redir)
 	{
 		fd[0] = open(infile, O_RDONLY);
 		if (fd[0] == -1)
-			perror("caca");
+			perror(infile);
 		else
 			fd[1] = set_fd_out(fd[1], outfile, redir);
 	}
@@ -56,7 +56,7 @@ int	*find_files(int *fd, char *infile, char **outfile, int redir)
 }
 
 //fd[0] : input | fd[1] : output
-int	*set_fd(char *line, int *fd, t_var *vars)
+int	*set_fd(char *line, int *fd, t_var *vars, t_env **env)
 {
 	char	**outfile;
 	char	*infile;
@@ -67,6 +67,10 @@ int	*set_fd(char *line, int *fd, t_var *vars)
 	redirection = is_redirected(line);
 	fd = find_files(fd, infile, outfile, redirection);
 	if (fd[0] == -1)
+	{
 		vars->exit_statut = 1;
+		update_exit_env(*env, vars);
+	}
+	
 	return (free(infile), free_db_array(outfile), fd);
 }

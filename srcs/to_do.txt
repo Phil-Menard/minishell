@@ -9,3 +9,8 @@ throw this error :	bash: syntax error near unexpected token `newline'
 
 
 METTRE TOKEN COMMANDE DANS VARS->CMD (char **)
+echo "$?"
+0? || instead of || 0
+BUT
+echo "$?"
+127 || works well

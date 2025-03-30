@@ -26,7 +26,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
 	{
-		fd = init_and_set_fd(vars->line, vars);
+		fd = init_and_set_fd(vars->line, vars, env);
 		if (fd[0] > -1)
 			builtin_or_cmd(vars, fd, env, export);
 		else
@@ -40,7 +40,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 		pipex(vars, env, export, arr_size);
 	}
 	free_vars(vars);
-	printf("status : %d\n", vars->exit_statut);
 }
 
 char	*set_prompt_arg(t_env **env)
@@ -75,6 +74,7 @@ int	main(int argc, char **argv, char **envp)
 	fill_env(&env, envp);
 	init_export_lst(&env, &export);
 	init_vars(&vars);
+	update_exit_env(env, &vars);
 	print_minishell();
 	set_signal_action();
 	while (1)

@@ -130,8 +130,8 @@ void			init_vars(t_var *vars);
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/
 int				*init_fd(void);
-int				*set_fd(char *line, int *fd, t_var *vars);
-int				*init_and_set_fd(char *line, t_var *vars);
+int				*set_fd(char *line, int *fd, t_var *vars, t_env **env);
+int				*init_and_set_fd(char *line, t_var *vars, t_env **env);
 void			close_multiple_fd(int *fd);
 int				set_previous_fd(int *fd, int previous_fd);
 int				is_infile_valid(int fd, char *infile);
@@ -163,6 +163,7 @@ int				env_size(t_env *lst);
 void			free_env_node(char *var, t_env *node);
 void			free_env(t_env *lst);
 t_env			*add_var_env(t_env **env, char *line);
+void			update_exit_env(t_env *env, t_var *vars);
 /**========================================================================
  *!                                 EXPORT
  *========================================================================**/

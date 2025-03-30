@@ -70,6 +70,7 @@ void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 			}
 			nb = set_nb_exit(fd, vars, env, export);
 		}
+		update_exit_env(*env, vars);
 		free_before_exit(fd, vars, env, export);
 		exit(nb);
 	}

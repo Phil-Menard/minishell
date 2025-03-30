@@ -58,4 +58,5 @@ void	builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp)
 	else
 		exec_cmds(vars, fd, env, exp);
 	close_multiple_fd(fd);
+	update_exit_env(*env, vars);
 }

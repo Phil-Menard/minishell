@@ -61,6 +61,7 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	else
 		exec_cmds_pipes(vars, env, export, fd);
 	close_multiple_fd(fd);
+	update_exit_env(*env, vars);
 }
 
 void	pipe_and_fork(int *pipefd, int *pids)
@@ -84,7 +85,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 	vars->i = -1;
 	while (vars->arr[++vars->i])
 	{
-		fd = init_and_set_fd(vars->arr[vars->i], vars);
+		fd = init_and_set_fd(vars->arr[vars->i], vars, env);
 		previous_fd = set_previous_fd(fd, previous_fd);
 		pipe_and_fork(pipefd, &vars->pids[vars->i]);
 		if (vars->pids[vars->i] == 0)
