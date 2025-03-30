@@ -80,7 +80,11 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 			if (id == 0)
 				ft_execve(vars, env, export, fd);
 			else
+			{
 				waitpid(id, &vars->exit_statut, 0);
+				if (WIFEXITED(vars->exit_statut))
+					vars->exit_statut = WEXITSTATUS(vars->exit_statut);
+			}
 		}
 	}
 }

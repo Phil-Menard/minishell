@@ -130,8 +130,8 @@ void			init_vars(t_var *vars);
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/
 int				*init_fd(void);
-int				*set_fd(char *line, int *fd);
-int				*init_and_set_fd(char *line);
+int				*set_fd(char *line, int *fd, t_var *vars);
+int				*init_and_set_fd(char *line, t_var *vars);
 void			close_multiple_fd(int *fd);
 int				set_previous_fd(int *fd, int previous_fd);
 int				is_infile_valid(int fd, char *infile);

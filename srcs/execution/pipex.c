@@ -84,7 +84,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 	vars->i = -1;
 	while (vars->arr[++vars->i])
 	{
-		fd = init_and_set_fd(vars->arr[vars->i]);
+		fd = init_and_set_fd(vars->arr[vars->i], vars);
 		previous_fd = set_previous_fd(fd, previous_fd);
 		pipe_and_fork(pipefd, &vars->pids[vars->i]);
 		if (vars->pids[vars->i] == 0)

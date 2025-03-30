@@ -26,7 +26,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
 	{
-		fd = init_and_set_fd(vars->line);
+		fd = init_and_set_fd(vars->line, vars);
 		if (fd[0] > -1)
 			builtin_or_cmd(vars, fd, env, export);
 		else

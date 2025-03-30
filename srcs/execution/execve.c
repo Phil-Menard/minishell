@@ -31,7 +31,8 @@ void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
 		free_and_close(vars, env, export, fd);
 		if (arr_env)
 			free_db_array(arr_env);
-		exit(2);
+		vars->exit_statut = 2;
+		exit(vars->exit_statut);
 	}
 }
 
