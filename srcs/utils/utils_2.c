@@ -66,5 +66,5 @@ void	quit(char *msg, int exit_status, t_var *vars)
 	if (msg)
 		ft_putstr_fd(msg, 2);
 	vars->exit_statut = exit_status;
-	exit(vars->exit_statut);
+	// exit(vars->exit_statut);
 }

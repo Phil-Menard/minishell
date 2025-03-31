@@ -1,5 +1,66 @@
 #include "../minishell.h"
 
+// add var to res
+static void addvar(char **res, char *str, size_t *start, t_env *env)
+{
+	char	*var;
+	char	*var_content;
+
+	var = NULL;
+	var_content = NULL;
+	(*start)++;
+	while (str[*start] && (str[*start] != '\"' && str[*start] != '\'')
+		&& str[*start] != ' ' && (str[*start] <= 9 || str[*start] >= 13))
+	{
+		var = ft_straddchar(var, str[*start]);
+		(*start)++;
+	}
+	var_content = ft_getenv(env, var);
+	*res = ft_straddstr(*res, var_content);
+	free(var_content);
+	var_content = NULL;
+	free(var);
+	var = NULL;
+}
+
+//* for double quotes, cpy quoted and take value (if) var
+static char	*quotes(char *str, size_t *start, t_env *env)
+{
+	char	*res;
+
+	res = NULL;
+	while (str[*start] && *start < get_pos(str, *start, '\"'))
+	{
+		if (str[*start] == '$')
+			addvar(&res, str, start, env);
+		else
+			res = ft_straddchar(res, str[(*start)++]);
+	}
+	return (res);
+}
+
+//* Add all quoted text in buf into list token_builder.
+//* Return size of quoted text.
+static void	addquotes_to_token(t_token_builder **builder, char *line, size_t *start, t_env *env)
+{
+	char	*quoted;
+
+	if (!line)
+		return ;
+	quoted = NULL;
+	if (line[*start - 1] == '\'')
+	{
+		quoted = ft_strndup(line, *start, get_pos(line, *start, '\'') - *start);
+		*start += ft_strlen(quoted);
+	}
+	else if (line[*start - 1] == '\"')
+		quoted = quotes(line, start, env);
+	if (!quoted)
+		return ;
+	get_last(*builder)->buf = ft_straddstr(get_last(*builder)->buf, quoted);
+	free(quoted);
+}
+
 // part of tokenizer
 static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
 {
@@ -8,65 +69,8 @@ static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
 	last = get_last(tokens);
 	while (line[*i] && line[*i] == ' ')
 		(*i)++;
-	if (tokens->buf != NULL) // to avoid create a null node when begin by space
+	if (tokens->buf != NULL) // to avoid creating a null node when begin by space
 		last->next = new_tkb(0, NULL);
-}
-
-//* for double quotes, cpy quoted and take value (if) var
-static char	*quotes(char *str, int start, t_env *env)
-{
-	char	*res;
-	char	*var;
-	int		size;
-	int		iv;
-
-	var = NULL;
-	res = NULL;
-	size = get_pos(str, start, '\"');
-	while (str[start] && start < size) //peut etre start ?
-	{
-		if (str[start] == '$')
-		{
-			iv = start + 1;
-			while (str[iv] && iv < size && str[iv] != ' '
-				&& (str[iv] <= 9 || str[iv] >= 13))
-				var = ft_straddchar(var, str[iv++]);
-			res = ft_straddstr(res, ft_getenv(env, var));
-			start = iv; //pb incrementation
-			free(var);
-			var = NULL;
-		}
-		else
-			res = ft_straddchar(res, str[start++]);
-	}
-	return (res);
-}
-
-//* Add all quoted text in buf into list token_builder.
-//* Return size of quoted text.
-static size_t	addquotes_to_token(t_token_builder **builder, char *line, size_t start, t_env *env)
-{
-	int		size;
-	char	*quoted;
-
-	if (!line)
-		return (0);
-	size = 0;
-	quoted = NULL;
-	if (line[start - 1] == '\'')
-	{
-		size = get_pos(line, start, '\'') - start;
-		quoted = ft_strndup(line, start, size);
-	}
-	else if (line[start - 1] == '\"')
-	{
-		quoted = quotes(line, start, env);
-		size = ft_strlen(quoted);
-	}
-	if (!quoted)
-		return (0);
-	get_last(*builder)->buf = ft_straddstr(get_last(*builder)->buf, quoted);
-	return (free(quoted), size);
 }
 
 //* State machine
@@ -76,7 +80,7 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 {
 	t_token_builder	*tokens;
 	size_t			i;
-	int				quote_count;
+	size_t			quote_count;
 
 	i = 0;
 	quote_count = 0;
@@ -87,12 +91,17 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 		{
 			i++;
 			if (++quote_count % 2 != 0)
-				i += addquotes_to_token(&tokens, line, i, env);
+				addquotes_to_token(&tokens, line, &i, env);
 		}
 		else if (line[i] && line[i] == ' ')
 			space_handler(tokens, line, &i);
 		else if (line[i])
-			get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
+		{
+			if (line[i] == '$')
+				addvar(&get_last(tokens)->buf, line, &i, env);
+			else
+				get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
+		}
 	}
 	return (tokens);
 }

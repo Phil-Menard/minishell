@@ -1,4 +1,3 @@
-- $VAR a gerer sans quotes
 - < "Makefile" gr"ep echo" | "rev"  --> verif si au moins 1 token est une commande
 - leaks tokenizer et invalid read of size pour list_to_string
 
@@ -14,3 +13,6 @@ echo "$?"
 BUT
 echo "$?"
 127 || works well
+
+fonctionne pas :
+env | grep $PATH

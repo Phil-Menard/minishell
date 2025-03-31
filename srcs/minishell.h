@@ -64,8 +64,8 @@ t_token_builder	*tokenizer(char *line, t_env *env);
 t_token_builder	*new_tkb(size_t len, void *buf);
 t_token_builder	*get_last(t_token_builder *node);
 t_token			get_token(char *str);
-int				get_pos(char *str, int start, char c);
-int				check_pair(char *line, char what);
+size_t			get_pos(char *str, size_t start, char c);
+int				check_pair(char *line);
 /**========================================================================
  *!                                  TREE
  *========================================================================**/
