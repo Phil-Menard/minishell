@@ -39,9 +39,9 @@ static char	*quotes(char *str, size_t *start, t_env *env)
 	return (res);
 }
 
-//* Add all quoted text in buf into list token_builder.
+//* Add all quoted text in buf into list token.
 //* Return size of quoted text.
-static void	addquotes_to_token(t_token_builder **builder, char *line, size_t *start, t_env *env)
+static void	addquotes_to_token(t_token **builder, char *line, size_t *start, t_env *env)
 {
 	char	*quoted;
 
@@ -62,9 +62,9 @@ static void	addquotes_to_token(t_token_builder **builder, char *line, size_t *st
 }
 
 // part of tokenizer
-static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
+static void	space_handler(t_token *tokens, char *line, size_t *i)
 {
-	t_token_builder	*last;
+	t_token	*last;
 
 	last = get_last(tokens);
 	while (line[*i] && line[*i] == ' ')
@@ -73,12 +73,20 @@ static void	space_handler(t_token_builder *tokens, char *line, size_t *i)
 		last->next = new_tkb(0, NULL);
 }
 
+static void	normal_mod(t_token *tokens, char *line, size_t *i, t_env *env)
+{
+	if (line[(*i)] == '$')
+		addvar(&get_last(tokens)->buf, line, i, env);
+	else
+		get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[(*i)++]);
+}
+
 //* State machine
 //		* Normal : add char by char to token, split on spaces
 //		* Quotes : take all btw quotes and add it to token
-t_token_builder	*tokenizer(char *line, t_env *env)
+t_token	*tokenizer(char *line, t_env *env)
 {
-	t_token_builder	*tokens;
+	t_token	*tokens;
 	size_t			i;
 	size_t			quote_count;
 
@@ -96,12 +104,7 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 		else if (line[i] && line[i] == ' ')
 			space_handler(tokens, line, &i);
 		else if (line[i])
-		{
-			if (line[i] == '$')
-				addvar(&get_last(tokens)->buf, line, &i, env);
-			else
-				get_last(tokens)->buf = ft_straddchar(get_last(tokens)->buf, line[i++]);
-		}
+			normal_mod(tokens, line, &i, env);
 	}
 	return (tokens);
 }
@@ -113,8 +116,8 @@ t_token_builder	*tokenizer(char *line, t_env *env)
 /* int	main(void)
 {
 	char			*test = "            <Makefile \"grep echo \"e abc | \"$PWD |a\" | ls";
-	t_token_builder	*tokens;
-	t_token_builder	*tmp;
+	t_token	*tokens;
+	t_token	*tmp;
 
 	if (!check_pair(test, '\'') || !check_pair(test, '\"'))
 	{

@@ -35,7 +35,7 @@ void	free_list(t_ast *tree)
 	free(tree);
 }
 
-t_ast	*new_node(char *token, t_token token_type)
+t_ast	*new_node(char *content, t_type type)
 {
 	t_ast	*node;
 
@@ -44,8 +44,8 @@ t_ast	*new_node(char *token, t_token token_type)
 		return (NULL);
 	node->left = NULL;
 	node->right = NULL;
-	node->token = token;
-	node->token = token_type;
+	node->content = content;
+	node->type = type;
 	return (node);
 }
 

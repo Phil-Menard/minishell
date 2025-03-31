@@ -1,6 +1,7 @@
 #include "../minishell.h"
 
-//find s2 in s1
+// find s2 in s1
+// return 1 if founded or 0 if not find
 int	ft_strfind(char *s1, char *s2)
 {
 	int	i;
