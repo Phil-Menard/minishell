@@ -36,22 +36,20 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 char	*get_right_path(char *str, t_var *vars, t_env **env)
 {
 	char	**arr;
-	char	**split_cmd;
 	char	*path;
 	int		i;
 
 	arr = set_arr_right_path(env);
-	printf("str : %s\n", str);
 	i = 0;
 	while (arr && arr[i])
 	{
-		path = get_next_path(arr[i], vars->cmd, vars);
+		path = get_next_path(arr[i], str, vars);
 		if (access(path, X_OK) == 0)
 		{
 			free_db_array(arr);
 			return (path);
 		}
-		else if (ft_strrchr(vars->cmd, '/') != NULL)
+		else if (ft_strrchr(str, '/') != NULL)
 			break ;
 		free(path);
 		i++;
@@ -70,7 +68,6 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
-		printf("vars->cmd : %s\n", vars->cmd[0]);
 		vars->path = get_right_path(vars->cmd[0], vars, env);
 		if (vars->path)
 		{

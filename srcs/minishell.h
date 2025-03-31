@@ -25,7 +25,7 @@ typedef struct s_var
 	char	**arr;
 	char	**cmd_split;
 	char	**arg;
-	char	*cmd;
+	char	**cmd;
 	char	*line;
 	char	*prompt;
 	char	*path;

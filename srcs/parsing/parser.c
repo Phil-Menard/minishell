@@ -73,11 +73,7 @@ static void	setcmd(t_var *vars, char *line, t_env *env)
 	i = 0;
 	while (split[i])
 	{
-		printf("prout\n");
 		tokens[i] = tokenizer(split[i], env);
-		printf("tokens[%d] = ", i);
-		printlist(tokens[i]);
-		printf("\n");
 		vars->cmd[i] = ft_strdup(tokens[i]->buf);
 		i++;
 	}

@@ -27,12 +27,12 @@ void	free_vars(t_var *vars)
 	if (vars->arr)
 		free_db_array(vars->arr);
 	if (vars->path
-		&& ft_strncmp(vars->path, vars->cmd, ft_strlen(vars->path)) == 0)
+		&& ft_strncmp(vars->path, vars->cmd[0], ft_strlen(vars->path)) == 0)
 		free(vars->path);
 	else
 	{
 		free(vars->path);
-		free(vars->cmd);
+		free_db_array(vars->cmd);
 	}
 	nullify_arg_vars(vars);
 }
