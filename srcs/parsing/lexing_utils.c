@@ -26,21 +26,31 @@ size_t	get_pos(char *str, size_t start, char c)
 }
 
 //* 1 = pair \ 0 = odd
-int	check_pair(char *line, char what)
+int	check_pair(char *line)
 {
-	int	count;
 	int	i;
 
 	i = 0;
-	count = 0;
 	while (line[i])
 	{
-		if (line[i] == what)
-			count++;
+		if (line[i] == '\'')
+		{
+			i++;
+			while (line[i] && line[i] != '\'')
+				i++;
+			if (line[i] != '\'')
+				return (0);
+		}
+		else if (line[i] == '\"')
+		{
+			i++;
+			while (line[i] && line[i] != '\"')
+				i++;
+			if (line[i] != '\"')
+				return (0);
+		}
 		i++;
 	}
-	if (count % 2 != 0)
-		return (0);
 	return (1);
 }
 

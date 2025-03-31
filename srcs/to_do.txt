@@ -8,3 +8,6 @@ throw this error :	bash: syntax error near unexpected token `newline'
 
 
 METTRE TOKEN COMMANDE DANS VARS->CMD (char **)
+
+fonctionne pas :
+env | grep $PATH
