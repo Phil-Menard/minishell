@@ -18,7 +18,7 @@ char	**set_arr_right_path(t_env **env)
 void	end_right_path(t_var *vars, char *str, char **arr)
 {
 	vars->exit_statut = 127;
-	if (ft_strrchr(vars->cmd, '/') == NULL)
+	if (ft_strrchr(str, '/') == NULL)
 	{
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(": command not found\n", 2);
