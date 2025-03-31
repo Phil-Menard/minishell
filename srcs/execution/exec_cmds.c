@@ -41,9 +41,7 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 	int		i;
 
 	arr = set_arr_right_path(env);
-	split_cmd = ft_split(str, " ");
-	vars->cmd = ft_strdup(split_cmd[0]);
-	free_db_array(split_cmd);
+	printf("str : %s\n", str);
 	i = 0;
 	while (arr && arr[i])
 	{
@@ -72,7 +70,8 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
-		vars->path = get_right_path(vars->line, vars, env);
+		printf("vars->cmd : %s\n", vars->cmd[0]);
+		vars->path = get_right_path(vars->cmd[0], vars, env);
 		if (vars->path)
 		{
 			vars->arg = fill_arg(vars->path, vars->line);

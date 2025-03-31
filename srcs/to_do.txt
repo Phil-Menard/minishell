@@ -14,6 +14,4 @@ BUT
 echo "$?"
 127 || works well
 
-heredoc
-creer un fichier temporaire, ecrire dedans, et le detruire a la fin avec unlink
-c'est comme lire dans un infile, mais avant on le remplit
+mettre redirection en 2 pos si en 1 pour envoyer node 1 (cmd) dans vars->cmd.

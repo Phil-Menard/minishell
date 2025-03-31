@@ -1,6 +1,6 @@
 # include "../minishell.h"
 
-// static int	check_tokens(t_token_builder *tokens)
+// static int	check_tokens(t_token *tokens)
 // {
 // 	char	*path;
 
@@ -26,10 +26,74 @@
 // 	return (0);
 // }
 
-static char	*list_to_string(t_token_builder *tokens)
+void	free_tokens(t_token *tokens)
+{
+	t_token	*tmp;
+
+	while (tokens)
+	{
+		tmp = tokens->next;
+		free(tokens->buf);
+		tokens->buf = NULL;
+		free(tokens);
+		tokens = tmp;
+	}
+}
+
+void	printlist(t_token *tokens)
+{
+	while (tokens)
+	{
+		printf("%s, ", tokens->buf);
+		tokens = tokens->next;
+	}
+}
+
+// ajoute espace, retire redir, split au | et tokenise
+// Put in vars->cmd the first node cmd
+static void	setcmd(t_var *vars, char *line, t_env *env)
+{
+	char	**split;
+	char	*tmp;
+	char	*str;
+	t_token	**tokens;
+	int		i;
+
+	tmp = parse_redirections(line);
+	str = str_without_redir(tmp);
+	split = ft_split(str, "|");
+	if (!split)
+		return ;
+	tokens = ft_calloc(sizeof(t_token *), double_arr_len(split) + 1);
+	if (!tokens)
+		return ;
+	vars->cmd = ft_calloc(sizeof(char *), double_arr_len(split) + 1);
+	if (!vars->cmd)
+		return ;
+	i = 0;
+	while (split[i])
+	{
+		printf("prout\n");
+		tokens[i] = tokenizer(split[i], env);
+		printf("tokens[%d] = ", i);
+		printlist(tokens[i]);
+		printf("\n");
+		vars->cmd[i] = ft_strdup(tokens[i]->buf);
+		i++;
+	}
+	free(tmp);
+	free(str);
+	free_db_array(split);
+	i = 0;
+	while (tokens[i])
+		free_tokens(tokens[i++]);
+	free(tokens);
+}
+
+static char	*list_to_string(t_token *tokens)
 {
 	char			*res;
-	t_token_builder	*tmp;
+	t_token	*tmp;
 
 	res = NULL;
 	while (tokens && tokens->buf)
@@ -55,21 +119,19 @@ static char	*list_to_string(t_token_builder *tokens)
 void	parsing(t_env **env, t_var *vars, t_env **export)
 {
 	// t_ast			*tree;
-	t_token_builder	*tokens;
+	t_token	*tokens;
 
 	if (!vars->line)
 		return ;
 	if (check_pair(vars->line) == 0)
 		quit("Unclosed quotes\n", 2, vars);
 	tokens = tokenizer(vars->line, *env); // lexing
+	setcmd(vars, vars->line, *env);
 	free(vars->line);
 	vars->line = NULL;
 	// if (check_tokens(tokens) == 0)
 	// 	printf("error\n");
 	vars->line = list_to_string(tokens);
-	// vars->cmd = ft_calloc(2, sizeof(char *));
-	// vars->cmd[0] = ft_strdup("grep echo");
-	// vars->cmd[1] = NULL;
 	if (vars->line)
 		check_pipes(vars, env, export);
 	// create tree
