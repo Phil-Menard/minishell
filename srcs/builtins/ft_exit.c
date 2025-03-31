@@ -12,13 +12,12 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 
 void	arg_not_numeric(int *fd, t_var *vars, t_env **env, t_env **export)
 {
-	free_before_exit(fd, vars, env, export);
 	ft_putstr_fd("minishell: exit: ", 1);
 	ft_putstr_fd(vars->cmd_split[1], 1);
 	ft_putstr_fd(": numeric argument required\n", 1);
-	if (vars->cmd_split)
-		free_db_array(vars->cmd_split);
-	exit(2);
+	vars->exit_statut = 2;
+	free_before_exit(fd, vars, env, export);
+	exit(vars->exit_statut);
 }
 
 long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
@@ -44,10 +43,10 @@ long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	}
 	free(content);
 	if (nb < 0)
-		nb = -((-nb) % 256);
+		vars->exit_statut = -((-nb) % 256);
 	else
-		nb = nb % 256;
-	return (nb);
+		vars->exit_statut = nb % 256;
+	return (vars->exit_statut);
 }
 
 void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)

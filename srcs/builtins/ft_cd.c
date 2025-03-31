@@ -47,6 +47,15 @@ void	set_oldpwd(t_env **env, int x)
 	}
 }
 
+void	cd_print_invalid(char *arr, int fd, int *x)
+{
+	*x = 1;
+	ft_putstr_fd("minishell: cd: ", fd);
+	ft_putstr_fd(arr, fd);
+	ft_putstr_fd(": invalid option\n", fd);
+
+}
+
 //set path for chdir
 char	*set_path_dir(char *arr, t_env **env, int fd)
 {
@@ -62,26 +71,27 @@ char	*set_path_dir(char *arr, t_env **env, int fd)
 		if (ft_strlen(arr) == 1)
 			path = cd_oldpwd(*env, fd, &x);
 		else
-		{
-			x = 1;
-			ft_putstr_fd("minishell: cd: ", fd);
-			ft_putstr_fd(arr, fd);
-			ft_putstr_fd(": invalid option\n", fd);
-		}
+			cd_print_invalid(arr, fd, &x);
 	}
 	else if (ft_strncmp(arr, "~", 1) == 0)
 		path = getenv("HOME");
 	else
 		path = ft_strdup(arr);
+	if (!path)
+	{
+		x = 1;
+		ft_putstr_fd("minishell: cd: HOME not set\n", fd);
+	}
 	set_oldpwd(env, x);
 	return (path);
 }
 
-void	ft_cd(char *str, t_env **env, int fd)
+void	ft_cd(char *str, t_env **env, int fd, t_var *vars)
 {
 	char	**arr;
 	char	*path;
 
+	(void) vars;
 	path = NULL;
 	arr = ft_split(str, " ");
 	if (double_arr_len(arr) > 2 && fd == 1)

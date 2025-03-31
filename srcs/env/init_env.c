@@ -41,7 +41,10 @@ t_env	*fill_env(t_env **lst, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		node = ft_new_env_node(envp[i]);
+		if (ft_strncmp(envp[i], "_", 1) == 0)
+			node = ft_new_env_node("_=/usr/bin/env");
+		else
+			node = ft_new_env_node(envp[i]);
 		ft_env_add_back(lst, node);
 		i++;
 	}

@@ -14,10 +14,3 @@ ls -l /proc/$(ps aux | grep minishell | grep -v grep | awk '{print $2}')/fd
 - pour bosser a la maison il faut installer la lib de readline : libreadline-dev
 
 le return de la fonction getenv() n'a pas besoin d'etre free
-
-leon :
-- < "Makefile" gr"ep echo" | "rev"  --> verif si au moins 1 token est une commande
-- leaks tokenizer et invalid read of size pour list_to_string
-
-phil :
-- gerer infile qd chevrons colles

@@ -58,9 +58,9 @@ int	*find_files(int *fd, char *infile, char **outfile, int redir)
 //fd[0] : input | fd[1] : output
 int	*set_fd(char *line, int *fd)
 {
-	int		redirection;
-	char	*infile;
 	char	**outfile;
+	char	*infile;
+	int		redirection;
 
 	infile = get_infile(line);
 	outfile = get_outfile(line);

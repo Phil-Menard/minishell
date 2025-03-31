@@ -14,10 +14,15 @@ void	print_minishell(void)
 //check if vars contains a pipe or not, and call the corresponding function
 void	check_pipes(t_var *vars, t_env **env, t_env **export)
 {
+	char	*temp;
 	int		*fd;
 	int		arr_size;
 
 	fd = NULL;
+	temp = parse_redirections(vars->line);
+	free(vars->line);
+	vars->line = ft_strdup(temp);
+	free(temp);
 	vars->arr = prepare_line(vars->line);
 	if (!vars->arr[1])
 	{
@@ -29,9 +34,12 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	}
 	else
 	{
+		free(vars->line);
+		vars->line = NULL;
 		arr_size = double_arr_len(vars->arr);
 		pipex(vars, env, export, arr_size);
 	}
+	free_vars(vars);
 	printf("status : %d\n", vars->exit_statut);
 }
 
@@ -76,9 +84,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
 			parsing(&env, &vars, &export);
-		if (vars.line)
-			free_vars(&vars);
-		else
+		if (!vars.line)
 			free(vars.prompt);
 	}
 	free_env(env);

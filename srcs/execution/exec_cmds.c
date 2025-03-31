@@ -32,21 +32,6 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 	return (path);
 }
 
-//set arr variable for get_right_path
-char	**set_arr(t_env **env)
-{
-	char	**arr;
-	char	*temp;
-
-	arr = NULL;
-	temp = NULL;
-	temp = ft_getenv(*env, "PATH");
-	if (temp)
-		arr = ft_split(temp, ":");
-	free(temp);
-	return (arr);
-}
-
 //find correct path to execute cmd
 char	*get_right_path(char *str, t_var *vars, t_env **env)
 {
@@ -55,7 +40,7 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 	char	*path;
 	int		i;
 
-	arr = set_arr(env);
+	arr = set_arr_right_path(env);
 	split_cmd = ft_split(str, " ");
 	vars->cmd = ft_strdup(split_cmd[0]);
 	free_db_array(split_cmd);
@@ -69,18 +54,11 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 			return (path);
 		}
 		else if (ft_strrchr(vars->cmd, '/') != NULL)
-			break;
+			break ;
 		free(path);
 		i++;
 	}
-	vars->exit_statut = 127;
-	if (ft_strrchr(vars->cmd, '/') == NULL)
-	{
-		ft_putstr_fd(str, 2);
-		ft_putstr_fd(": command not found\n", 2);
-	}
-	if (arr)
-		free_db_array(arr);
+	end_right_path(vars, str, arr);
 	return (NULL);
 }
 

@@ -26,15 +26,14 @@ void	free_vars(t_var *vars)
 		free(vars->prompt);
 	if (vars->arr)
 		free_db_array(vars->arr);
-	if (vars->path && ft_strncmp(vars->path, vars->cmd, ft_strlen(vars->path)) == 0)
+	if (vars->path
+		&& ft_strncmp(vars->path, vars->cmd, ft_strlen(vars->path)) == 0)
 		free(vars->path);
 	else
 	{
 		free(vars->path);
 		free(vars->cmd);
 	}
-	// if (!vars->path && vars->cmd)
-	// 	free(vars->cmd);
 	nullify_arg_vars(vars);
 }
 

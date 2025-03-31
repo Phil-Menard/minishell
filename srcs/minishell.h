@@ -80,9 +80,9 @@ void			check_pipes(t_var *vars, t_env **env, t_env **export);
 void			ft_pwd(t_var *vars, int fd);
 void			ft_env(t_env *env, t_var *vars, int fd);
 void			ft_export(t_var *vars, t_env **env, t_env **export, int fd);
-void			ft_echo(char *str, int fd);
-void			ft_cd(char *str, t_env **env, int fd);
-void			ft_unset(char *str, t_env **env, t_env **export);
+void			ft_echo(char *str, int fd, t_var *vars);
+void			ft_cd(char *str, t_env **env, int fd, t_var *vars);
+void			ft_unset(char *str, t_env **env, t_env **export, t_var *vars);
 void			ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
@@ -93,6 +93,8 @@ void			builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
 char			*get_right_path(char *str, t_var *vars, t_env **env);
 char			*get_next_path(char *arr, char *str, t_var *vars);
 void			check_path_errors(char *argv, char **env, int *pipefd);
+char			**set_arr_right_path(t_env **env);
+void			end_right_path(t_var *vars, char *str, char **arr);
 /**========================================================================
  *!                                 PIPES
  *========================================================================**/
@@ -133,6 +135,7 @@ int				*init_and_set_fd(char *line);
 void			close_multiple_fd(int *fd);
 int				set_previous_fd(int *fd, int previous_fd);
 int				is_infile_valid(int fd, char *infile);
+char			*parse_redirections(char *line);
 /**========================================================================
  *!                      CHECK QUOTES WHEN NEW LINE
  *========================================================================**/
@@ -171,5 +174,5 @@ t_env			*assign_var_export(t_env **export, t_env **env, char *line);
 /**========================================================================
  *!                                 SIGNALS
  *========================================================================**/
-void	set_signal_action(void);
+void			set_signal_action(void);
 #endif

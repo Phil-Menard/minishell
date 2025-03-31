@@ -2,18 +2,8 @@
 
 void	free_child_process(t_var *vars, t_env **env, t_env **export)
 {
-	if (vars->line)
-	{
-		free(vars->line);
-		vars->line = NULL;
-	}
-	if (vars->cmd_split)
-		free_db_array(vars->cmd_split);
-	free(vars->prompt);
-	if (vars->arr)
-		free_db_array(vars->arr);
-	if(vars->pids)
-		free(vars->pids);
+	free(vars->pids);
+	free_vars(vars);
 	free_env(*export);
 	free_env(*env);
 }
@@ -41,10 +31,8 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 		vars->pids = NULL;
 		ft_execve(vars, env, export, fd);
 	}
+	free(vars->pids);
 	free(cmd);
-	close_multiple_fd(fd);
-	free_child_process(vars, env, export);
-	exit(vars->exit_statut);
 }
 
 //same as builtin_or_cmd but for pipes
@@ -59,16 +47,15 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	else if (ft_strncmp(vars->cmd_split[0], "env", vars->size_cmd) == 0)
 		ft_env(*env, vars, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "echo", vars->size_cmd) == 0)
-		ft_echo(vars->line, fd[1]);
+		ft_echo(vars->line, fd[1], vars);
 	else if (ft_strncmp(vars->cmd_split[0], "cd", vars->size_cmd) == 0)
-		ft_cd(vars->line, env, fd[1]);
+		ft_cd(vars->line, env, fd[1], vars);
 	else if (ft_strncmp(vars->cmd_split[0], "unset", vars->size_cmd) == 0)
-		ft_unset(vars->line, env, export);
+		ft_unset(vars->line, env, export, vars);
 	else if (ft_strncmp(vars->line, "export", vars->size_cmd) == 0)
 		ft_export(vars, env, export, fd[1]);
 	else if (ft_strncmp(vars->cmd_split[0], "exit", vars->size_cmd) == 0)
 	{
-		free_db_array(vars->cmd_split);
 		free(vars->pids);
 		ft_exit(fd, vars, env, export);
 	}

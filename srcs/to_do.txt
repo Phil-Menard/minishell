@@ -1,0 +1,10 @@
+- < "Makefile" gr"ep echo" | "rev"  --> verif si au moins 1 token est une commande
+- leaks tokenizer et invalid read of size pour list_to_string
+
+- <Makefile grep @ > > out
+throw this error :	bash: syntax error near unexpected token `>'
+- ls >
+throw this error :	bash: syntax error near unexpected token `newline'
+
+
+METTRE TOKEN COMMANDE DANS VARS->CMD (char **)

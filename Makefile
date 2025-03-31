@@ -19,6 +19,7 @@ SRC = minishell.c \
 	builtins/ft_unset.c \
 	execution/execve.c \
 	execution/exec_cmds.c \
+	execution/exec_cmds_utils.c \
 	execution/pipex.c \
 	execution/utils_pipex.c \
 	utils/utils.c \
@@ -30,6 +31,7 @@ SRC = minishell.c \
 	utils/utils_free.c \
 	redirections/prepare_redir.c \
 	redirections/redirections.c \
+	redirections/redirections_parsing.c \
 	env/init_env.c \
 	env/utils_env.c \
 	signals/signals.c \
