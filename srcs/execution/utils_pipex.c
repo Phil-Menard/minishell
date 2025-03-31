@@ -10,17 +10,15 @@ void	close_previous_fd(int previous_fd)
 void	wait_childs(t_var *vars, int arr_size)
 {
 	int	j;
-	int	exit_code;
 
 	j = 0;
 	while (j < arr_size)
 	{
 		waitpid(vars->pids[j], &vars->exit_statut, 0);
 		if (WIFEXITED(vars->exit_statut))
-			exit_code = WEXITSTATUS(vars->exit_statut);
+			vars->exit_statut = WEXITSTATUS(vars->exit_statut);
 		j++;
 	}
-	vars->exit_statut = exit_code;
 }
 
 //regroups dups2 in pipex

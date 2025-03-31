@@ -29,6 +29,8 @@ int	count_angle_brackets(char *line)
 	return (count);
 }
 
+//add space to redirections when they are right next to filename
+//ex : <Makefile becomes < Makefile
 char	*fill_redir_line(char *line, char *res, int i, int j)
 {
 	while (line[i])
