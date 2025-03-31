@@ -13,6 +13,3 @@ echo "$?"
 BUT
 echo "$?"
 127 || works well
-
-fonctionne pas :
-env | grep $PATH

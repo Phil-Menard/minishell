@@ -67,6 +67,9 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 	// if (check_tokens(tokens) == 0)
 	// 	printf("error\n");
 	vars->line = list_to_string(tokens);
+	// vars->cmd = ft_calloc(2, sizeof(char *));
+	// vars->cmd[0] = ft_strdup("grep echo");
+	// vars->cmd[1] = NULL;
 	if (vars->line)
 		check_pipes(vars, env, export);
 	// create tree
