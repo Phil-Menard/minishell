@@ -24,21 +24,21 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	vars->line = ft_strdup(temp);
 	free(temp);
 	vars->arr = prepare_line(vars->line);
-	if (!vars->arr[1])
+	fd = init_and_set_fd(vars->line, vars, env);
+	if (!vars->arr[1] && fd[0] > -1)
 	{
-		fd = init_and_set_fd(vars->line, vars, env);
-		if (fd[0] > -1)
-			builtin_or_cmd(vars, fd, env, export);
-		else
-			close_multiple_fd(fd);
+		builtin_or_cmd(vars, fd, env, export);
 	}
-	else
+	else if (fd[0] != -1)
 	{
+		close_multiple_fd(fd);
 		free(vars->line);
 		vars->line = NULL;
 		arr_size = double_arr_len(vars->arr);
 		pipex(vars, env, export, arr_size);
 	}
+	else
+		close_multiple_fd(fd);
 	free_vars(vars);
 }
 
