@@ -32,7 +32,6 @@ SRC = minishell.c \
 	redirections/prepare_redir.c \
 	redirections/redirections.c \
 	redirections/redirections_parsing.c \
-	redirections/heredoc.c \
 	env/init_env.c \
 	env/utils_env.c \
 	signals/signals.c \

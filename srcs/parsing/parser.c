@@ -46,14 +46,14 @@ static void	free_tokens(t_token **tokens, char *temp, char *str, char **split)
 	free_db_array(split);
 }
 
-static void	printlist(t_token *tokens)
+/* static void	printlist(t_token *tokens)
 {
 	while (tokens)
 	{
 		printf("%s, ", tokens->buf);
 		tokens = tokens->next;
 	}
-}
+} */
 
 // ajoute espace, retire redir, split au | et tokenise
 // Put in vars->cmd the first node cmd
@@ -82,6 +82,7 @@ static void	setcmd(t_var *vars, char *line, t_env *env)
 		tokens[i] = tokenizer(split[i], env, 0);
 		vars->cmd[i] = ft_strdup(tokens[i]->buf);
 	}
+	free_tokens(tokens, tmp, str, split);
 }
 
 static char	*list_to_string(t_token *tokens)
@@ -119,7 +120,9 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 		return ;
 	if (check_pair(vars->line) == 0)
 		quit("Unclosed quotes\n", 2, vars);
-	tokens = tokenizer(vars->line, *env, 0); // lexing
+	if (ft_strfind(vars->line, "<<") == 1)
+		heredoc(vars->line);
+	tokens = tokenizer(vars->line, *env, 0);
 	setcmd(vars, vars->line, *env);
 	free(vars->line);
 	vars->line = NULL;

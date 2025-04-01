@@ -13,6 +13,8 @@
 # include <limits.h>
 # include "../libft/libft.h"
 
+# define HEREDOC	tomatePastequeCitronMiel
+
 typedef struct s_env
 {
 	char			*var;
