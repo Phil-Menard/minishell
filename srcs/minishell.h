@@ -32,7 +32,6 @@ typedef struct s_var
 	char	*prompt;
 	char	*path;
 	int		i;
-	int		size_cmd;
 	int		exit_statut;
 }				t_var;
 
@@ -114,6 +113,7 @@ void		end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd);
  *!                               UTILS
  *========================================================================**/
 char		*ft_join_mid(char *s1, char slash, char *s2);
+int			ft_cmpstr(char *cmd, char *builtin);
 void		free_db_array(char **arr);
 char		**fill_arg(char *path, char *argv);
 char		*ft_straddstr(char *s1, char *s2);

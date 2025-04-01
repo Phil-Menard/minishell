@@ -18,3 +18,8 @@ mettre redirection en 2 pos si en 1 pour envoyer node 1 (cmd) dans vars->cmd.
 
 
 parsing : mettre en espace entre chevrons
+gerer les tabs (ne segfault pas mains considere comme une cmd) :	
+
+LEAKS
+      pwd |      exit
+<Makefile grep @ | sort (and then exit)

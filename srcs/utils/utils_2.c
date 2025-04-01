@@ -69,3 +69,16 @@ void	quit(char *msg, int exit_status, t_var *vars)
 	vars->exit_statut = exit_status;
 	// exit(vars->exit_statut);
 }
+
+//compare 2 strings
+//0 if same
+//1 if different
+int	ft_cmpstr(char *cmd, char *builtin)
+{
+	if (ft_strlen(cmd) == ft_strlen(builtin))
+	{
+		if (ft_strncmp(cmd, builtin, ft_strlen(cmd)) == 0)
+			return (0);
+	}
+	return (1);
+}

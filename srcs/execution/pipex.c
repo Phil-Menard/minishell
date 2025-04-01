@@ -15,7 +15,6 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 
 	cmd = str_without_redir(vars->line);
 	vars->path = NULL;
-	printf("cmd : %s\n", vars->cmd[vars->i]);
 	vars->path = get_right_path(vars->cmd[vars->i], vars, env);
 	if (vars->path != NULL)
 	{
@@ -42,20 +41,19 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	vars->exit_statut = 0;
 	vars->line = ft_strdup(vars->arr[vars->i]);
 	vars->cmd_split = ft_split(vars->line, " ");
-	vars->size_cmd = ft_strlen(vars->cmd_split[0]);
-	if (ft_strncmp(vars->cmd_split[0], "pwd", vars->size_cmd) == 0)
+	if (ft_cmpstr(vars->cmd_split[0], "pwd") == 0)
 		ft_pwd(vars, fd[1]);
-	else if (ft_strncmp(vars->cmd_split[0], "env", vars->size_cmd) == 0)
+	else if (ft_cmpstr(vars->cmd_split[0], "env") == 0)
 		ft_env(*env, vars, fd[1]);
-	else if (ft_strncmp(vars->cmd_split[0], "echo", vars->size_cmd) == 0)
+	else if (ft_cmpstr(vars->cmd_split[0], "echo") == 0)
 		ft_echo(vars->line, fd[1], vars);
-	else if (ft_strncmp(vars->cmd_split[0], "cd", vars->size_cmd) == 0)
+	else if (ft_cmpstr(vars->cmd_split[0], "cd") == 0)
 		ft_cd(vars->line, env, fd[1], vars);
-	else if (ft_strncmp(vars->cmd_split[0], "unset", vars->size_cmd) == 0)
+	else if (ft_cmpstr(vars->cmd_split[0], "unset") == 0)
 		ft_unset(vars->line, env, export, vars);
-	else if (ft_strncmp(vars->line, "export", vars->size_cmd) == 0)
+	else if (ft_cmpstr(vars->cmd_split[0], "export") == 0)
 		ft_export(vars, env, export, fd[1]);
-	else if (ft_strncmp(vars->cmd_split[0], "exit", vars->size_cmd) == 0)
+	else if (ft_cmpstr(vars->cmd_split[0], "exit") == 0)
 	{
 		free(vars->pids);
 		ft_exit(fd, vars, env, export);

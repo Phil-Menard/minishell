@@ -43,7 +43,6 @@ void	init_vars(t_var *vars)
 	nullify_arg_vars(vars);
 	vars->exit_statut = 0;
 	vars->i = 0;
-	vars->size_cmd = 0;
 }
 
 void	free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd)
