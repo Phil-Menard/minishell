@@ -146,7 +146,7 @@ char		*get_vars(char *line);
 int			is_redirected(char *str);
 void		prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp);
 char		*str_without_redir(char *str);
-char		*get_infile(char *str);
+char		**get_infile(char *str);
 char		**get_outfile(char *str);
 void		exec_redir(t_var *vars, int *fd, t_env **env, t_env **export);
 /**========================================================================
