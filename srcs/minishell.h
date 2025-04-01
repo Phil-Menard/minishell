@@ -13,7 +13,7 @@
 # include <limits.h>
 # include "../libft/libft.h"
 
-# define HEREDOC	tomatePastequeCitronMiel
+# define HEREDOC	"tomatePastequeCitronMiel"
 
 typedef struct s_env
 {
@@ -67,6 +67,8 @@ t_token		*get_last(t_token *node);
 t_token		get_token(char *str);
 size_t		get_pos(char *str, size_t start, char c);
 int			check_pair(char *line);
+void		heredoc(char *str);
+char		*trunc_heredoc(char *line);
 /**========================================================================
  *!                                  TREE
  *========================================================================**/

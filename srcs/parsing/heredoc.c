@@ -26,36 +26,63 @@ static char	**getdel(char *line)
 	return (split);
 }
 
-void	heredoc(char *line)
+static void	add(char *res, char *line)
 {
-	res = NULL
-	del = \n1\n2\n3\n
-	> cat << 1 << 2 << 3
-	>pipi
-	>caca
-	>1
-	>2
-	>1
-	>3
-	del = straddstr(split) = "\n1\n2\n3\n4\n5\n7\n";
-	while (ft_strfind(res, del) == 0)
-	{
-		readline();
-		res = straddstr(res, readline);
-	}
-	cut(res, del)
+	res = ft_straddstr(res, line);
+	res = ft_straddchar(res, '\n');
 }
 
-/*
-res = NULL;
-while (split[i])
+void	heredoc(char *str)
 {
-	line = readline();
-	if (ft_strlen(line) == ft_strlen(split[i]))
+	char	*res;
+	char	**split;
+	char	*line;
+	int		fd;
+	int		i;
+
+	fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	i = 1;
+	res = NULL;
+	split = getdel(str);
+	while (split[i])
 	{
-		if (ft_strncmp(line, split[i], ft_strlen(line) == 0))
-			FOUND
+		line = readline(">");
+		if (ft_strlen(line) == ft_strlen(split[i]))
+		{
+			if (ft_strncmp(line, split[i], ft_strlen(line)) == 0)
+				i++;
+			else if (i > (double_arr_len(split) - 2))
+				add(res, line);
+		}
+		else if (i > (double_arr_len(split) - 2))
+			add(res, line);
+		free(line);
 	}
-	i++;
+	ft_putstr_fd(res, fd);
+	close(fd);
+	free(res); //tmp
+	free_db_array(split);
 }
-*/
+
+char	*trunc_heredoc(char *line)
+{
+	char	*res;
+	char	**split;
+	size_t	i;
+
+	i = 0;
+	res = NULL;
+	split = ft_split(line, " ");
+	if (!split)
+		return (NULL);
+	while (line[i])
+	{
+		if (split[i + 1] && split[i + 2] && ft_strfind(split[i + 1], "<<"))
+			i += 2;
+		res = ft_straddstr(res, split[i]);
+		i++;
+	}
+	free(line);
+	printf("res : %s\n", res);
+	return (res);
+}

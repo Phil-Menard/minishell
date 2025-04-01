@@ -15,3 +15,6 @@ echo "$?"
 127 || works well
 
 mettre redirection en 2 pos si en 1 pour envoyer node 1 (cmd) dans vars->cmd.
+
+
+parsing : mettre en espace entre chevrons

@@ -121,7 +121,10 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 	if (check_pair(vars->line) == 0)
 		quit("Unclosed quotes\n", 2, vars);
 	if (ft_strfind(vars->line, "<<") == 1)
+	{
 		heredoc(vars->line);
+		vars->line = trunc_heredoc(vars->line);
+	}
 	tokens = tokenizer(vars->line, *env, 0);
 	setcmd(vars, vars->line, *env);
 	free(vars->line);

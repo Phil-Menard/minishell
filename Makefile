@@ -38,6 +38,7 @@ SRC = minishell.c \
 	parsing/parser.c \
 	parsing/lexing.c \
 	parsing/lexing_utils.c \
+	parsing/heredoc.c \
 	# parsing/tree.c \
 
 # Ajout des préfixes de dossiers
