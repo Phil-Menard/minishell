@@ -84,13 +84,11 @@ static void	normal_mod(t_token *tokens, char *line, size_t *i, t_env *env)
 //* State machine
 //		* Normal : add char by char to token, split on spaces
 //		* Quotes : take all btw quotes and add it to token
-t_token	*tokenizer(char *line, t_env *env)
+t_token	*tokenizer(char *line, t_env *env, size_t i)
 {
 	t_token	*tokens;
-	size_t			i;
 	size_t			quote_count;
 
-	i = 0;
 	quote_count = 0;
 	tokens = new_tkb(0, NULL);
 	while (line[i] && i < ft_strlen(line))

@@ -59,7 +59,7 @@ typedef struct s_token
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-t_token		*tokenizer(char *line, t_env *env);
+t_token		*tokenizer(char *line, t_env *env, size_t i);
 t_token		*new_tkb(size_t len, void *buf);
 t_token		*get_last(t_token *node);
 t_token		get_token(char *str);

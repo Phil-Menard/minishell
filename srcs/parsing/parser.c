@@ -26,21 +26,27 @@
 // 	return (0);
 // }
 
-void	free_tokens(t_token *tokens)
+static void	free_tokens(t_token **tokens, char *temp, char *str, char **split)
 {
 	t_token	*tmp;
+	size_t	i;
 
-	while (tokens)
+	i = -1;
+	while (tokens[++i])
 	{
-		tmp = tokens->next;
-		free(tokens->buf);
-		tokens->buf = NULL;
-		free(tokens);
-		tokens = tmp;
+		tmp = tokens[i]->next;
+		free(tokens[i]->buf);
+		tokens[i]->buf = NULL;
+		free(tokens[i]);
+		tokens[i] = tmp;
 	}
+	free(tokens);
+	free(str);
+	free(temp);
+	free_db_array(split);
 }
 
-void	printlist(t_token *tokens)
+static void	printlist(t_token *tokens)
 {
 	while (tokens)
 	{
@@ -70,20 +76,12 @@ static void	setcmd(t_var *vars, char *line, t_env *env)
 	vars->cmd = ft_calloc(sizeof(char *), double_arr_len(split) + 1);
 	if (!vars->cmd)
 		return ;
-	i = 0;
-	while (split[i])
+	i = -1;
+	while (split[++i])
 	{
-		tokens[i] = tokenizer(split[i], env);
+		tokens[i] = tokenizer(split[i], env, 0);
 		vars->cmd[i] = ft_strdup(tokens[i]->buf);
-		i++;
 	}
-	free(tmp);
-	free(str);
-	free_db_array(split);
-	i = 0;
-	while (tokens[i])
-		free_tokens(tokens[i++]);
-	free(tokens);
 }
 
 static char	*list_to_string(t_token *tokens)
@@ -121,7 +119,7 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 		return ;
 	if (check_pair(vars->line) == 0)
 		quit("Unclosed quotes\n", 2, vars);
-	tokens = tokenizer(vars->line, *env); // lexing
+	tokens = tokenizer(vars->line, *env, 0); // lexing
 	setcmd(vars, vars->line, *env);
 	free(vars->line);
 	vars->line = NULL;
