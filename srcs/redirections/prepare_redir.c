@@ -29,30 +29,29 @@ char	*str_without_redir(char *str)
 }
 
 //get infile name
-char	*get_infile(char *str)
+char	**get_infile(char *str)
 {
 	char	**arr;
-	char	*res;
+	char	**res;
 	int		i;
+	int		j;
 
 	arr = ft_split(str, " ");
 	i = 0;
-	res = NULL;
+	j = 0;
+	res = malloc((find_occurences(str, '<') + 1) * sizeof(char *));
 	while (arr[i])
 	{
-		if (find_occurences(arr[i], '<') == 1)
+		if (find_occurences(arr[i], '<') > 0)
 		{
 			i++;
-			if (res)
-			{
-				free(res);
-				res = NULL;
-			}
-			res = ft_strdup(arr[i]);
+			res[j] = ft_strdup(arr[i]);
+			j++;
 		}
 		i++;
 	}
 	free_db_array(arr);
+	res[j] = NULL;
 	return (res);
 }
 

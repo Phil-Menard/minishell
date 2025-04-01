@@ -8,53 +8,45 @@ int	set_fd_out(int fd, char **outfile, int redir)
 
 	i = -1;
 	size = double_arr_len(outfile);
-	if (size == 1)
+	while (outfile[++i])
 	{
 		if (redir < 3)
-			fd = open(outfile[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			fd = open(outfile[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
-			fd = open(outfile[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
-	}
-	else
-	{
-		while (outfile[++i])
-		{
-			if (redir < 3)
-				fd = open(outfile[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else
-				fd = open(outfile[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (i < size - 1)
-				close(fd);
-		}
+			fd = open(outfile[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (i < size - 1)
+			close(fd);
 	}
 	return (fd);
 }
 
-// int	*set_heredoc_fd(int *fd, char *infile, char **outfile, int redir)
-// {
-// 	if (redir == 5)
-// 	{
+int	set_fd_in(int fd, char **infile)
+{
+	int	i;
+	int	size;
 
-// 	}
-// 	else if (redir == 6)
-// 	{
+	i = -1;
+	size = double_arr_len(infile);
+	while (infile[++i])
+	{
+		fd = open(infile[i], O_RDONLY);
+		if (fd < 0)
+		{
+			perror(infile[i]);
+			return (-1);
+		}
+		if (i < size - 1)
+			close(fd);
+	}
+	return (fd);
+}
 
-// 	}
-// 	else if (redir == 7)
-// 	{
-
-// 	}
-// 	return (fd);
-// }
-
-int	*find_files(int *fd, char *infile, char **outfile, int redir)
+int	*find_files(int *fd, char **infile, char **outfile, int redir)
 {
 	if (redir == 1 || redir == 0)
 	{
-		fd[0] = open(infile, O_RDONLY);
-		if (fd[0] == -1)
-			perror(infile);
-		else if (redir == 0)
+		fd[0] = set_fd_in(fd[0], infile);
+		if (fd[0] != -1 && redir == 0)
 			fd[1] = set_fd_out(fd[1], outfile, redir);
 	}
 	else if (redir == 2)
@@ -63,22 +55,19 @@ int	*find_files(int *fd, char *infile, char **outfile, int redir)
 		fd[1] = set_fd_out(fd[1], outfile, redir);
 	else if (redir == 4)
 	{
-		fd[0] = open(infile, O_RDONLY);
-		if (fd[0] == -1)
-			perror(infile);
-		else
+		fd[0] = set_fd_in(fd[0], infile);
+		if (fd[0] != -1)
 			fd[1] = set_fd_out(fd[1], outfile, redir);
 	}
-	// else
-	// 	fd = set_heredoc_fd(fd, infile, outfile, redirection);
 	return (fd);
 }
 
-//fd[0] : input | fd[1] : output
+//fd[0] : input
+//fd[1] : output
 int	*set_fd(char *line, int *fd, t_var *vars, t_env **env)
 {
 	char	**outfile;
-	char	*infile;
+	char	**infile;
 	int		redirection;
 
 	infile = get_infile(line);
@@ -90,6 +79,5 @@ int	*set_fd(char *line, int *fd, t_var *vars, t_env **env)
 		vars->exit_statut = 1;
 		update_exit_env(*env, vars);
 	}
-	
-	return (free(infile), free_db_array(outfile), fd);
+	return (free_db_array(infile), free_db_array(outfile), fd);
 }
