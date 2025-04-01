@@ -41,23 +41,6 @@ int	set_fd_in(int fd, char **infile)
 	return (fd);
 }
 
-// int	*set_heredoc_fd(int *fd, char *infile, char **outfile, int redir)
-// {
-// 	if (redir == 5)
-// 	{
-
-// 	}
-// 	else if (redir == 6)
-// 	{
-
-// 	}
-// 	else if (redir == 7)
-// 	{
-
-// 	}
-// 	return (fd);
-// }
-
 int	*find_files(int *fd, char **infile, char **outfile, int redir)
 {
 	if (redir == 1 || redir == 0)
@@ -76,8 +59,6 @@ int	*find_files(int *fd, char **infile, char **outfile, int redir)
 		if (fd[0] != -1)
 			fd[1] = set_fd_out(fd[1], outfile, redir);
 	}
-	// else
-	// 	fd = set_heredoc_fd(fd, infile, outfile, redirection);
 	return (fd);
 }
 
@@ -98,6 +79,5 @@ int	*set_fd(char *line, int *fd, t_var *vars, t_env **env)
 		vars->exit_statut = 1;
 		update_exit_env(*env, vars);
 	}
-	
 	return (free_db_array(infile), free_db_array(outfile), fd);
 }
