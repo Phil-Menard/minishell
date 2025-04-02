@@ -23,3 +23,6 @@ gerer les tabs (ne segfault pas mains considere comme une cmd) :
 LEAKS
       pwd |      exit
 <Makefile grep @ | sort (and then exit)
+
+HEREDOC : apres avoir ecrit dans le fichier temp, retirer tous les heredocs
+et ajouter un nouveau '<' + infile pour le fichier temporaire
