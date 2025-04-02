@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	print_minishell(void)
+static void	print_minishell(void)
 {
 	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
 	printf("|  \\/  |_   _| \\ | |_   _/  ___| | | ||  ___| |    | |    \n");

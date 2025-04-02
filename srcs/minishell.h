@@ -15,6 +15,24 @@
 
 # define HEREDOC	"tomatePastequeCitronMiel"
 
+typedef struct s_cmd_line
+{
+	char	*cmd;
+	char	**args;
+	char	*infile;
+	char	*outfile;
+}			t_cmd_line;
+
+typedef struct s_leaf
+{
+	t_cmd_line		*cmd_line; // tableau de cmd_line[nb de pipe]
+	struct s_leaf	*left;
+	struct s_leaf	*right;
+}					t_leaf;
+
+
+
+
 typedef struct s_env
 {
 	char			*var;
@@ -35,46 +53,46 @@ typedef struct s_var
 	int		exit_statut;
 }				t_var;
 
-typedef enum e_type
-{
-	LEAF,
-	AND,
-	OR,
-}	t_type;
+// typedef struct s_ast
+// {
+// 	t_type				type;
+// 	char				*content;
+// 	struct s_ast		*left;
+// 	struct s_ast		*right;
+// }						t_ast;
 
-typedef struct s_ast
+typedef enum e_token_type
 {
-	t_type				type;
-	char				*content;
-	struct s_ast		*left;
-	struct s_ast		*right;
-}						t_ast;
+	TOKEN_WORD,
+	TOKEN_OPERATOR
+}	t_token_type;
 
 typedef struct s_token
 {
-	char					*buf;
-	int						len;
+	char			*content;
+	t_token_type	type;
 	struct s_token	*next;
-}							t_token;
+}					t_token;
 
-/**========================================================================
- *!                                  PARSING
- *========================================================================**/
-t_token		*tokenizer(char *line, t_env *env, size_t i);
-t_token		*new_tkb(size_t len, void *buf);
-t_token		*get_last(t_token *node);
-t_token		get_token(char *str);
-size_t		get_pos(char *str, size_t start, char c);
-int			check_pair(char *line);
-void		heredoc(char *str);
-char		*trunc_heredoc(char *line);
-/**========================================================================
- *!                                  TREE
- *========================================================================**/
-void		free_list(t_ast *tree);
-t_ast		*new_node(char *cmd, t_token type);
-void		add_node_end(t_ast *tree, const char *branch, t_ast *node);
-void		parsing(t_env **env, t_var *vars, t_env **export);
+t_token		*tokenizer(char *line);
+// /**========================================================================
+//  *!                                  PARSING
+//  *========================================================================**/
+// t_token		*tokenizer(char *line, t_env *env, size_t i);
+// t_token		*new_tkb(size_t len, void *buf);
+// t_token		*get_last(t_token *node);
+// t_token		get_token(char *str);
+// size_t		get_pos(char *str, size_t start, char c);
+// int			check_pair(char *line);
+// void		heredoc(char *str);
+// char		*trunc_heredoc(char *line);
+// /**========================================================================
+//  *!                                  TREE
+//  *========================================================================**/
+// void		free_list(t_ast *tree);
+// t_ast		*new_node(char *cmd, t_token type);
+// void		add_node_end(t_ast *tree, const char *branch, t_ast *node);
+// void		parsing(t_env **env, t_var *vars, t_env **export);
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/

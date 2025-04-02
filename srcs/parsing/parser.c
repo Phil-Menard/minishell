@@ -66,7 +66,11 @@ static void	setcmd(t_var *vars, char *line, t_env *env)
 	int		i;
 
 	tmp = parse_redirections(line);
+	if (!tmp)
+		return ;
 	str = str_without_redir(tmp);
+	if (!str)
+		return ;
 	split = ft_split(str, "|");
 	if (!split)
 		return ;
@@ -84,6 +88,8 @@ static void	setcmd(t_var *vars, char *line, t_env *env)
 	}
 	free_tokens(tokens, tmp, str, split);
 }
+
+
 
 static char	*list_to_string(t_token *tokens)
 {
@@ -120,6 +126,7 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 		return ;
 	if (check_pair(vars->line) == 0)
 		quit("Unclosed quotes\n", 2, vars);
+	if (ft_strfind)
 	if (ft_strfind(vars->line, "<<") == 1)
 	{
 		heredoc(vars->line);
@@ -127,6 +134,7 @@ void	parsing(t_env **env, t_var *vars, t_env **export)
 	}
 	tokens = tokenizer(vars->line, *env, 0);
 	setcmd(vars, vars->line, *env);
+	setarg(); //todo
 	free(vars->line);
 	vars->line = NULL;
 	// if (check_tokens(tokens) == 0)
