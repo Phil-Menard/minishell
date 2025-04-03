@@ -25,13 +25,10 @@ typedef struct s_cmd_line
 
 typedef struct s_leaf
 {
-	t_cmd_line		*cmd_line; // tableau de cmd_line[nb de pipe]
+	t_cmd_line		*cmd_line; // tableau de cmd_line[nb de pipe + 1]
 	struct s_leaf	*left;
 	struct s_leaf	*right;
 }					t_leaf;
-
-
-
 
 typedef struct s_env
 {
@@ -41,16 +38,17 @@ typedef struct s_env
 
 typedef struct s_var
 {
-	pid_t	*pids;
-	char	**arr;
-	char	**cmd_split;
-	char	**arg;
-	char	**cmd;
-	char	*line;
-	char	*prompt;
-	char	*path;
-	int		i;
-	int		exit_statut;
+	pid_t		*pids;
+	t_cmd_line	*cmd_line;
+	char		**arr;
+	char		**cmd_split;
+	char		**arg;
+	char		**cmd;
+	char		*line;
+	char		*prompt;
+	char		*path;
+	int			i;
+	int			exit_statut;
 }				t_var;
 
 // typedef struct s_ast
@@ -64,6 +62,7 @@ typedef struct s_var
 typedef enum e_token_type
 {
 	TOKEN_WORD,
+	TOKEN_PIPE,
 	TOKEN_OPERATOR
 }	t_token_type;
 
@@ -74,6 +73,9 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+t_cmd_line	*set_cmd_line(t_token *tokens);
+size_t		count_in_tokens(t_token *tokens, const char *to_find);
+void		free_tokens(t_token **tokens);
 t_token		*tokenizer(char *line);
 // /**========================================================================
 //  *!                                  PARSING

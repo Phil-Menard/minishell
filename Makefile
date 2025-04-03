@@ -35,10 +35,13 @@ SRC = minishell.c \
 	env/init_env.c \
 	env/utils_env.c \
 	signals/signals.c \
-	parsing/parser.c \
-	parsing/lexing.c \
-	parsing/lexing_utils.c \
-	parsing/heredoc.c \
+	parsing2/tokenizer.c \
+	parsing2/parser.c \
+	parsing2/set_cmd_line.c \
+	# parsing/parser.c \
+	# parsing/lexing.c \
+	# parsing/lexing_utils.c \
+	# parsing/heredoc.c \
 	# parsing/tree.c \
 
 # Ajout des préfixes de dossiers
