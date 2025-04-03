@@ -19,8 +19,8 @@ typedef struct s_cmd_line
 {
 	char	*cmd;
 	char	**args;
-	char	*infile;
-	char	*outfile;
+	char	**infile;
+	char	**outfile;
 }			t_cmd_line;
 
 typedef struct s_leaf

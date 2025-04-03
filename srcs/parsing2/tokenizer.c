@@ -52,6 +52,26 @@ static char	*ft_strdup(const char *s)
 	return (dst);
 }
 
+char	*ft_strndup(const char *s, size_t start, size_t len)
+{
+	char	*dst;
+	size_t	i;
+
+	if (!s || start >= ft_strlen(s))
+		return (NULL);
+	dst = malloc((len + 1) * sizeof(char));
+	if (!dst)
+		return (NULL);
+	i = 0;
+	while (i < len && s[start + i])
+	{
+		dst[i] = s[start + i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
 //add a char at the end of s1 (kind of realloc)
 static char	*ft_straddchar(char *str, char c)
 {
@@ -116,18 +136,19 @@ static void	add_operator(t_token **tokens, char *line, int *i)
 		(*i)++;
 	}
 	else
-		add_token(tokens, ft_strdup("|"), TOKEN_OPERATOR);
+		add_token(tokens, ft_strndup(line, *i, 1), TOKEN_OPERATOR);
 }
 
-static inline void	add(t_token *tokens, char *buffer)
+static inline void	add(t_token **tokens, char **buffer)
 {
-	if (buffer)
+	if (*buffer)
 	{
-		add_token(&tokens, ft_strdup(buffer), TOKEN_WORD);
-		free(buffer);
-		buffer = NULL;
+		add_token(tokens, ft_strdup(*buffer), TOKEN_WORD);
+		free(*buffer);
+		*buffer = NULL;
 	}
 }
+
 
 t_token	*tokenizer(char *line)
 {
@@ -143,10 +164,10 @@ t_token	*tokenizer(char *line)
 	while (line[++i])
 	{
 		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && !in_quote)
-			add(tokens, buffer);
-		else if (line[i] == '<' || line[i] == '>' || line[i] == '|')
+			add(&tokens, &buffer);
+		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && !in_quote)
 		{
-			add(tokens, buffer);
+			add(&tokens, &buffer);
 			add_operator(&tokens, line, &i);
 		}
 		else if (line[i] == '\"' || line[i] == '\'')
@@ -154,24 +175,17 @@ t_token	*tokenizer(char *line)
 		else
 			buffer = ft_straddchar(buffer, line[i]);
 	}
-	add(tokens, buffer);
+	add(&tokens, &buffer);
 	return (tokens);
 }
 
 ////////////////////////////////////////////////////////////////! 
 
-static void	putstr(char *str)
-{
-	while (*str)
-		write(1, str++, 1);
-	write(1, "\n", 1);
-}
-
 static void	printlist(t_token *tokens)
 {
 	while (tokens)
 	{
-		putstr(tokens->content);
+		printf("%s\n", tokens->content);
 		tokens = tokens->next;
 	}
 }
@@ -179,24 +193,26 @@ static void	printlist(t_token *tokens)
 static void	free_tokens(t_token **tokens)
 {
 	t_token	*tmp;
-	size_t	i;
 
-	i = -1;
-	while (tokens[++i])
+	while (*tokens)
 	{
-		tmp = tokens[i]->next;
-		free(tokens[i]->content);
-		tokens[i]->content = NULL;
-		free(tokens[i]);
-		tokens[i] = tmp;
+		tmp = (*tokens)->next;
+		free((*tokens)->content);
+		(*tokens)->content = NULL;
+		free(*tokens);
+		*tokens = tmp;
 	}
 }
 
 int main(int ac, char **av)
 {
 	if (ac != 2)
-		return (putstr("error nb arg\n"), 1);
-	t_token	*tokens = tokenizer(av[1]);
+		return (printf("nb arg\n"), 1);
+	t_token	*tokens;
+	
+	tokens = tokenizer(av[1]);
+	if (!tokens)
+		return (printf("error\n"), 1);
 	printlist(tokens);
 	free_tokens(&tokens);
 	return (0);
