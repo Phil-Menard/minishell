@@ -25,6 +25,7 @@ void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
 {
 	char	**arr_env;
 
+	unblock_sigquit = 1;
 	arr_env = lst_to_arr(env);
 	if (vars->arg == NULL || execve(vars->path, vars->arg, arr_env) == -1)
 	{

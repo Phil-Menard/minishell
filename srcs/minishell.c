@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+volatile int unblock_sigquit = 0;
+
 void	print_minishell(void)
 {
 	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
@@ -39,7 +41,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	}
 	else
 		close_multiple_fd(fd);
-	free_vars(vars);
 }
 
 char	*set_prompt_arg(t_env **env)
@@ -82,12 +83,11 @@ int	main(int argc, char **argv, char **envp)
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
 		if (vars.line == NULL)
-			handle_ctr_d(&env, &export, &vars);
+			handle_ctrl_d(&env, &export, &vars);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
 			parsing(&env, &vars, &export);
-		if (!vars.line)
-			free(vars.prompt);
+		free_vars(&vars);
 	}
 	free_env(env);
 	free_env(export);

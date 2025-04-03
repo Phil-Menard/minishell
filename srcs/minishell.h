@@ -15,6 +15,8 @@
 
 # define HEREDOC	"tomatePastequeCitronMiel"
 
+extern volatile int unblock_sigquit;
+
 typedef struct s_env
 {
 	char			*var;
@@ -56,6 +58,7 @@ typedef struct s_token
 	int						len;
 	struct s_token	*next;
 }							t_token;
+
 
 /**========================================================================
  *!                                  PARSING
@@ -179,6 +182,6 @@ t_env		*assign_var_export(t_env **export, t_env **env, char *line, t_var *vars);
  *!                                 SIGNALS
  *========================================================================**/
 void		set_signal_action(void);
-void	handle_ctr_d(t_env **env, t_env **export, t_var *vars);
+void		handle_ctrl_d(t_env **env, t_env **export, t_var *vars);
 
 #endif
