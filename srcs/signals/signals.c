@@ -21,3 +21,13 @@ void	set_signal_action(void)
 	sigaction(SIGINT, &act, NULL);
 	sigaction(SIGPIPE, &act, NULL);
 }
+
+void	handle_ctr_d(t_env **env, t_env **export, t_var *vars)
+{
+	free_env(*env);
+	free_env(*export);
+	free_vars(vars);
+	rl_clear_history();
+	ft_putstr_fd("exit\n", 1);
+	exit(0);
+}

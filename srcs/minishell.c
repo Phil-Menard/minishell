@@ -81,6 +81,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
+		if (vars.line == NULL)
+			handle_ctr_d(&env, &export, &vars);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
 			parsing(&env, &vars, &export);
