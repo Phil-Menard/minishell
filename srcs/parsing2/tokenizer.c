@@ -44,20 +44,9 @@ static void	add_operator(t_token **tokens, char *line, int *i)
 
 static inline void	add(t_token **tokens, char **buffer)
 {
-	t_token	*last;
-
-// rajouter une verif 
-	last = *tokens;
-	while (last->next)
-		last = last->next;
 	if (*buffer)
 	{
-		if (last->type == TOKEN_INFILE)
-			add_token(tokens, ft_strdup(*buffer), TOKEN_INFILE);
-		else if (last->type == TOKEN_OUTFILE)
-			add_token(tokens, ft_strdup(*buffer), TOKEN_OUTFILE);
-		else
-			add_token(tokens, ft_strdup(*buffer), TOKEN_WORD);
+		add_token(tokens, ft_strdup(*buffer), TOKEN_WORD);
 		free(*buffer);
 		*buffer = NULL;
 	}

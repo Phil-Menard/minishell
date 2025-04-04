@@ -36,12 +36,7 @@ static char	**set_redir(t_token *tokens, size_t i, t_token_type type)
 	while (tokens)
 	{
 		if (x == i && tokens->type == type)
-		{
-			printf("%s\n", tokens->content);
-			if (tokens->type == TOKEN_OUTFILE || tokens->type == TOKEN_INFILE)
-				printf("type redir\n");
 			redir[j++] = ft_straddstr(tokens->content, tokens->next->content);
-		}
 		if (tokens->type == TOKEN_PIPE)
 			x++;
 		tokens = tokens->next;

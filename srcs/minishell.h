@@ -75,6 +75,7 @@ typedef enum e_token_type
 	TOKEN_PIPE,
 	TOKEN_INFILE,
 	TOKEN_OUTFILE,
+	TOKEN_REDIR_FILE,
 	// TOKEN_AND,
 	// TOKEN_OR,
 }	t_token_type;
