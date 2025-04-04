@@ -44,6 +44,8 @@ static char	**set_redir(t_token *tokens, size_t i)
 			x++;
 		tokens = tokens->next;
 	}
+	redir[j] = NULL;
+	return (redir);
 }
 
 static char	*set_cmd(t_token *tokens, size_t i)

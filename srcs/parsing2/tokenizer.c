@@ -50,29 +50,42 @@ static inline void	add(t_token **tokens, char **buffer)
 	}
 }
 
+static void	quote_handler(char c, t_mod *mod, char **buffer)
+{
+	if (*mod == MOD_NORMAL && c == '\'')
+		*mod = MOD_SINGLE;
+	else if (*mod == MOD_NORMAL && c == '\"')
+		*mod = MOD_DOUBLE;
+	else if (*mod == MOD_SINGLE && c == '\'')
+		*mod = MOD_NORMAL;
+	else if (*mod == MOD_DOUBLE && c == '\"')
+		*mod = MOD_NORMAL;
+	else
+		*buffer = ft_straddchar(*buffer, c);
+}
 
 t_token	*tokenizer(char *line)
 {
 	t_token	*tokens;
 	int		i;
-	int		in_quote;
+	t_mod	mod;
 	char	*buffer;
 
 	tokens = NULL;
 	i = -1;
-	in_quote = 0;
+	mod = MOD_NORMAL;
 	buffer = NULL;
 	while (line[++i])
 	{
-		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && !in_quote)
+		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && mod == MOD_NORMAL)
 			add(&tokens, &buffer);
-		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && !in_quote)
+		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && mod == MOD_NORMAL)
 		{
 			add(&tokens, &buffer);
 			add_operator(&tokens, line, &i);
 		}
 		else if (line[i] == '\"' || line[i] == '\'')
-			in_quote = !in_quote;
+			quote_handler(line[i], &mod, &buffer);
 		else
 			buffer = ft_straddchar(buffer, line[i]);
 	}

@@ -62,6 +62,13 @@ typedef struct s_var
 // 	struct s_ast		*right;
 // }						t_ast;
 
+typedef enum e_mod
+{
+	MOD_NORMAL,
+	MOD_SINGLE,
+	MOD_DOUBLE
+}	t_mod;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -76,7 +83,7 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-t_cmd_line	*set_cmd_line(t_token *tokens);
+t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 t_token		*tokenizer(char *line);
