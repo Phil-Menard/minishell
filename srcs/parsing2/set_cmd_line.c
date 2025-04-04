@@ -83,18 +83,17 @@ static char	**set_args(t_token *tokens, size_t i)
 	return (args);
 }
 
-t_cmd_line	*set_cmd_line(t_token *tokens)
+t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 {
 	size_t	i;
-	size_t	nb_cmd_line;
 	t_cmd_line	*cmd_line;
 
-	nb_cmd_line = count_in_tokens(tokens, "|") + 1;
-	cmd_line = malloc(sizeof(t_cmd_line) * (nb_cmd_line + 1));
+	vars->nb_cmd_line = count_in_tokens(tokens, "|") + 1;
+	cmd_line = malloc(sizeof(t_cmd_line) * (vars->nb_cmd_line + 1));
 	if (!cmd_line)
 		return (NULL);
 	i = 0;
-	while (i < nb_cmd_line)
+	while (i < vars->nb_cmd_line)
 	{
 		cmd_line[i].cmd = set_cmd(tokens, i);
 		cmd_line[i].args = set_args(tokens, i);
