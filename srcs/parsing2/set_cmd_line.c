@@ -1,21 +1,5 @@
 #include "../minishell.h"
 
-static char	*set_cmd(t_token *tokens, size_t i)
-{
-	size_t	x;
-
-	x = 0;
-	while (tokens)
-	{
-		if (x == i && tokens->type == TOKEN_WORD)
-			return (ft_strdup(tokens->content));
-		if (ft_cmpstr(tokens->content, "|") == 0)
-			x++;
-		tokens = tokens->next;
-	}
-	return (NULL);
-}
-
 static size_t	count_words_token(t_token *tokens, size_t i)
 {
 	size_t	count;
@@ -36,6 +20,22 @@ static size_t	count_words_token(t_token *tokens, size_t i)
 		tokens = tokens->next;
 	}
 	return (count);
+}
+
+static char	*set_cmd(t_token *tokens, size_t i)
+{
+	size_t	x;
+
+	x = 0;
+	while (tokens)
+	{
+		if (x == i && tokens->type == TOKEN_WORD)
+			return (ft_strdup(tokens->content));
+		if (ft_cmpstr(tokens->content, "|") == 0)
+			x++;
+		tokens = tokens->next;
+	}
+	return (NULL);
 }
 
 static char	**set_args(t_token *tokens, size_t i)
@@ -81,8 +81,8 @@ t_cmd_line	*set_cmd_line(t_token *tokens)
 	{
 		cmd_line[i].cmd = set_cmd(tokens, i);
 		cmd_line[i].args = set_args(tokens, i);
-		cmd_line[i].infile = set_redir(tokens);
-		cmd_line[i].outfile = set_redir(tokens);
+		cmd_line[i].infile = NULL; // set_redir(tokens);
+		cmd_line[i].outfile = NULL; // set_redir(tokens);
 		i++;
 	}
 	return (cmd_line);
