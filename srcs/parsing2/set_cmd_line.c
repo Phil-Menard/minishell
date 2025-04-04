@@ -22,24 +22,26 @@ static size_t	count_words_tokens(t_token *tokens, size_t i)
 	return (count);
 }
 
-static char	**set_redir(t_token *tokens, size_t i)
+static char	**set_redir(t_token *tokens, size_t i, t_token_type type)
 {
 	size_t	j;
 	size_t	x;
-	size_t	nb_redir;
 	char	**redir;
 
-	nb_redir = count_in_tokens(tokens, "<") + count_in_tokens(tokens, ">");
-	nb_redir += count_in_tokens(tokens, "<<") + count_in_tokens(tokens, ">>");
-	redir = malloc(sizeof(char *) * (nb_redir + 1));
+	redir = malloc(sizeof(char *) * (count_tokens_type(tokens, type) + 1));
 	if (!redir)
 		return (NULL);
 	x = 0;
 	j = 0;
 	while (tokens)
 	{
-		if (x == i && tokens->type == TOKEN_OPERATOR)
-			redir[j++] = ft_straddstr(ft_strdup(tokens->content), tokens->next->content);
+		if (x == i && tokens->type == type)
+		{
+			printf("%s\n", tokens->content);
+			if (tokens->type == TOKEN_OUTFILE || tokens->type == TOKEN_INFILE)
+				printf("type redir\n");
+			redir[j++] = ft_straddstr(tokens->content, tokens->next->content);
+		}
 		if (tokens->type == TOKEN_PIPE)
 			x++;
 		tokens = tokens->next;
@@ -99,8 +101,8 @@ t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 	{
 		cmd_line[i].cmd = set_cmd(tokens, i);
 		cmd_line[i].args = set_args(tokens, i);
-		cmd_line[i].infile = set_redir(tokens, i);
-		cmd_line[i].outfile = set_redir(tokens, i);
+		cmd_line[i].infile = set_redir(tokens, i, TOKEN_INFILE);
+		cmd_line[i].outfile = set_redir(tokens, i, TOKEN_OUTFILE);
 		i++;
 	}
 	cmd_line[i].cmd = NULL;

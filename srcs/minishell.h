@@ -73,7 +73,10 @@ typedef enum e_token_type
 {
 	TOKEN_WORD,
 	TOKEN_PIPE,
-	TOKEN_OPERATOR
+	TOKEN_INFILE,
+	TOKEN_OUTFILE,
+	// TOKEN_AND,
+	// TOKEN_OR,
 }	t_token_type;
 
 typedef struct s_token
@@ -84,6 +87,7 @@ typedef struct s_token
 }					t_token;
 
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
+size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 t_token		*tokenizer(char *line);

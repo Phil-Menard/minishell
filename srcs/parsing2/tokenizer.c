@@ -26,25 +26,38 @@ static void	add_operator(t_token **tokens, char *line, int *i)
 {
 	if (line[*i] == '>' && line[*i + 1] == '>')
 	{
-		add_token(tokens, ft_strdup(">>"), TOKEN_OPERATOR);
+		add_token(tokens, ft_strdup(">>"), TOKEN_OUTFILE);
 		(*i)++;
 	}
 	if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		add_token(tokens, ft_strdup("<<"), TOKEN_OPERATOR);
+		add_token(tokens, ft_strdup("<<"), TOKEN_INFILE);
 		(*i)++;
 	}
 	else if (line[*i] == '|' && line[*i + 1] != '|')
 		add_token(tokens, ft_strdup("|"), TOKEN_PIPE);
-	else
-		add_token(tokens, ft_strndup(line, *i, 1), TOKEN_OPERATOR);
+	else if (line[*i] == '<')
+		add_token(tokens, ft_strdup("<"), TOKEN_INFILE);
+	else if (line[*i] == '>')
+		add_token(tokens, ft_strdup(">"), TOKEN_OUTFILE);
 }
 
 static inline void	add(t_token **tokens, char **buffer)
 {
+	t_token	*last;
+
+// rajouter une verif 
+	last = *tokens;
+	while (last->next)
+		last = last->next;
 	if (*buffer)
 	{
-		add_token(tokens, ft_strdup(*buffer), TOKEN_WORD);
+		if (last->type == TOKEN_INFILE)
+			add_token(tokens, ft_strdup(*buffer), TOKEN_INFILE);
+		else if (last->type == TOKEN_OUTFILE)
+			add_token(tokens, ft_strdup(*buffer), TOKEN_OUTFILE);
+		else
+			add_token(tokens, ft_strdup(*buffer), TOKEN_WORD);
 		free(*buffer);
 		*buffer = NULL;
 	}
@@ -52,6 +65,7 @@ static inline void	add(t_token **tokens, char **buffer)
 
 static void	quote_handler(char c, t_mod *mod, char **buffer)
 {
+	// printf("quote\n");
 	if (*mod == MOD_NORMAL && c == '\'')
 		*mod = MOD_SINGLE;
 	else if (*mod == MOD_NORMAL && c == '\"')
@@ -77,46 +91,44 @@ t_token	*tokenizer(char *line)
 	buffer = NULL;
 	while (line[++i])
 	{
+		// printf("line[%d] : %c\n", i, line[i]);
 		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && mod == MOD_NORMAL)
+		{
+			// printf("space\n");
 			add(&tokens, &buffer);
+		}
 		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && mod == MOD_NORMAL)
 		{
+			// printf("operator\n");
 			add(&tokens, &buffer);
 			add_operator(&tokens, line, &i);
 		}
 		else if (line[i] == '\"' || line[i] == '\'')
 			quote_handler(line[i], &mod, &buffer);
 		else
+		{
+			// printf("addchar\n");
 			buffer = ft_straddchar(buffer, line[i]);
+		}
 	}
+	// printlist(tokens);
 	add(&tokens, &buffer);
 	return (tokens);
 }
 
-void	free_tokens(t_token **tokens)
-{
-	t_token	*tmp;
-
-	while (*tokens)
-	{
-		tmp = (*tokens)->next;
-		free((*tokens)->content);
-		(*tokens)->content = NULL;
-		free(*tokens);
-		*tokens = tmp;
-	}
-}
-
 ////////////////////////////////////////////////////////////////! 
 
-/* static void	printlist(t_token *tokens)
+
+/*static void	printlist(t_token *tokens)
 {
+	if (!tokens)
+		printf("meeeeeeeeeeeeeerde\n");
 	while (tokens)
 	{
 		printf("%s\n", tokens->content);
 		tokens = tokens->next;
 	}
-} */
+}*/
 
 
 /* int main(int ac, char **av)
