@@ -21,8 +21,10 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 			ft_putstr_fd(str, 2);
 			ft_putstr_fd(": No such file or directory\n", 2);
 			vars->exit_statut = 127;
+			return (NULL);
 		}
-		return (str);
+		path = ft_strdup(str);
+		return (path);
 	}
 	path = ft_join_mid(arr, '/', str);
 	return (path);
@@ -35,12 +37,12 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 	char	*path;
 	int		i;
 
-	arr = set_arr_right_path(env);
+	arr = split_path_var(env);
 	i = 0;
 	while (arr && arr[i])
 	{
 		path = get_next_path(arr[i], str, vars);
-		if (access(path, X_OK) == 0)
+		if (path && access(path, X_OK) == 0)
 		{
 			free_db_array(arr);
 			return (path);

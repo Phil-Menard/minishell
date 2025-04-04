@@ -15,19 +15,17 @@ void	nullify_arg_vars(t_var *vars)
 //free all variables from t_var and set them to NULL
 void	free_vars(t_var *vars)
 {
-	int	i;
+	size_t	i;
 
 	if (vars->prompt)
 		free(vars->prompt);
 	i = 0;
-	if (vars->line != NULL)
+	while (i < vars->nb_cmd_line)
 	{
-		while (vars->cmd_line[i].cmd)
-		{
-			free_db_array(vars->cmd_line[i].args);
-			free(vars->cmd_line[i].cmd);
-			i++;
-		}
+		printf("freeing...\n");
+		free_db_array(vars->cmd_line[i].args);
+		free(vars->cmd_line[i].cmd);
+		i++;
 	}
 	free(vars->cmd_line);
 	if (vars->line)

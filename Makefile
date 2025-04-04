@@ -20,6 +20,8 @@ SRC = minishell.c \
 	execution/execve.c \
 	execution/exec_cmds.c \
 	execution/exec_cmds_utils.c \
+	execution/pipex.c \
+	execution/utils_pipex.c \
 	utils/utils.c \
 	utils/utils_2.c \
 	utils/utils_3.c \
@@ -36,8 +38,6 @@ SRC = minishell.c \
 	parsing2/tokenizer.c \
 	parsing2/parser.c \
 	parsing2/set_cmd_line.c \
-	# execution/pipex.c \
-	# execution/utils_pipex.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \
 	# parsing/lexing_utils.c \
