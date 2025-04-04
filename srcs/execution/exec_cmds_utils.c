@@ -1,7 +1,7 @@
 #include "../minishell.h"
 
 //set arr variable for get_right_path
-char	**set_arr_right_path(t_env **env)
+char	**split_path_var(t_env **env)
 {
 	char	**arr;
 	char	*temp;

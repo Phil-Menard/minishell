@@ -24,7 +24,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	// vars->line = ft_strdup(temp);
 	// free(temp);
 	fd = init_and_set_fd(vars->line, vars, env);
-	if (!vars->cmd_line[1].cmd && fd[0] > -1)
+	if (vars->nb_cmd_line == 1 && fd[0] > -1)
 	{
 		vars->i = 0;
 		builtin_or_cmd(vars, fd, env, export);
@@ -34,8 +34,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 		close_multiple_fd(fd);
 		free(vars->line);
 		vars->line = NULL;
-		arr_size = double_arr_len(vars->arr);
-		pipex(vars, env, export, arr_size);
+		pipex(vars, env, export);
 	}
 	else
 		close_multiple_fd(fd);
@@ -60,6 +59,16 @@ char	*set_prompt_arg(t_env **env)
 	return (prompt_arg);
 }
 
+void	init_minishell(t_env **env, t_env **export, t_var *vars, char **envp)
+{
+	fill_env(env, envp);
+	init_export_lst(env, export);
+	init_vars(vars);
+	update_exit_env(*env, vars);
+	print_minishell();
+	set_signal_action();
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env;
@@ -70,12 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	env = NULL;
 	export = NULL;
-	fill_env(&env, envp);
-	init_export_lst(&env, &export);
-	init_vars(&vars);
-	update_exit_env(env, &vars);
-	print_minishell();
-	set_signal_action();
+	init_minishell(&env, &export, &vars, envp);
 	while (1)
 	{
 		vars.prompt = set_prompt_arg(&env);
@@ -84,8 +88,12 @@ int	main(int argc, char **argv, char **envp)
 			handle_ctrl_d(&env, &export, &vars);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
+		{
 			parser(&env, &vars, &export);
-		free_vars(&vars);
+			free_vars(&vars);
+		}
+		else
+			free(vars.prompt);
 	}
 	free_env(env);
 	free_env(export);

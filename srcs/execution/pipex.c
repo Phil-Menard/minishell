@@ -15,14 +15,7 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 	vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 	if (vars->path != NULL)
 	{
-		vars->cmd_line.args = fill_arg(vars);
-		if (vars->cmd_line.args)
-		{
-			free(vars->line);
-			vars->line = NULL;
-			free(vars->prompt);
-			free_env(*export);
-		}
+		vars->cmd_line[vars->i].args = fill_arg(vars);
 		free(vars->pids);
 		vars->pids = NULL;
 		ft_execve(vars, env, export, fd);
@@ -33,8 +26,6 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
 	vars->exit_statut = 0;
-	vars->line = ft_strdup(vars->arr[vars->i]);
-	vars->cmd_split = ft_split(vars->line, " ");
 	if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "pwd") == 0)
 		ft_pwd(vars, fd[1]);
 	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "env") == 0)
@@ -68,16 +59,16 @@ void	pipe_and_fork(int *pipefd, int *pids)
 }
 
 //modified pipex that redirects input and output in correct file descriptor/pipe
-void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
+void	pipex(t_var *vars, t_env **env, t_env **export)
 {
 	int		pipefd[2];
 	int		*fd;
 	int		previous_fd;
 
-	vars->pids = malloc(sizeof(pid_t) * arr_size);
+	vars->pids = malloc(sizeof(pid_t) * vars->nb_cmd_line);
 	previous_fd = -1;
 	vars->i = -1;
-	while (vars->cmd_line[++vars->i])
+	while (++vars->i < vars->nb_cmd_line)
 	{
 		fd = init_and_set_fd(vars->cmd_line[vars->i].cmd, vars, env);
 		previous_fd = set_previous_fd(fd, previous_fd);
@@ -86,15 +77,15 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 		{
 			if (previous_fd != -1)
 				dup2(previous_fd, STDIN_FILENO);
-			outfile_dups(fd, pipefd, vars->i, arr_size);
+			outfile_dups(fd, pipefd, vars);
 			close_previous_fd(previous_fd);
 			builtin_or_cmd_pipes(vars, fd, env, export);
 			free_child_process(vars, env, export);
 			exit(vars->exit_statut);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
-		if (vars->cmd_line[vars->i + 1] && find_occurences(vars->cmd_line.cmd[vars->i + 1], '<') > 0)
+		if (vars->i + 1 < vars->nb_cmd_line && find_occurences(vars->cmd_line[vars->i + 1].cmd, '<') > 0)
 			close(pipefd[0]);
 	}
-	end_pipex(pipefd, vars, arr_size, previous_fd);
+	end_pipex(pipefd, vars, previous_fd);
 }

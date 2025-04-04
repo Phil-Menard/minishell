@@ -22,7 +22,7 @@ static size_t	count_words_tokens(t_token *tokens, size_t i)
 	return (count);
 }
 
-static char	**set_redir(t_token *tokens, size_t i)
+/* static char	**set_redir(t_token *tokens, size_t i)
 {
 	size_t	j;
 	size_t	x;
@@ -44,7 +44,8 @@ static char	**set_redir(t_token *tokens, size_t i)
 			x++;
 		tokens = tokens->next;
 	}
-}
+	return ()
+} */
 
 static char	*set_cmd(t_token *tokens, size_t i)
 {
@@ -97,14 +98,14 @@ t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 	{
 		cmd_line[i].cmd = set_cmd(tokens, i);
 		cmd_line[i].args = set_args(tokens, i);
-		cmd_line[i].infile = set_redir(tokens, i);
-		cmd_line[i].outfile = set_redir(tokens, i);
+		// cmd_line[i].infile = set_redir(tokens, i);
+		// cmd_line[i].outfile = set_redir(tokens, i);
 		i++;
 	}
 	cmd_line[i].cmd = NULL;
 	cmd_line[i].args = NULL;
-	cmd_line[i].infile = NULL;
-	cmd_line[i].outfile = NULL;
+	// cmd_line[i].infile = NULL;
+	// cmd_line[i].outfile = NULL;
 	return (cmd_line);
 }
 //ls | sort | rev

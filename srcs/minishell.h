@@ -43,14 +43,10 @@ typedef struct s_var
 	pid_t		*pids;
 	t_cmd_line	*cmd_line;
 	size_t		nb_cmd_line;
-	// char		**arr;
-	// char		**cmd_split;
-	// char		**arg;
-	// char		**cmd;
+	size_t		i;
 	char		*line;
 	char		*prompt;
 	char		*path;
-	int			i;
 	int			exit_statut;
 }				t_var;
 
@@ -76,7 +72,7 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-t_cmd_line	*set_cmd_line(t_token *tokens);
+t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 t_token		*tokenizer(char *line);
@@ -119,20 +115,20 @@ void		builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
 char		*get_right_path(char *str, t_var *vars, t_env **env);
 char		*get_next_path(char *arr, char *str, t_var *vars);
 void		check_path_errors(char *argv, char **env, int *pipefd);
-char		**set_arr_right_path(t_env **env);
+char		**split_path_var(t_env **env);
 void		end_right_path(t_var *vars, char *str, char **arr);
 /**========================================================================
  *!                                 PIPES
  *========================================================================**/
-void		pipex(t_var *vars, t_env **env, t_env **export, int arr_size);
+void		pipex(t_var *vars, t_env **env, t_env **export);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR PIPES
  *========================================================================**/
 void		close_previous_fd(int previous_fd);
-void		wait_childs(t_var *vars, int arr_size);
-void		outfile_dups(int *fd, int *pipefd, int i, int arr_size);
+void		wait_childs(t_var *vars);
+void		outfile_dups(int *fd, int *pipefd, t_var *vars);
 void		post_cmd(int *pipefd, int *previous_fd, int *fd);
-void		end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd);
+void		end_pipex(int *pipefd, t_var *vars, int prev_fd);
 /**========================================================================
  *!                               UTILS
  *========================================================================**/
