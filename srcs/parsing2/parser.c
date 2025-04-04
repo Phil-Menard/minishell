@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-size_t	count_in_tokens(t_token *tokens, const char *to_find)
+size_t	count_in_tokens(t_token *tokens, char *to_find)
 {
 	size_t	count;
 

@@ -16,29 +16,26 @@ static void	print_minishell(void)
 //check if vars contains a pipe or not, and call the corresponding function
 void	check_pipes(t_var *vars, t_env **env, t_env **export)
 {
-	char	*temp;
 	int		*fd;
-	int		arr_size;
 
 	fd = NULL;
-	temp = parse_redirections(vars->line);
-	free(vars->line);
-	vars->line = ft_strdup(temp);
-	free(temp);
-	vars->arr = prepare_line(vars->line);
+	// temp = parse_redirections(vars->line);
+	// free(vars->line);
+	// vars->line = ft_strdup(temp);
+	// free(temp);
 	fd = init_and_set_fd(vars->line, vars, env);
-	if (!vars->arr[1] && fd[0] > -1)
+	if (!vars->cmd_line[1].cmd && fd[0] > -1)
 	{
 		builtin_or_cmd(vars, fd, env, export);
 	}
-	else if (fd[0] != -1)
-	{
-		close_multiple_fd(fd);
-		free(vars->line);
-		vars->line = NULL;
-		arr_size = double_arr_len(vars->arr);
-		pipex(vars, env, export, arr_size);
-	}
+	// else if (fd[0] != -1)
+	// {
+	// 	close_multiple_fd(fd);
+	// 	free(vars->line);
+	// 	vars->line = NULL;
+	// 	arr_size = double_arr_len(vars->arr);
+	// 	pipex(vars, env, export, arr_size);
+	// }
 	else
 		close_multiple_fd(fd);
 }
@@ -86,7 +83,7 @@ int	main(int argc, char **argv, char **envp)
 			handle_ctrl_d(&env, &export, &vars);
 		add_history(vars.line);
 		if (ft_strlen(vars.line) > 0)
-			parsing(&env, &vars, &export);
+			parser(&env, &vars, &export);
 		free_vars(&vars);
 	}
 	free_env(env);

@@ -85,34 +85,30 @@ char	*set_path_dir(char *arr, t_env **env, int fd)
 	return (path);
 }
 
-void	ft_cd(char *str, t_env **env, int fd, t_var *vars)
+void	ft_cd(t_env **env, int fd, t_var *vars)
 {
-	char	**arr;
 	char	*path;
 
-	(void) vars;
 	path = NULL;
-	arr = ft_split(str, " ");
-	if (double_arr_len(arr) > 2 && fd == 1)
+	if (double_arr_len(vars->cmd_line[0].args) > 2 && fd == 1)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 1);
 		vars->exit_statut = 1;
 	}
 	else
-		path = set_path_dir(arr[1], env, fd);
+		path = set_path_dir(vars->cmd_line[0].args[1], env, fd);
 	if (path)
 	{
 		vars->exit_statut = 0;
 		if (chdir(path) == -1)
 		{
 			ft_putstr_fd("minishell: cd: ", fd);
-			ft_putstr_fd(arr[1], fd);
+			ft_putstr_fd(vars->cmd_line[0].args[1], fd);
 			ft_putstr_fd(": No such file or directory\n", fd);
 			vars->exit_statut = 1;
 		}
 		*env = modify_env(*env, "PWD", path);
-		if (!arr[1] || (arr[1] && ft_strncmp(arr[1], "~", 1) != 0))
+		if (!vars->cmd_line[0].args[1] || (vars->cmd_line[0].args[1] && ft_strncmp(vars->cmd_line[0].args[1], "~", 1) != 0))
 			free(path);
 	}
-	free_db_array(arr);
 }

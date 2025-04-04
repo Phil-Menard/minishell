@@ -84,16 +84,10 @@ char	**get_outfile(char *str)
 
 void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 {
-	char	*line;
-
-	line = str_without_redir(vars->line);
-	free(vars->line);
-	vars->line = ft_strdup(line);
-	free(line);
-	vars->path = get_right_path(vars->cmd[0], vars, env);
+	vars->path = get_right_path(vars->cmd_line->cmd, vars, env);
 	if (vars->path)
 	{
-		vars->arg = fill_arg(vars->path, vars->line);
+		vars->cmd_line->args = fill_arg(vars);
 		exec_redir(vars, fd, env, exp);
 	}
 }

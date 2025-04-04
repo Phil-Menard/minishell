@@ -42,10 +42,10 @@ typedef struct s_var
 {
 	pid_t		*pids;
 	t_cmd_line	*cmd_line;
-	char		**arr;
-	char		**cmd_split;
-	char		**arg;
-	char		**cmd;
+	// char		**arr;
+	// char		**cmd_split;
+	// char		**arg;
+	// char		**cmd;
 	char		*line;
 	char		*prompt;
 	char		*path;
@@ -76,9 +76,10 @@ typedef struct s_token
 }					t_token;
 
 t_cmd_line	*set_cmd_line(t_token *tokens);
-size_t		count_in_tokens(t_token *tokens, const char *to_find);
+size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 t_token		*tokenizer(char *line);
+void		parser(t_env **env, t_var *vars, t_env **export);
 // /**========================================================================
 //  *!                                  PARSING
 //  *========================================================================**/
@@ -104,9 +105,9 @@ void		check_pipes(t_var *vars, t_env **env, t_env **export);
 void		ft_pwd(t_var *vars, int fd);
 void		ft_env(t_env *env, t_var *vars, int fd);
 void		ft_export(t_var *vars, t_env **env, t_env **export, int fd);
-void		ft_echo(char *str, int fd, t_var *vars);
-void		ft_cd(char *str, t_env **env, int fd, t_var *vars);
-void		ft_unset(char *str, t_env **env, t_env **export, t_var *vars);
+void		ft_echo(t_var *vars, int fd);
+void		ft_cd(t_env **env, int fd, t_var *vars);
+void		ft_unset(t_env **env, t_env **export, t_var *vars);
 void		ft_exit(int *fd, t_var *vars, t_env **env, t_env **export);
 /**========================================================================
  *!                        EXECUTION BASH COMMANDS
@@ -137,7 +138,7 @@ void		end_pipex(int *pipefd, t_var *vars, int arr_size, int prev_fd);
 char		*ft_join_mid(char *s1, char slash, char *s2);
 int			ft_cmpstr(char *cmd, char *builtin);
 void		free_db_array(char **arr);
-char		**fill_arg(char *path, char *argv);
+char		**fill_arg(t_var *vars);
 char		*ft_straddstr(char *s1, char *s2);
 int			ft_strfind(char *s1, char *s2);
 int			double_arr_len(char **arr);

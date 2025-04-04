@@ -32,29 +32,26 @@ t_env	*sort_export(t_env **lst)
 //if no args, print export, otherwise add/update var(s) in export and env
 void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 {
-	char	**arr;
 	int		i;
 
 	i = 1;
-	arr = ft_split(vars->line, " ");
-	if (!arr[i])
+	if (vars->cmd_line[0].args[i])
 		ft_env(*export, vars, fd);
 	else
 	{
-		while (arr[i])
+		while (vars->cmd_line[0].args[i])
 		{
-			if (find_occurences(arr[i], '=') == 0)
-				*export = add_var_export(export, env, arr[i], vars);
+			if (find_occurences(vars->cmd_line[0].args[i], '=') == 0)
+				*export = add_var_export(export, env, vars->cmd_line[0].args[i], vars);
 			else
 			{
-				*export = assign_var_export(export, env, arr[i], vars);
-				*env = add_var_env(env, arr[i]);
+				*export = assign_var_export(export, env, vars->cmd_line[0].args[i], vars);
+				*env = add_var_env(env, vars->cmd_line[0].args[i]);
 			}
 			i++;
 		}
 	}
 	*export = sort_export(export);
-	free_db_array(arr);
 }
 
 //set export var from env but with 'declare -x ' at first and then 

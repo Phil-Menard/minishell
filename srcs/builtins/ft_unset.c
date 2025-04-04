@@ -1,20 +1,17 @@
 #include "../minishell.h"
 
-void	ft_unset(char *str, t_env **env, t_env **export, t_var *vars)
+void	ft_unset(t_env **env, t_env **export, t_var *vars)
 {
-	char	**arr;
 	int		i;
 	int		size;
 
 	size = ft_strlen("declare -x ");
-	arr = ft_split(str, " ");
 	i = 1;
-	while (arr[i])
+	while (vars->cmd_line[0].args[i])
 	{
-		*env = remove_env_var(env, arr[i], 0);
-		*export = remove_env_var(export, arr[i], size);
+		*env = remove_env_var(env, vars->cmd_line[0].args[i], 0);
+		*export = remove_env_var(export, vars->cmd_line[0].args[i], size);
 		i++;
 	}
-	free_db_array(arr);
 	vars->exit_statut = 0;
 }

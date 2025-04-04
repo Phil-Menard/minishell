@@ -22,11 +22,14 @@
 // 	free(var);
 // }
 
-void	echo_loop(char *str, int i, int fd, int option)
+void	echo_loop(t_var *vars, int i, int fd, int option)
 {
-	while (str[i])
+	int	j;
+
+	j = 1;
+	while (vars->cmd_line[0].args[j])
 	{
-		ft_putchar_fd(str[i], fd);
+		ft_putchar_fd(vars->cmd_line[0].args[j][i], fd);
 		i++;
 	}
 	if (option == 0)
@@ -50,17 +53,15 @@ int	check_arg(char *str)
 	return (i);
 }
 
-void	ft_echo(char *str, int fd, t_var *vars)
+void	ft_echo(t_var *vars, int fd)
 {
-	char	**arr;
-	char	*line;
+	// char	*line;
 	int		i;
 	int		j;
 	int		option;
 
 	option = 0;
-	arr = ft_split(str, " ");
-	j = check_arg(arr[1]);
+	j = check_arg(vars->cmd_line[0].args[1]);
 	if (j > 0)
 	{
 		i = 6 + j;
@@ -68,9 +69,8 @@ void	ft_echo(char *str, int fd, t_var *vars)
 	}
 	else
 		i = 5;
-	line = str_without_redir(str);
-	echo_loop(line, i, fd, option);
-	free_db_array(arr);
-	free(line);
+	//line = str_without_redir(str);
+	echo_loop(vars, i, fd, option);
+	// free(line);
 	vars->exit_statut = 0;
 }

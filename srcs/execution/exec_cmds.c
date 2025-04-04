@@ -1,17 +1,13 @@
 #include "../minishell.h"
 
 //prepare double array for execve
-char	**fill_arg(char *path, char *line)
+char	**fill_arg(t_var *vars)
 {
-	char	**arg;
-
-	if (!path)
+	if (!vars->path)
 		return (NULL);
-	arg = NULL;
-	arg = ft_split(line, " ");
-	free(arg[0]);
-	arg[0] = ft_strdup(path);
-	return (arg);
+	free(vars->cmd_line[0].args[0]);
+	vars->cmd_line[0].args[0] = ft_strdup(vars->path);
+	return (vars->cmd_line[0].args);
 }
 
 char	*get_next_path(char *arr, char *str, t_var *vars)
@@ -60,27 +56,27 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 
 void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	int		redirection;
+	// int		redirection;
 	int		id;
 
-	redirection = is_redirected(vars->line);
-	if (redirection >= 0)
-		prepare_redir(vars, fd, env, export);
-	else
+	// redirection = is_redirected(vars->line);
+	// if (redirection >= 0)
+	// 	prepare_redir(vars, fd, env, export);
+	// else
+	// {
+	vars->path = get_right_path(vars->cmd_line[0].cmd, vars, env);
+	if (vars->path)
 	{
-		vars->path = get_right_path(vars->cmd[0], vars, env);
-		if (vars->path)
+		vars->cmd_line[0].args = fill_arg(vars);
+		id = fork();
+		if (id == 0)
+			ft_execve(vars, env, export, fd);
+		else
 		{
-			vars->arg = fill_arg(vars->path, vars->line);
-			id = fork();
-			if (id == 0)
-				ft_execve(vars, env, export, fd);
-			else
-			{
-				waitpid(id, &vars->exit_statut, 0);
-				if (WIFEXITED(vars->exit_statut))
-					vars->exit_statut = WEXITSTATUS(vars->exit_statut);
-			}
+			waitpid(id, &vars->exit_statut, 0);
+			if (WIFEXITED(vars->exit_statut))
+				vars->exit_statut = WEXITSTATUS(vars->exit_statut);
 		}
 	}
+	// }
 }

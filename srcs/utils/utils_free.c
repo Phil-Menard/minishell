@@ -3,10 +3,10 @@
 //set all variables with char * or char ** to NULL
 void	nullify_arg_vars(t_var *vars)
 {
-	vars->arg = NULL;
-	vars->arr = NULL;
-	vars->cmd = NULL;
-	vars->cmd_split = NULL;
+	// vars->arg = NULL;
+	// vars->arr = NULL;
+	// vars->cmd = NULL;
+	// vars->cmd_split = NULL;
 	vars->line = NULL;
 	vars->path = NULL;
 	vars->pids = NULL;
@@ -16,23 +16,23 @@ void	nullify_arg_vars(t_var *vars)
 //free all variables from t_var and set them to NULL
 void	free_vars(t_var *vars)
 {
-	if (vars->cmd_split != NULL)
-		free_db_array(vars->cmd_split);
-	if (vars->arg)
-		free_db_array(vars->arg);
+	// if (vars->cmd_split != NULL)
+	// 	free_db_array(vars->cmd_split);
+	// if (vars->arg)
+	// 	free_db_array(vars->arg);
 	if (vars->line)
 		free(vars->line);
 	if (vars->prompt)
 		free(vars->prompt);
-	if (vars->arr)
-		free_db_array(vars->arr);
+	// if (vars->arr)
+	// 	free_db_array(vars->arr);
 	if (vars->path
-		&& ft_strncmp(vars->path, vars->cmd[0], ft_strlen(vars->path)) == 0)
+		&& ft_strncmp(vars->path, vars->cmd_line->cmd, ft_strlen(vars->path)) == 0)
 		free(vars->path);
 	else
 	{
 		free(vars->path);
-		free_db_array(vars->cmd);
+		free(vars->cmd_line->cmd);
 	}
 	nullify_arg_vars(vars);
 }
