@@ -80,15 +80,19 @@ typedef struct s_token
 {
 	char			*content;
 	t_token_type	type;
+	int				expandable;
 	struct s_token	*next;
 }					t_token;
 
+void		parser(t_env **env, t_var *vars, t_env **export);
+t_token		*tokenizer(char *line);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
+// utils
+char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
-t_token		*tokenizer(char *line);
-void		parser(t_env **env, t_var *vars, t_env **export);
+// void		printlist(t_token *tokens);
 // /**========================================================================
 //  *!                                  PARSING
 //  *========================================================================**/

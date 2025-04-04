@@ -1,50 +1,23 @@
 #include "../minishell.h"
 
-void	free_tokens(t_token **tokens)
+// If a token is expandable, expand it
+// cad, if there is a $var -> replace by content in env
+// otherwise if it's expandable but there's no $var, just let it.
+static void	expander(t_token **tokens, t_env *env)
 {
 	t_token	*tmp;
 
-	while (*tokens)
+	tmp = *tokens;
+	while (tmp)
 	{
-		tmp = (*tokens)->next;
-		if ((*tokens)->content)
-		{
-			free((*tokens)->content);
-			(*tokens)->content = NULL;
-		}
-		free(*tokens);
-		*tokens = tmp;
+		if (tmp->expandable)
+			tmp->content = expand_str(tmp->content, env);
+		tmp = tmp->next;
 	}
 }
 
-size_t	count_tokens_type(t_token *tokens, t_token_type type)
-{
-	size_t	count;
-
-	count = 0;
-	while (tokens)
-	{
-		if (tokens->type == type)
-			count++;
-		tokens = tokens->next;
-	}
-	return (count);
-}
-
-size_t	count_in_tokens(t_token *tokens, char *to_find)
-{
-	size_t	count;
-
-	count = 0;
-	while (tokens)
-	{
-		if (ft_cmpstr(tokens->content, to_find) == 0)
-			count++;
-		tokens = tokens->next;
-	}
-	return (count);
-}
-
+// Change tokens after tokens of types redir to tokens of type redir_file,
+// make it easier to add them to vars->cmd_line[].infile/outfile
 static void	adjust_tokens_type(t_token **tokens)
 {
 	t_token	*tmp;
@@ -66,6 +39,7 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	//if redir go to nowhere, go back to main (see Trello)
 	tokens = tokenizer(vars->line);
 	adjust_tokens_type(&tokens);
+	expander(&tokens, *env);
 	// func to now nb of leafs (compared to &&, ||, ())
 	// leafs = malloc(sizeof(t_leaf)); // for now only
 	// if (!leafs)

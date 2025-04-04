@@ -36,7 +36,12 @@ static char	**set_redir(t_token *tokens, size_t i, t_token_type type)
 	while (tokens)
 	{
 		if (x == i && tokens->type == type)
-			redir[j++] = ft_straddstr(tokens->content, tokens->next->content);
+		{
+			redir[j] = ft_strdup(tokens->content);
+			if (tokens->next)
+				redir[j] = ft_straddstr(redir[j], tokens->next->content);
+			j++;
+		}
 		if (tokens->type == TOKEN_PIPE)
 			x++;
 		tokens = tokens->next;
@@ -84,7 +89,7 @@ static char	**set_args(t_token *tokens, size_t i)
 
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 {
-	size_t	i;
+	size_t		i;
 	t_cmd_line	*cmd_line;
 
 	vars->nb_cmd_line = count_in_tokens(tokens, "|") + 1;
@@ -102,9 +107,7 @@ t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 	}
 	cmd_line[i].cmd = NULL;
 	cmd_line[i].args = NULL;
-	// cmd_line[i].infile = NULL;
-	// cmd_line[i].outfile = NULL;
+	cmd_line[i].infile = NULL;
+	cmd_line[i].outfile = NULL;
 	return (cmd_line);
 }
-//ls | sort | rev
-//i=0| i=1  | i=2

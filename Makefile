@@ -38,6 +38,7 @@ SRC = minishell.c \
 	parsing2/tokenizer.c \
 	parsing2/parser.c \
 	parsing2/set_cmd_line.c \
+	parsing2/utils_parsing.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \
 	# parsing/lexing_utils.c \

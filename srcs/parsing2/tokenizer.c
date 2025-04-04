@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-static void	add_token(t_token **tokens, char *buffer, t_token_type type)
+static void	add_token(t_token **tokens, char *buffer, t_token_type type, t_mod mod)
 {
 	t_token	*new_token;
 	t_token	*tmp;
@@ -8,9 +8,13 @@ static void	add_token(t_token **tokens, char *buffer, t_token_type type)
 	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return ;
-	new_token->content = buffer;
+	new_token->content = ft_strdup(buffer);
 	new_token->type = type;
 	new_token->next = NULL;
+	if (mod == MOD_NORMAL || mod == MOD_DOUBLE)
+		new_token->expandable = 1;
+	else
+		new_token->expandable = 0;
 	if (*tokens == NULL)
 		*tokens = new_token;
 	else
@@ -22,31 +26,31 @@ static void	add_token(t_token **tokens, char *buffer, t_token_type type)
 	}
 }
 
-static void	add_operator(t_token **tokens, char *line, int *i)
+static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
 {
 	if (line[*i] == '>' && line[*i + 1] == '>')
 	{
-		add_token(tokens, ft_strdup(">>"), TOKEN_OUTFILE);
+		add_token(tokens, ft_strdup(">>"), TOKEN_OUTFILE, mod);
 		(*i)++;
 	}
 	if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		add_token(tokens, ft_strdup("<<"), TOKEN_INFILE);
+		add_token(tokens, ft_strdup("<<"), TOKEN_INFILE, mod);
 		(*i)++;
 	}
 	else if (line[*i] == '|' && line[*i + 1] != '|')
-		add_token(tokens, ft_strdup("|"), TOKEN_PIPE);
+		add_token(tokens, ft_strdup("|"), TOKEN_PIPE, mod);
 	else if (line[*i] == '<')
-		add_token(tokens, ft_strdup("<"), TOKEN_INFILE);
+		add_token(tokens, ft_strdup("<"), TOKEN_INFILE, mod);
 	else if (line[*i] == '>')
-		add_token(tokens, ft_strdup(">"), TOKEN_OUTFILE);
+		add_token(tokens, ft_strdup(">"), TOKEN_OUTFILE, mod);
 }
 
-static inline void	add(t_token **tokens, char **buffer)
+static inline void	add(t_token **tokens, char **buffer, t_mod mod)
 {
 	if (*buffer)
 	{
-		add_token(tokens, ft_strdup(*buffer), TOKEN_WORD);
+		add_token(tokens, *buffer, TOKEN_WORD, mod);
 		free(*buffer);
 		*buffer = NULL;
 	}
@@ -84,13 +88,13 @@ t_token	*tokenizer(char *line)
 		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && mod == MOD_NORMAL)
 		{
 			// printf("space\n");
-			add(&tokens, &buffer);
+			add(&tokens, &buffer, mod);
 		}
 		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && mod == MOD_NORMAL)
 		{
 			// printf("operator\n");
-			add(&tokens, &buffer);
-			add_operator(&tokens, line, &i);
+			add(&tokens, &buffer, mod);
+			add_operator(&tokens, line, &i, mod);
 		}
 		else if (line[i] == '\"' || line[i] == '\'')
 			quote_handler(line[i], &mod, &buffer);
@@ -101,24 +105,11 @@ t_token	*tokenizer(char *line)
 		}
 	}
 	// printlist(tokens);
-	add(&tokens, &buffer);
+	add(&tokens, &buffer, mod);
 	return (tokens);
 }
 
 ////////////////////////////////////////////////////////////////! 
-
-
-/*static void	printlist(t_token *tokens)
-{
-	if (!tokens)
-		printf("meeeeeeeeeeeeeerde\n");
-	while (tokens)
-	{
-		printf("%s\n", tokens->content);
-		tokens = tokens->next;
-	}
-}*/
-
 
 /* int main(int ac, char **av)
 {
