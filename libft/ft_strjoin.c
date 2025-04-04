@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:09:06 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/03/25 14:38:43 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/04 13:53:30 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		i;
 	int		j;
 
+	if (!s2)
+		return (ft_strdup(s1));
 	len = ft_strlen(s1) + ft_strlen(s2);
 	res = ft_calloc(sizeof(char), (len + 1));
 	if (!res)
