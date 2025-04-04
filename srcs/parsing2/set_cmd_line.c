@@ -22,6 +22,30 @@ static size_t	count_words_tokens(t_token *tokens, size_t i)
 	return (count);
 }
 
+static char	**set_redir(t_token *tokens, size_t i)
+{
+	size_t	j;
+	size_t	x;
+	size_t	nb_redir;
+	char	**redir;
+
+	nb_redir = count_in_tokens(tokens, "<") + count_in_tokens(tokens, ">");
+	nb_redir += count_in_tokens(tokens, "<<") + count_in_tokens(tokens, ">>");
+	redir = malloc(sizeof(char *) * (nb_redir + 1));
+	if (!redir)
+		return (NULL);
+	x = 0;
+	j = 0;
+	while (tokens)
+	{
+		if (x == i && tokens->type == TOKEN_OPERATOR)
+			redir[j++] = ft_straddstr(ft_strdup(tokens->content), tokens->next->content);
+		if (tokens->type == TOKEN_PIPE)
+			x++;
+		tokens = tokens->next;
+	}
+}
+
 static char	*set_cmd(t_token *tokens, size_t i)
 {
 	size_t	x;
@@ -31,7 +55,7 @@ static char	*set_cmd(t_token *tokens, size_t i)
 	{
 		if (x == i && tokens->type == TOKEN_WORD)
 			return (ft_strdup(tokens->content));
-		if (ft_cmpstr(tokens->content, "|") == 0)
+		if (tokens->type == TOKEN_PIPE)
 			x++;
 		tokens = tokens->next;
 	}
@@ -59,23 +83,22 @@ static char	**set_args(t_token *tokens, size_t i)
 	return (args);
 }
 
-t_cmd_line	*set_cmd_line(t_token *tokens)
+t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 {
 	size_t	i;
-	size_t	nb_cmd_line;
 	t_cmd_line	*cmd_line;
 
-	nb_cmd_line = count_in_tokens(tokens, "|") + 1;
-	cmd_line = malloc(sizeof(t_cmd_line) * (nb_cmd_line + 1));
+	vars->nb_cmd_line = count_in_tokens(tokens, "|") + 1;
+	cmd_line = malloc(sizeof(t_cmd_line) * (vars->nb_cmd_line + 1));
 	if (!cmd_line)
 		return (NULL);
 	i = 0;
-	while (i < nb_cmd_line)
+	while (i < vars->nb_cmd_line)
 	{
 		cmd_line[i].cmd = set_cmd(tokens, i);
 		cmd_line[i].args = set_args(tokens, i);
-		cmd_line[i].infile = NULL; // set_redir(tokens);
-		cmd_line[i].outfile = NULL; // set_redir(tokens);
+		cmd_line[i].infile = set_redir(tokens, i);
+		cmd_line[i].outfile = set_redir(tokens, i);
 		i++;
 	}
 	cmd_line[i].cmd = NULL;

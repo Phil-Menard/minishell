@@ -42,6 +42,7 @@ typedef struct s_var
 {
 	pid_t		*pids;
 	t_cmd_line	*cmd_line;
+	size_t		nb_cmd_line;
 	// char		**arr;
 	// char		**cmd_split;
 	// char		**arg;
