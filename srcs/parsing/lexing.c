@@ -87,7 +87,7 @@ static void	normal_mod(t_token *tokens, char *line, size_t *i, t_env *env)
 t_token	*tokenizer(char *line, t_env *env, size_t i)
 {
 	t_token	*tokens;
-	size_t			quote_count;
+	size_t	quote_count;
 
 	quote_count = 0;
 	tokens = new_tkb(0, NULL);
