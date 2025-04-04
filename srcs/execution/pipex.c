@@ -11,28 +11,22 @@ void	free_child_process(t_var *vars, t_env **env, t_env **export)
 //same as exec_cmd but for pipes
 void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 {
-	char	*cmd;
-
-	cmd = str_without_redir(vars->line);
 	vars->path = NULL;
-	vars->path = get_right_path(vars->cmd[vars->i], vars, env);
+	vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 	if (vars->path != NULL)
 	{
-		vars->arg = fill_arg(vars->path, cmd);
-		free(cmd);
-		if (vars->arg)
+		vars->cmd_line.args = fill_arg(vars);
+		if (vars->cmd_line.args)
 		{
 			free(vars->line);
 			vars->line = NULL;
 			free(vars->prompt);
-			free_db_array(vars->arr);
 			free_env(*export);
 		}
 		free(vars->pids);
 		vars->pids = NULL;
 		ft_execve(vars, env, export, fd);
 	}
-	free(cmd);
 }
 
 //same as builtin_or_cmd but for pipes
@@ -41,19 +35,19 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 	vars->exit_statut = 0;
 	vars->line = ft_strdup(vars->arr[vars->i]);
 	vars->cmd_split = ft_split(vars->line, " ");
-	if (ft_cmpstr(vars->cmd_split[0], "pwd") == 0)
+	if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "pwd") == 0)
 		ft_pwd(vars, fd[1]);
-	else if (ft_cmpstr(vars->cmd_split[0], "env") == 0)
+	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "env") == 0)
 		ft_env(*env, vars, fd[1]);
-	else if (ft_cmpstr(vars->cmd_split[0], "echo") == 0)
-		ft_echo(vars->line, fd[1], vars);
-	else if (ft_cmpstr(vars->cmd_split[0], "cd") == 0)
-		ft_cd(vars->line, env, fd[1], vars);
-	else if (ft_cmpstr(vars->cmd_split[0], "unset") == 0)
-		ft_unset(vars->line, env, export, vars);
-	else if (ft_cmpstr(vars->cmd_split[0], "export") == 0)
+	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "echo") == 0)
+		ft_echo(vars, fd[1]);
+	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "cd") == 0)
+		ft_cd(env, fd[1], vars);
+	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "unset") == 0)
+		ft_unset(env, export, vars);
+	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "export") == 0)
 		ft_export(vars, env, export, fd[1]);
-	else if (ft_cmpstr(vars->cmd_split[0], "exit") == 0)
+	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "exit") == 0)
 	{
 		free(vars->pids);
 		ft_exit(fd, vars, env, export);
@@ -83,9 +77,9 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 	vars->pids = malloc(sizeof(pid_t) * arr_size);
 	previous_fd = -1;
 	vars->i = -1;
-	while (vars->arr[++vars->i])
+	while (vars->cmd_line[++vars->i])
 	{
-		fd = init_and_set_fd(vars->arr[vars->i], vars, env);
+		fd = init_and_set_fd(vars->cmd_line[vars->i].cmd, vars, env);
 		previous_fd = set_previous_fd(fd, previous_fd);
 		pipe_and_fork(pipefd, &vars->pids[vars->i]);
 		if (vars->pids[vars->i] == 0)
@@ -99,7 +93,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export, int arr_size)
 			exit(vars->exit_statut);
 		}
 		post_cmd(pipefd, &previous_fd, fd);
-		if (vars->arr[vars->i + 1] && find_occurences(vars->arr[vars->i + 1], '<') > 0)
+		if (vars->cmd_line[vars->i + 1] && find_occurences(vars->cmd_line.cmd[vars->i + 1], '<') > 0)
 			close(pipefd[0]);
 	}
 	end_pipex(pipefd, vars, arr_size, previous_fd);

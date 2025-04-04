@@ -26,16 +26,17 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	fd = init_and_set_fd(vars->line, vars, env);
 	if (!vars->cmd_line[1].cmd && fd[0] > -1)
 	{
+		vars->i = 0;
 		builtin_or_cmd(vars, fd, env, export);
 	}
-	// else if (fd[0] != -1)
-	// {
-	// 	close_multiple_fd(fd);
-	// 	free(vars->line);
-	// 	vars->line = NULL;
-	// 	arr_size = double_arr_len(vars->arr);
-	// 	pipex(vars, env, export, arr_size);
-	// }
+	else if (fd[0] != -1)
+	{
+		close_multiple_fd(fd);
+		free(vars->line);
+		vars->line = NULL;
+		arr_size = double_arr_len(vars->arr);
+		pipex(vars, env, export, arr_size);
+	}
 	else
 		close_multiple_fd(fd);
 }
