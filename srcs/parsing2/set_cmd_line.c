@@ -78,6 +78,10 @@ t_cmd_line	*set_cmd_line(t_token *tokens)
 		cmd_line[i].outfile = NULL; // set_redir(tokens);
 		i++;
 	}
+	cmd_line[i].cmd = NULL;
+	cmd_line[i].args = NULL;
+	cmd_line[i].infile = NULL;
+	cmd_line[i].outfile = NULL;
 	return (cmd_line);
 }
 //ls | sort | rev
