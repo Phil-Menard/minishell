@@ -31,12 +31,12 @@ static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
 	if (line[*i] == '>' && line[*i + 1] == '>')
 	{
 		add_token(tokens, ">>", TOKEN_OUTFILE, mod);
-		(*i) += 2;
+		(*i) += 1;
 	}
-	if (line[*i] == '<' && line[*i + 1] == '<')
+	else if (line[*i] == '<' && line[*i + 1] == '<')
 	{
 		add_token(tokens, "<<", TOKEN_INFILE, mod);
-		(*i) += 2;
+		(*i) += 1;
 	}
 	else if (line[*i] == '|' && line[*i + 1] != '|')
 		add_token(tokens, "|", TOKEN_PIPE, mod);

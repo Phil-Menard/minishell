@@ -39,7 +39,14 @@ static int	check_redir_file(t_token *tokens)
 		if (tokens->type == TOKEN_INFILE || tokens->type == TOKEN_OUTFILE)
 		{
 			if (!tokens->next || (tokens->next && tokens->next->type != TOKEN_REDIR_FILE))
-				return (ft_putstr_fd("syntax error near unexpected token\n", 1), 0);
+			{
+				ft_putstr_fd("syntax error near unexpected token : ", 1);
+				if (!tokens->next)
+					printf("newline\n");
+				else
+					printf("%s\n", tokens->next->content);
+				return (0);
+			}
 		}
 		tokens = tokens->next;
 	}
