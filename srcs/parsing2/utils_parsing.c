@@ -17,7 +17,7 @@ char	*expand_str(char *content, t_env *env)
 	{
 		if (content[i] == '$')
 		{
-			while (content[i] && content[i] != ' ' || (content[i] >= 9 && content <= 13))
+			while ((content[i] && content[i] != ' ') || (content[i] >= 9 && content[i] <= 13))
 				var = ft_straddchar(var, content[i++]);
 			res = ft_straddstr(res, ft_getenv(env, var));
 		}
