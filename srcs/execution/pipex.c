@@ -12,6 +12,7 @@ void	free_child_process(t_var *vars, t_env **env, t_env **export)
 void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 {
 	vars->path = NULL;
+	printf("cmd : %s\n", vars->cmd_line[vars->i].cmd);
 	vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 	if (vars->path != NULL)
 	{

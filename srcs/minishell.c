@@ -23,18 +23,17 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	// free(vars->line);
 	// vars->line = ft_strdup(temp);
 	// free(temp);
+	
 	if (!vars->tokens)
 		return ;
 	fd = init_and_set_fd(vars->cmd_line, vars, env);
 	if (vars->nb_cmd_line == 1 && fd[0] > -1)
 	{
-		printf("one cmd\n");
 		vars->i = 0;
 		builtin_or_cmd(vars, fd, env, export);
 	}
 	else if (fd[0] != -1)
 	{
-		printf("pipe\n");
 		close_multiple_fd(fd);
 		free(vars->line);
 		vars->line = NULL;

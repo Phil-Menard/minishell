@@ -55,11 +55,9 @@ void	get_nb_redir(char **outfiles, int *out, int *out_append)
 		j = 0;
 		while (outfiles[i][j])
 		{
-			printf("%c\n", outfiles[i][j]);
 			if (outfiles[i][j + 1] 
 				&& outfiles[i][j] == '>' && outfiles[i][j + 1] != '>')
 			{
-				i++;
 				(*out)++;
 				*out_append = 0;
 				break;
@@ -67,7 +65,6 @@ void	get_nb_redir(char **outfiles, int *out, int *out_append)
 			else if (outfiles[i][j + 1] 
 				&& outfiles[i][j] == '>' && outfiles[i][j + 1] == '>')
 			{
-				i++;
 				(*out_append)++;
 				*out = 0;
 				break;

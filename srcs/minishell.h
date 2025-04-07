@@ -95,7 +95,7 @@ char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
-void		printlist(t_token *tokens);
+// void		printlist(t_token *tokens);
 // /**========================================================================
 //  *!                                  PARSING
 //  *========================================================================**/

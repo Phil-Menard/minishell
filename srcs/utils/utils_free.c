@@ -47,6 +47,8 @@ void	free_vars(t_var *vars)
 void	init_vars(t_var *vars)
 {
 	nullify_arg_vars(vars);
+	vars->tokens = NULL;
+	vars->nb_cmd_line = 0;
 	vars->exit_statut = 0;
 	vars->i = 0;
 }

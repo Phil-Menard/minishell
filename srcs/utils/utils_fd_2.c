@@ -18,6 +18,7 @@ int	set_fd_out(int fd, char **outfile, int redir)
 			fd = open(split[1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (i < size - 1)
 			close(fd);
+		free_db_array(split);
 	}
 	return (fd);
 }
@@ -74,8 +75,6 @@ int	*set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env, int *fd)
 {
 	int		redir;
 
-	printf("infile %s\n", cmd_line->infile[0]);
-	printf("outfile %s\n", cmd_line->outfile[0]);
 	redir = is_redirected(cmd_line->infile, cmd_line->outfile);
 	fd = find_files(fd, cmd_line->infile, cmd_line->outfile, redir);
 	if (fd[0] == -1)
