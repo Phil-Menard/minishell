@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-//return line without redirection
+/* //return line without redirection
 char	*str_without_redir(char *str)
 {
 	char	**arr;
@@ -26,9 +26,9 @@ char	*str_without_redir(char *str)
 	}
 	free_db_array(arr);
 	return (res);
-}
+} */
 
-//get infile name
+/* //get infile name
 char	**get_infile(char *str)
 {
 	char	**arr;
@@ -80,7 +80,7 @@ char	**get_outfile(char *str)
 	free_db_array(arr);
 	res[j] = NULL;
 	return (res);
-}
+} */
 
 void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
 {

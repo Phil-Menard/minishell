@@ -66,12 +66,8 @@ int	*find_files(int *fd, char **infile, char **outfile, int redir)
 //fd[1] : output
 int	*set_fd(char *line, int *fd, t_var *vars, t_env **env)
 {
-	char	**outfile;
-	char	**infile;
 	int		redirection;
 
-	infile = get_infile(line);
-	outfile = get_outfile(line);
 	redirection = is_redirected(line);
 	fd = find_files(fd, infile, outfile, redirection);
 	if (fd[0] == -1)
