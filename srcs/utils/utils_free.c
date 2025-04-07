@@ -22,7 +22,6 @@ void	free_vars(t_var *vars)
 	i = 0;
 	while (i < vars->nb_cmd_line)
 	{
-		printf("freeing...\n");
 		free_db_array(vars->cmd_line[i].args);
 		free(vars->cmd_line[i].cmd);
 		i++;
