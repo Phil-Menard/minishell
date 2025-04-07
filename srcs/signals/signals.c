@@ -10,12 +10,12 @@ void	sig_handler(int signal)
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	if (signal == SIGQUIT && unblock_sigquit == 1)
-	{
-		ft_putstr_fd("Quit (core dumped)\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-	}
+	// if (signal == SIGQUIT && unblock_sigquit == 1)
+	// {
+	// 	ft_putstr_fd("Quit (core dumped)\n", 1);
+	// 	rl_replace_line("", 0);
+	// 	rl_on_new_line();
+	// }
 }
 
 void	set_signal_action(void)
@@ -25,7 +25,8 @@ void	set_signal_action(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sig_handler;
 	sigaction(SIGINT, &act, NULL);
-	sigaction(SIGQUIT, &act, NULL);
+	// sigaction(SIGQUIT, &act, NULL);
+	signal(SIGQUIT, SIG_IGN);
 	sigaction(SIGPIPE, &act, NULL);
 }
 
