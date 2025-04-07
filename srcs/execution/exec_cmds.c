@@ -58,27 +58,27 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 
 void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	// int		redirection;
+	int		redirection;
 	int		id;
 
-	// redirection = is_redirected(vars->line);
-	// if (redirection >= 0)
-	// 	prepare_redir(vars, fd, env, export);
-	// else
-	// {
-	vars->path = get_right_path(vars->cmd_line[0].cmd, vars, env);
-	if (vars->path)
+	redirection = is_redirected(vars->cmd_line->infile, vars->cmd_line->outfile);
+	if (redirection >= 0)
+		prepare_redir(vars, fd, env, export);
+	else
 	{
-		vars->cmd_line[0].args = fill_arg(vars);
-		id = fork();
-		if (id == 0)
-			ft_execve(vars, env, export, fd);
-		else
+		vars->path = get_right_path(vars->cmd_line[0].cmd, vars, env);
+		if (vars->path)
 		{
-			waitpid(id, &vars->exit_statut, 0);
-			if (WIFEXITED(vars->exit_statut))
-				vars->exit_statut = WEXITSTATUS(vars->exit_statut);
+			vars->cmd_line[0].args = fill_arg(vars);
+			id = fork();
+			if (id == 0)
+				ft_execve(vars, env, export, fd);
+			else
+			{
+				waitpid(id, &vars->exit_statut, 0);
+				if (WIFEXITED(vars->exit_statut))
+					vars->exit_statut = WEXITSTATUS(vars->exit_statut);
+			}
 		}
 	}
-	// }
 }

@@ -32,20 +32,13 @@ void	exec_redir(t_var *vars, int *fd, t_env **env, t_env **export)
 int	get_nb_redir_in(char **infiles)
 {
 	int	i;
-	int	j;
 	int	in;
 
 	in = 0;
 	i = 0;
 	while (infiles[i])
 	{
-		j = 0;
-		while (infiles[i][j])
-		{
-			if (infiles[i][j + 1])
-				in++;
-			j++;
-		}
+		in++;
 		i++;
 	}
 	return (in);
@@ -62,19 +55,22 @@ void	get_nb_redir(char **outfiles, int *out, int *out_append)
 		j = 0;
 		while (outfiles[i][j])
 		{
+			printf("%c\n", outfiles[i][j]);
 			if (outfiles[i][j + 1] 
 				&& outfiles[i][j] == '>' && outfiles[i][j + 1] != '>')
 			{
 				i++;
 				(*out)++;
 				*out_append = 0;
+				break;
 			}
-			if (outfiles[i][j + 1] 
+			else if (outfiles[i][j + 1] 
 				&& outfiles[i][j] == '>' && outfiles[i][j + 1] == '>')
 			{
 				i++;
 				(*out_append)++;
 				*out = 0;
+				break;
 			}
 			j++;
 		}

@@ -5,15 +5,17 @@ int	set_fd_out(int fd, char **outfile, int redir)
 {
 	int	i;
 	int	size;
+	char	**split;
 
 	i = -1;
 	size = double_arr_len(outfile);
 	while (outfile[++i])
 	{
+		split = ft_split(outfile[i], " ");
 		if (redir < 3)
-			fd = open(outfile[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			fd = open(split[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
-			fd = open(outfile[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			fd = open(split[1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (i < size - 1)
 			close(fd);
 	}
@@ -22,21 +24,25 @@ int	set_fd_out(int fd, char **outfile, int redir)
 
 int	set_fd_in(int fd, char **infile)
 {
-	int	i;
-	int	size;
+	int		i;
+	int		size;
+	char	**split;
 
 	i = -1;
 	size = double_arr_len(infile);
 	while (infile[++i])
 	{
-		fd = open(infile[i], O_RDONLY);
+		split = ft_split(infile[i], " ");
+		fd = open(split[1], O_RDONLY);
 		if (fd < 0)
 		{
-			perror(infile[i]);
+			perror(split[1]);
+			free_db_array(split);
 			return (-1);
 		}
 		if (i < size - 1)
 			close(fd);
+		free_db_array(split);
 	}
 	return (fd);
 }
@@ -68,6 +74,8 @@ int	*set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env, int *fd)
 {
 	int		redir;
 
+	printf("infile %s\n", cmd_line->infile[0]);
+	printf("outfile %s\n", cmd_line->outfile[0]);
 	redir = is_redirected(cmd_line->infile, cmd_line->outfile);
 	fd = find_files(fd, cmd_line->infile, cmd_line->outfile, redir);
 	if (fd[0] == -1)

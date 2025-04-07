@@ -19,24 +19,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	int		*fd;
 
 	fd = NULL;
-	size_t i = 0;
-	int j;
-	while (i < vars->nb_cmd_line)
-	{
-		j = 0;
-		while (vars->cmd_line[i].infile[j])
-		{
-			printf("infile : %s\n", vars->cmd_line[i].infile[j]);
-			j++;
-		}
-		j = 0;
-		while (vars->cmd_line[i].outfile[j])
-		{
-			printf("outfile : %s\n", vars->cmd_line[i].outfile[j]);
-			j++;
-		}
-		i++;
-	}
 	// temp = parse_redirections(vars->line);
 	// free(vars->line);
 	// vars->line = ft_strdup(temp);
@@ -44,11 +26,13 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	fd = init_and_set_fd(vars->cmd_line, vars, env);
 	if (vars->nb_cmd_line == 1 && fd[0] > -1)
 	{
+		printf("one cmd\n");
 		vars->i = 0;
 		builtin_or_cmd(vars, fd, env, export);
 	}
 	else if (fd[0] != -1)
 	{
+		printf("pipe\n");
 		close_multiple_fd(fd);
 		free(vars->line);
 		vars->line = NULL;

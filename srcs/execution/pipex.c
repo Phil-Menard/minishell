@@ -26,6 +26,8 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
 	vars->exit_statut = 0;
+	printf("cmd : %s\n", vars->cmd_line[vars->i].cmd);
+	printf("i : %zu\n", vars->i);
 	if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "pwd") == 0)
 		ft_pwd(vars, fd[1]);
 	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "env") == 0)
