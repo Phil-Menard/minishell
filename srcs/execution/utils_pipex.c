@@ -33,12 +33,15 @@ void	outfile_dups(int *fd, int *pipefd, t_var *vars)
 }
 
 //regroups every functions called after child process
-void	post_cmd(int *pipefd, int *previous_fd, int *fd)
+void	post_cmd(t_var *vars, int *pipefd, int *previous_fd, int *fd)
 {
 	close(pipefd[1]);
 	close_previous_fd(*previous_fd);
 	*previous_fd = pipefd[0];
 	close_multiple_fd(fd);
+	if (vars->i + 1 < vars->nb_cmd_line
+		&& vars->cmd_line[vars->i + 1].infile[0])
+		close(pipefd[0]);
 }
 
 //regroups every functions called at the end of pipex

@@ -12,7 +12,6 @@ void	free_child_process(t_var *vars, t_env **env, t_env **export)
 void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 {
 	vars->path = NULL;
-	printf("cmd : %s\n", vars->cmd_line[vars->i].cmd);
 	vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 	if (vars->path != NULL)
 	{
@@ -26,9 +25,6 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 //same as builtin_or_cmd but for pipes
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	vars->exit_statut = 0;
-	printf("cmd : %s\n", vars->cmd_line[vars->i].cmd);
-	printf("i : %zu\n", vars->i);
 	if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "pwd") == 0)
 		ft_pwd(vars, fd[1]);
 	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "env") == 0)
@@ -86,9 +82,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 			free_child_process(vars, env, export);
 			exit(vars->exit_statut);
 		}
-		post_cmd(pipefd, &previous_fd, fd);
-		if (vars->i + 1 < vars->nb_cmd_line && find_occurences(vars->cmd_line[vars->i + 1].cmd, '<') > 0)
-			close(pipefd[0]);
+		post_cmd(vars, pipefd, &previous_fd, fd);
 	}
 	end_pipex(pipefd, vars, previous_fd);
 }

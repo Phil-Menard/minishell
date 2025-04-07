@@ -87,26 +87,18 @@ typedef struct s_var
 
 
 
+
+/**========================================================================
+ *!                                  PARSING
+ *========================================================================**/
 void		parser(t_env **env, t_var *vars, t_env **export);
 t_token		*tokenizer(char *line);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
-// utils
 char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 void		printlist(t_token *tokens);
-// /**========================================================================
-//  *!                                  PARSING
-//  *========================================================================**/
-// t_token		*tokenizer(char *line, t_env *env, size_t i);
-// t_token		*new_tkb(size_t len, void *buf);
-// t_token		*get_last(t_token *node);
-// t_token		get_token(char *str);
-// size_t		get_pos(char *str, size_t start, char c);
-// int			check_pair(char *line);
-// void		heredoc(char *str);
-// char		*trunc_heredoc(char *line);
 // /**========================================================================
 //  *!                                  TREE
 //  *========================================================================**/
@@ -146,7 +138,7 @@ void		pipex(t_var *vars, t_env **env, t_env **export);
 void		close_previous_fd(int previous_fd);
 void		wait_childs(t_var *vars);
 void		outfile_dups(int *fd, int *pipefd, t_var *vars);
-void		post_cmd(int *pipefd, int *previous_fd, int *fd);
+void		post_cmd(t_var *vars, int *pipefd, int *previous_fd, int *fd);
 void		end_pipex(int *pipefd, t_var *vars, int prev_fd);
 /**========================================================================
  *!                               UTILS
