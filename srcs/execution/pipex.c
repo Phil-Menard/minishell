@@ -1,7 +1,8 @@
 #include "../minishell.h"
 
-void	free_child_process(t_var *vars, t_env **env, t_env **export)
+void	free_child_process(t_var *vars, t_env **env, t_env **export, int *fd)
 {
+	close_multiple_fd(fd);
 	free(vars->pids);
 	free_vars(vars);
 	free_env(*export);
@@ -47,7 +48,6 @@ void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 		else
 			exec_cmds_pipes(vars, env, export, fd);
 	}
-	close_multiple_fd(fd);
 	update_exit_env(*env, vars);
 }
 
@@ -67,7 +67,6 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 	int		*fd;
 	int		previous_fd;
 
-	vars->pids = malloc(sizeof(pid_t) * vars->nb_cmd_line);
 	previous_fd = -1;
 	vars->i = -1;
 	while (++vars->i < vars->nb_cmd_line)
@@ -81,8 +80,9 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 				dup2(previous_fd, STDIN_FILENO);
 			outfile_dups(fd, pipefd, vars);
 			close_previous_fd(previous_fd);
-			builtin_or_cmd_pipes(vars, fd, env, export);
-			free_child_process(vars, env, export);
+			if (previous_fd != -1)
+				builtin_or_cmd_pipes(vars, fd, env, export);
+			free_child_process(vars, env, export, fd);
 			exit(vars->exit_statut);
 		}
 		post_cmd(vars, pipefd, &previous_fd, fd);
