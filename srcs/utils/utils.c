@@ -29,7 +29,9 @@ char	*ft_join_mid(char *s1, char slash, char *s2)
 	return (ptr);
 }
 
-//add s2 after s1 (kind of realloc)
+//add s2 after s1 
+//and free(s1)
+//(kind of realloc)
 char	*ft_straddstr(char *s1, char *s2)
 {
 	char	*res;

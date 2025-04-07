@@ -30,20 +30,20 @@ static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
 {
 	if (line[*i] == '>' && line[*i + 1] == '>')
 	{
-		add_token(tokens, ft_strdup(">>"), TOKEN_OUTFILE, mod);
+		add_token(tokens, ">>", TOKEN_OUTFILE, mod);
 		(*i)++;
 	}
 	if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		add_token(tokens, ft_strdup("<<"), TOKEN_INFILE, mod);
+		add_token(tokens, "<<", TOKEN_INFILE, mod);
 		(*i)++;
 	}
 	else if (line[*i] == '|' && line[*i + 1] != '|')
-		add_token(tokens, ft_strdup("|"), TOKEN_PIPE, mod);
+		add_token(tokens, "|", TOKEN_PIPE, mod);
 	else if (line[*i] == '<')
-		add_token(tokens, ft_strdup("<"), TOKEN_INFILE, mod);
+		add_token(tokens, "<", TOKEN_INFILE, mod);
 	else if (line[*i] == '>')
-		add_token(tokens, ft_strdup(">"), TOKEN_OUTFILE, mod);
+		add_token(tokens, ">", TOKEN_OUTFILE, mod);
 }
 
 static inline void	add(t_token **tokens, char **buffer, t_mod mod)
@@ -84,27 +84,18 @@ t_token	*tokenizer(char *line)
 	buffer = NULL;
 	while (line[++i])
 	{
-		// printf("line[%d] : %c\n", i, line[i]);
 		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && mod == MOD_NORMAL)
-		{
-			// printf("space\n");
 			add(&tokens, &buffer, mod);
-		}
 		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && mod == MOD_NORMAL)
 		{
-			// printf("operator\n");
 			add(&tokens, &buffer, mod);
 			add_operator(&tokens, line, &i, mod);
 		}
 		else if (line[i] == '\"' || line[i] == '\'')
 			quote_handler(line[i], &mod, &buffer);
 		else
-		{
-			// printf("addchar\n");
 			buffer = ft_straddchar(buffer, line[i]);
-		}
 	}
-	// printlist(tokens);
 	add(&tokens, &buffer, mod);
 	return (tokens);
 }

@@ -22,17 +22,24 @@ void	free_vars(t_var *vars)
 	i = 0;
 	while (i < vars->nb_cmd_line)
 	{
-		free_db_array(vars->cmd_line[i].args);
-		free_db_array(vars->cmd_line[i].infile);
-		free_db_array(vars->cmd_line[i].outfile);
-		free(vars->cmd_line[i].cmd);
+		if (vars->cmd_line[i].args)
+			free_db_array(vars->cmd_line[i].args);
+		if (vars->cmd_line[i].infile)
+			free_db_array(vars->cmd_line[i].infile);
+		if (vars->cmd_line[i].outfile)
+			free_db_array(vars->cmd_line[i].outfile);
+		if (vars->cmd_line[i].cmd)
+			free(vars->cmd_line[i].cmd);
 		i++;
 	}
-	free(vars->cmd_line);
+	if (vars->cmd_line)
+		free(vars->cmd_line);
 	if (vars->line)
 		free(vars->line);
 	if (vars->path)
 		free(vars->path);
+	if (vars->tokens)
+		free_tokens(&vars->tokens);
 	nullify_arg_vars(vars);
 }
 

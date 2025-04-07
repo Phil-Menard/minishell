@@ -40,6 +40,7 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	tokens = tokenizer(vars->line);
 	adjust_tokens_type(&tokens);
 	expander(&tokens, *env);
+	vars->tokens = tokens;
 	// func to now nb of leafs (compared to &&, ||, ())
 	// leafs = malloc(sizeof(t_leaf)); // for now only
 	// if (!leafs)
@@ -47,5 +48,4 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	// leafs->cmd_line = set_cmd_line(tokens);
 	vars->cmd_line = set_cmd_line(tokens, vars);
 	check_pipes(vars, env, export);
-	free_tokens(&tokens);
 }
