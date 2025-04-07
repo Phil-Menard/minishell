@@ -48,5 +48,4 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	// leafs->cmd_line = set_cmd_line(tokens);
 	vars->cmd_line = set_cmd_line(tokens, vars);
 	check_pipes(vars, env, export);
-	// free_tokens(&tokens);
 }

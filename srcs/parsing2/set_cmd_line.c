@@ -93,6 +93,8 @@ t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars)
 	size_t		i;
 	t_cmd_line	*cmd_line;
 
+	if (!tokens)
+		return (vars->nb_cmd_line = 0, NULL);
 	vars->nb_cmd_line = count_in_tokens(tokens, "|") + 1;
 	cmd_line = malloc(sizeof(t_cmd_line) * (vars->nb_cmd_line + 1));
 	if (!cmd_line)

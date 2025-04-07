@@ -78,13 +78,13 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 }
 
 
-/*void	printlist(t_token *tokens)
+void	printlist(t_token *tokens)
 {
 	if (!tokens)
-		printf("meeeeeeeeeeeeeerde\n");
+		printf("there's no list\n");
 	while (tokens)
 	{
 		printf("%s\n", tokens->content);
 		tokens = tokens->next;
 	}
-}*/
+}

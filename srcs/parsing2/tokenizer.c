@@ -84,27 +84,18 @@ t_token	*tokenizer(char *line)
 	buffer = NULL;
 	while (line[++i])
 	{
-		// printf("line[%d] : %c\n", i, line[i]);
 		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && mod == MOD_NORMAL)
-		{
-			// printf("space\n");
 			add(&tokens, &buffer, mod);
-		}
 		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && mod == MOD_NORMAL)
 		{
-			// printf("operator\n");
 			add(&tokens, &buffer, mod);
 			add_operator(&tokens, line, &i, mod);
 		}
 		else if (line[i] == '\"' || line[i] == '\'')
 			quote_handler(line[i], &mod, &buffer);
 		else
-		{
-			// printf("addchar\n");
 			buffer = ft_straddchar(buffer, line[i]);
-		}
 	}
-	// printlist(tokens);
 	add(&tokens, &buffer, mod);
 	return (tokens);
 }
