@@ -23,7 +23,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	// free(vars->line);
 	// vars->line = ft_strdup(temp);
 	// free(temp);
-	fd = init_and_set_fd(vars->line, vars, env);
+	fd = init_and_set_fd(vars->cmd_line, vars, env);
 	if (vars->nb_cmd_line == 1 && fd[0] > -1)
 	{
 		vars->i = 0;

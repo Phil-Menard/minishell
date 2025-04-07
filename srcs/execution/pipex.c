@@ -70,7 +70,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 	vars->i = -1;
 	while (++vars->i < vars->nb_cmd_line)
 	{
-		fd = init_and_set_fd(vars->cmd_line[vars->i].cmd, vars, env);
+		fd = init_and_set_fd(&vars->cmd_line[vars->i], vars, env);
 		previous_fd = set_previous_fd(fd, previous_fd);
 		pipe_and_fork(pipefd, &vars->pids[vars->i]);
 		if (vars->pids[vars->i] == 0)

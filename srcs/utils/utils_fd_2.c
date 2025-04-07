@@ -64,16 +64,16 @@ int	*find_files(int *fd, char **infile, char **outfile, int redir)
 
 //fd[0] : input
 //fd[1] : output
-int	*set_fd(char *line, int *fd, t_var *vars, t_env **env)
+int	*set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env, int *fd)
 {
-	int		redirection;
+	int		redir;
 
-	redirection = is_redirected(line);
-	fd = find_files(fd, infile, outfile, redirection);
+	redir = is_redirected(cmd_line->infile, cmd_line->outfile);
+	fd = find_files(fd, cmd_line->infile, cmd_line->outfile, redir);
 	if (fd[0] == -1)
 	{
 		vars->exit_statut = 1;
 		update_exit_env(*env, vars);
 	}
-	return (free_db_array(infile), free_db_array(outfile), fd);
+	return (fd);
 }

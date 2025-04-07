@@ -169,8 +169,8 @@ void		init_vars(t_var *vars);
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/
 int			*init_fd(void);
-int			*set_fd(char *line, int *fd, t_var *vars, t_env **env);
-int			*init_and_set_fd(char *line, t_var *vars, t_env **env);
+int			*set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env, int *fd);
+int			*init_and_set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env);
 void		close_multiple_fd(int *fd);
 int			set_previous_fd(int *fd, int previous_fd);
 int			is_infile_valid(int fd, char *infile);
@@ -183,7 +183,7 @@ char		*get_vars(char *line);
 /**========================================================================
  *!                            REDIRECTIONS
  *========================================================================**/
-int			is_redirected(char *str);
+int			is_redirected(char **infiles, char **outfiles);
 void		prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp);
 char		*str_without_redir(char *str);
 char		**get_infile(char *str);

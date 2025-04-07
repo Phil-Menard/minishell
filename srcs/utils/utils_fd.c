@@ -12,12 +12,12 @@ int	*init_fd(void)
 	return (fd);
 }
 
-int	*init_and_set_fd(char *line, t_var *vars, t_env **env)
+int	*init_and_set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env)
 {
 	int	*fd;
 
 	fd = init_fd();
-	fd = set_fd(line, fd, vars, env);
+	fd = set_fd(cmd_line, vars, env, fd);
 	return (fd);
 }
 
