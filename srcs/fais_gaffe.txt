@@ -14,3 +14,5 @@ ls -l /proc/$(ps aux | grep minishell | grep -v grep | awk '{print $2}')/fd
 - pour bosser a la maison il faut installer la lib de readline : libreadline-dev
 
 le return de la fonction getenv() n'a pas besoin d'etre free
+
+revenir last commit : git reset --hard HEAD
