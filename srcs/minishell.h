@@ -17,6 +17,32 @@
 
 extern volatile int unblock_sigquit;
 
+typedef enum e_mod
+{
+	MOD_NORMAL,
+	MOD_SINGLE,
+	MOD_DOUBLE
+}	t_mod;
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_INFILE,
+	TOKEN_OUTFILE,
+	TOKEN_REDIR_FILE,
+	// TOKEN_AND,
+	// TOKEN_OR,
+}	t_token_type;
+
+typedef struct s_token
+{
+	char			*content;
+	t_token_type	type;
+	int				expandable;
+	struct s_token	*next;
+}					t_token;
+
 typedef struct s_cmd_line
 {
 	char	*cmd;
@@ -44,6 +70,7 @@ typedef struct s_var
 	t_cmd_line	*cmd_line;
 	size_t		nb_cmd_line;
 	size_t		i;
+	t_token		*tokens;
 	char		*line;
 	char		*prompt;
 	char		*path;
@@ -58,31 +85,7 @@ typedef struct s_var
 // 	struct s_ast		*right;
 // }						t_ast;
 
-typedef enum e_mod
-{
-	MOD_NORMAL,
-	MOD_SINGLE,
-	MOD_DOUBLE
-}	t_mod;
 
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_INFILE,
-	TOKEN_OUTFILE,
-	TOKEN_REDIR_FILE,
-	// TOKEN_AND,
-	// TOKEN_OR,
-}	t_token_type;
-
-typedef struct s_token
-{
-	char			*content;
-	t_token_type	type;
-	int				expandable;
-	struct s_token	*next;
-}					t_token;
 
 void		parser(t_env **env, t_var *vars, t_env **export);
 t_token		*tokenizer(char *line);

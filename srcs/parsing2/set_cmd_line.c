@@ -38,6 +38,7 @@ static char	**set_redir(t_token *tokens, size_t i, t_token_type type)
 		if (x == i && tokens->type == type)
 		{
 			redir[j] = ft_strdup(tokens->content);
+			redir[j] = ft_straddchar(redir[j], ' ');
 			if (tokens->next)
 				redir[j] = ft_straddstr(redir[j], tokens->next->content);
 			j++;

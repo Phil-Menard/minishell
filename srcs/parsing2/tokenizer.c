@@ -30,20 +30,20 @@ static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
 {
 	if (line[*i] == '>' && line[*i + 1] == '>')
 	{
-		add_token(tokens, ft_strdup(">>"), TOKEN_OUTFILE, mod);
+		add_token(tokens, ">>", TOKEN_OUTFILE, mod);
 		(*i)++;
 	}
 	if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		add_token(tokens, ft_strdup("<<"), TOKEN_INFILE, mod);
+		add_token(tokens, "<<", TOKEN_INFILE, mod);
 		(*i)++;
 	}
 	else if (line[*i] == '|' && line[*i + 1] != '|')
-		add_token(tokens, ft_strdup("|"), TOKEN_PIPE, mod);
+		add_token(tokens, "|", TOKEN_PIPE, mod);
 	else if (line[*i] == '<')
-		add_token(tokens, ft_strdup("<"), TOKEN_INFILE, mod);
+		add_token(tokens, "<", TOKEN_INFILE, mod);
 	else if (line[*i] == '>')
-		add_token(tokens, ft_strdup(">"), TOKEN_OUTFILE, mod);
+		add_token(tokens, ">", TOKEN_OUTFILE, mod);
 }
 
 static inline void	add(t_token **tokens, char **buffer, t_mod mod)
