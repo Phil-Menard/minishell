@@ -18,12 +18,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 {
 	int		*fd;
 
-	fd = NULL;
-	// temp = parse_redirections(vars->line);
-	// free(vars->line);
-	// vars->line = ft_strdup(temp);
-	// free(temp);
-	
+	fd = NULL;	
 	if (!vars->tokens)
 		return ;
 	fd = init_and_set_fd(vars->cmd_line, vars, env);
