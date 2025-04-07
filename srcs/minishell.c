@@ -19,6 +19,24 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	int		*fd;
 
 	fd = NULL;
+	size_t i = 0;
+	int j;
+	while (i < vars->nb_cmd_line)
+	{
+		j = 0;
+		while (vars->cmd_line[i].infile[j])
+		{
+			printf("infile : %s\n", vars->cmd_line[i].infile[j]);
+			j++;
+		}
+		j = 0;
+		while (vars->cmd_line[i].outfile[j])
+		{
+			printf("outfile : %s\n", vars->cmd_line[i].outfile[j]);
+			j++;
+		}
+		i++;
+	}
 	// temp = parse_redirections(vars->line);
 	// free(vars->line);
 	// vars->line = ft_strdup(temp);

@@ -23,6 +23,8 @@ void	free_vars(t_var *vars)
 	while (i < vars->nb_cmd_line)
 	{
 		free_db_array(vars->cmd_line[i].args);
+		free_db_array(vars->cmd_line[i].infile);
+		free_db_array(vars->cmd_line[i].outfile);
 		free(vars->cmd_line[i].cmd);
 		i++;
 	}
