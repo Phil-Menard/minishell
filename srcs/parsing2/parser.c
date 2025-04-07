@@ -25,10 +25,25 @@ static void	adjust_tokens_type(t_token **tokens)
 	tmp = *tokens;
 	while (tmp)
 	{
-		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE) && tmp->next)
+		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE)
+			&& tmp->next && tmp->next->type == TOKEN_WORD)
 			tmp->next->type = TOKEN_REDIR_FILE;
 		tmp = tmp->next;
 	}
+}
+
+static int	check_redir_file(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == TOKEN_INFILE || tokens->type == TOKEN_OUTFILE)
+		{
+			if (!tokens->next || (tokens->next && tokens->next->type != TOKEN_REDIR_FILE))
+				return (ft_putstr_fd("syntax error near unexpected token\n", 1), 0);
+		}
+		tokens = tokens->next;
+	}
+	return (1);
 }
 
 void	parser(t_env **env, t_var *vars, t_env **export)
@@ -41,6 +56,8 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	adjust_tokens_type(&tokens);
 	expander(&tokens, *env);
 	vars->tokens = tokens;
+	if (check_redir_file(tokens) == 0)
+		return ;
 	// func to now nb of leafs (compared to &&, ||, ())
 	// leafs = malloc(sizeof(t_leaf)); // for now only
 	// if (!leafs)
