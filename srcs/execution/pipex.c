@@ -25,25 +25,28 @@ void	exec_cmds_pipes(t_var *vars, t_env **env, t_env **export, int *fd)
 //same as builtin_or_cmd but for pipes
 void	builtin_or_cmd_pipes(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "pwd") == 0)
-		ft_pwd(vars, fd[1]);
-	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "env") == 0)
-		ft_env(*env, vars, fd[1]);
-	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "echo") == 0)
-		ft_echo(vars, fd[1]);
-	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "cd") == 0)
-		ft_cd(env, fd[1], vars);
-	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "unset") == 0)
-		ft_unset(env, export, vars);
-	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "export") == 0)
-		ft_export(vars, env, export, fd[1]);
-	else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "exit") == 0)
+	if (vars->cmd_line[vars->i].cmd)
 	{
-		free(vars->pids);
-		ft_exit(fd, vars, env, export);
+		if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "pwd") == 0)
+			ft_pwd(vars, fd[1]);
+		else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "env") == 0)
+			ft_env(*env, vars, fd[1]);
+		else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "echo") == 0)
+			ft_echo(vars, fd[1]);
+		else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "cd") == 0)
+			ft_cd(env, fd[1], vars);
+		else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "unset") == 0)
+			ft_unset(env, export, vars);
+		else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "export") == 0)
+			ft_export(vars, env, export, fd[1]);
+		else if (ft_cmpstr(vars->cmd_line[vars->i].cmd, "exit") == 0)
+		{
+			free(vars->pids);
+			ft_exit(fd, vars, env, export);
+		}
+		else
+			exec_cmds_pipes(vars, env, export, fd);
 	}
-	else
-		exec_cmds_pipes(vars, env, export, fd);
 	close_multiple_fd(fd);
 	update_exit_env(*env, vars);
 }
