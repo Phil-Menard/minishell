@@ -5,9 +5,9 @@ char	**fill_arg(t_var *vars)
 {
 	if (!vars->path)
 		return (NULL);
-	free(vars->cmd_line[0].args[0]);
-	vars->cmd_line[0].args[0] = ft_strdup(vars->path);
-	return (vars->cmd_line[0].args);
+	free(vars->cmd_line[vars->i].args[0]);
+	vars->cmd_line[vars->i].args[0] = ft_strdup(vars->path);
+	return (vars->cmd_line[vars->i].args);
 }
 
 char	*get_next_path(char *arr, char *str, t_var *vars)
