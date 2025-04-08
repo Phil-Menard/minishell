@@ -73,7 +73,6 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 	{
 		fd = init_and_set_fd(&vars->cmd_line[vars->i], vars, env);
 		previous_fd = set_previous_fd(fd, previous_fd);
-		// fprintf(stderr, "previous_fd : %d     || i : %zu\n", previous_fd, vars->i);
 		pipe_and_fork(pipefd, &vars->pids[vars->i]);
 		if (vars->pids[vars->i] == 0)
 		{
@@ -88,5 +87,5 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 		}
 		post_cmd(vars, pipefd, &previous_fd, fd);
 	}
-	end_pipex(pipefd, vars, previous_fd);
+	end_pipex(pipefd, vars, previous_fd, env);
 }

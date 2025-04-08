@@ -64,7 +64,11 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	expander(&tokens, *env);
 	vars->tokens = tokens;
 	if (check_redir_file(tokens) == 0)
+	{
+		vars->exit_statut = 2;
+		update_exit_env(*env, vars);
 		return ;
+	}
 	// func to now nb of leafs (compared to &&, ||, ())
 	// leafs = malloc(sizeof(t_leaf)); // for now only
 	// if (!leafs)
