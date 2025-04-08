@@ -73,6 +73,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 	{
 		fd = init_and_set_fd(&vars->cmd_line[vars->i], vars, env);
 		previous_fd = set_previous_fd(fd, previous_fd);
+		// fprintf(stderr, "previous_fd : %d     || i : %zu\n", previous_fd, vars->i);
 		pipe_and_fork(pipefd, &vars->pids[vars->i]);
 		if (vars->pids[vars->i] == 0)
 		{
@@ -80,7 +81,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 				dup2(previous_fd, STDIN_FILENO);
 			outfile_dups(fd, pipefd, vars);
 			close_previous_fd(previous_fd);
-			if (previous_fd != -1)
+			if (fd[0] != -1)
 				builtin_or_cmd_pipes(vars, fd, env, export);
 			free_child_process(vars, env, export, fd);
 			exit(vars->exit_statut);

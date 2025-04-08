@@ -9,12 +9,12 @@ void	echo_loop(t_var *vars, int fd, int option)
 		j = 2;
 	else
 		j = 1;
-	while (vars->cmd_line[0].args[j])
+	while (vars->cmd_line[vars->i].args[j])
 	{
 		i = 0;
-		while (vars->cmd_line[0].args[j][i])
+		while (vars->cmd_line[vars->i].args[j][i])
 		{
-			ft_putchar_fd(vars->cmd_line[0].args[j][i], fd);
+			ft_putchar_fd(vars->cmd_line[vars->i].args[j][i], fd);
 			i++;
 		}
 		ft_putchar_fd(' ', fd);
@@ -29,6 +29,8 @@ int	check_arg(char *str)
 {
 	int	i;
 
+	if (!str)
+		return (0);
 	if (str[0] != '-')
 		return (0);
 	i = 1;
@@ -47,7 +49,7 @@ void	ft_echo(t_var *vars, int fd)
 	int		option;
 
 	option = 0;
-	j = check_arg(vars->cmd_line[0].args[1]);
+	j = check_arg(vars->cmd_line[vars->i].args[1]);
 	if (j > 0)
 		option = 1;
 	echo_loop(vars, fd, option);

@@ -8,24 +8,28 @@ char	*expand_str(char *content, t_env *env)
 {
 	char	*res;
 	char	*var;
+	char	*temp;
 	int		i;
 
 	res = NULL;
 	var = NULL;
+	temp = NULL;
 	i = 0;
 	while (content[i])
 	{
 		if (content[i] == '$')
 		{
+			i++;
 			while ((content[i] && content[i] != ' ') || (content[i] >= 9 && content[i] <= 13))
 				var = ft_straddchar(var, content[i++]);
-			res = ft_straddstr(res, ft_getenv(env, var));
+			temp = ft_getenv(env, var);
+			res = ft_straddstr(res, temp);
+			free(temp);
 		}
 		else
 			res = ft_straddchar(res, content[i++]);
 	}
 	free(var);
-	var = NULL;
 	free(content);
 	return (res);
 }
@@ -70,13 +74,12 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 	count = 0;
 	while (tokens)
 	{
-		if (ft_cmpstr(tokens->content, to_find) == 0)
+		if (tokens->content && ft_cmpstr(tokens->content, to_find) == 0)
 			count++;
 		tokens = tokens->next;
 	}
 	return (count);
 }
-
 
 void	printlist(t_token *tokens)
 {

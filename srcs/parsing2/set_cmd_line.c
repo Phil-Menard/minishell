@@ -78,7 +78,7 @@ static char	**set_args(t_token *tokens, size_t i)
 	args = malloc(sizeof(char *) * (count_words_tokens(tokens, i) + 1));
 	while (tokens)
 	{
-		if (x == i && tokens->type == TOKEN_WORD)
+		if (tokens->content && x == i && tokens->type == TOKEN_WORD)
 			args[i_arg++] = ft_strdup(tokens->content);
 		if (tokens->type == TOKEN_PIPE)
 			x++;
