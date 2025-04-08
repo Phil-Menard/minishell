@@ -58,13 +58,17 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	t_token	*tokens;
 	// t_leaf	*leafs;
 
-	//if redir go to nowhere, go back to main (see Trello)
 	tokens = tokenizer(vars->line);
+	ft_heredoc(&tokens);
 	adjust_tokens_type(&tokens);
 	expander(&tokens, *env);
 	vars->tokens = tokens;
 	if (check_redir_file(tokens) == 0)
+	{
+		vars->exit_statut = 2;
+		update_exit_env(*env, vars);
 		return ;
+	}
 	// func to now nb of leafs (compared to &&, ||, ())
 	// leafs = malloc(sizeof(t_leaf)); // for now only
 	// if (!leafs)

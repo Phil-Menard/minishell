@@ -17,7 +17,8 @@ void	echo_loop(t_var *vars, int fd, int option)
 			ft_putchar_fd(vars->cmd_line[vars->i].args[j][i], fd);
 			i++;
 		}
-		ft_putchar_fd(' ', fd);
+		if (vars->cmd_line[vars->i].args[j + 1])
+			ft_putchar_fd(' ', fd);
 		j++;
 	}
 	if (option == 0)
