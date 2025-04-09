@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+volatile sig_atomic_t	in_child;
+
 static void	print_minishell(void)
 {
 	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
@@ -79,6 +81,7 @@ int	main(int argc, char **argv, char **envp)
 	init_minishell(&env, &export, &vars, envp);
 	while (1)
 	{
+		in_child = 0;
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
 		if (vars.line == NULL)

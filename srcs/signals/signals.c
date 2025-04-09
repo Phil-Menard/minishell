@@ -3,14 +3,25 @@
 //routine de gestin SIGINT
 void	sig_handler(int signal)
 {
+	printf("in_child : %d\n", in_child);
 	if (signal == SIGINT)
 	{
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
+		if (in_child == 0)
+		{
+			printf("\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
+		}
+		else
+			exit(130);
+	}
+	if (in_child == 1 && signal == SIGQUIT)
+	{
+		printf("Quit (Core dumped)\n");
+		exit(203);
 	}
 }
+
 
 void	set_signal_action(void)
 {
@@ -19,7 +30,10 @@ void	set_signal_action(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sig_handler;
 	sigaction(SIGINT, &act, NULL);
-	signal(SIGQUIT, SIG_IGN);
+	if (in_child == 1)
+		sigaction(SIGQUIT, &act, NULL);
+	else
+		signal(SIGQUIT, SIG_IGN);
 	sigaction(SIGPIPE, &act, NULL);
 }
 
