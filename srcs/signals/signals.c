@@ -5,26 +5,12 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		if (g_in_child == 0)
-		{
-			printf("\n");
-			rl_replace_line("", 0);
-			rl_on_new_line();
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		if (g_in_child != 1)
 			rl_redisplay();
-		}
-		else
-		{
-			printf("\n");
-			g_in_child = 130;
-		}
-	}
-	if (sig == SIGQUIT && g_in_child == 1)
-	{
-		if (g_in_child == 1)
-		{
-			printf("Quit (Core dumped)\n");
-			g_in_child = 131;
-		}
+		g_in_child = 130;
 	}
 }
 
