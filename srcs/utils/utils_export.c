@@ -61,46 +61,45 @@ int	check_valid_identifier(char *line)
 }
 
 //add var to export, without assigning it
-t_env	*add_var_export(t_env **export, t_env **env, char *line, t_var *vars)
+t_env	*add_var_export(t_env **exp, t_env **env, char *line, t_var *vars)
 {
 	t_env	*node;
 	char	*str;
 
 	if (check_valid_identifier(line) == 2)
-		return (*export);
+		return (*exp);
 	if (check_valid_identifier(line) == 0)
 	{
-		ft_putstr_fd("minishell: export : '", 1);
-		ft_putstr_fd(line, 1);
-		ft_putstr_fd("': not a valid identifier\n", 1);
+		print_multiple_strfd("minishell: export : '", line,
+			"': not a valid identifier\n");
 		vars->exit_statut = 1;
 	}
 	else
 	{
 		str = ft_strdup("declare -x ");
 		str = ft_straddstr(str, line);
-		if (var_already_exist(export, str) == 1)
-			*export = remove_env_var(export, line, 11);
+		if (var_already_exist(exp, str) == 1)
+			*exp = remove_env_var(exp, line, 11);
 		if (var_already_exist(env, line) == 1)
 			*env = remove_env_var(env, line, 0);
 		node = ft_new_env_node(str);
-		ft_env_add_back(export, node);
+		ft_env_add_back(exp, node);
 		free(str);
 		vars->exit_statut = 0;
 	}
-	return (*export);
+	return (*exp);
 }
 
-t_env	*assign_var_export(t_env **export, t_env **env, char *line, t_var *vars)
+t_env	*assign_export(t_env **exp, t_env **env, char *line, t_var *vars)
 {
 	t_env	*current;
 	char	**arr;
 	int		index;
 
 	arr = ft_split(line, "=");
-	*export = add_var_export(export, env, arr[0], vars);
-	current = *export;
-	index = find_index_var(export, arr[0]);
+	*exp = add_var_export(exp, env, arr[0], vars);
+	current = *exp;
+	index = find_index_var(exp, arr[0]);
 	while (index-- > 0)
 		current = current->next;
 	current->var = ft_straddstr(current->var, "=\"");
@@ -114,5 +113,5 @@ t_env	*assign_var_export(t_env **export, t_env **env, char *line, t_var *vars)
 	}
 	current->var = ft_straddchar(current->var, '\"');
 	free_db_array(arr);
-	return (*export);
+	return (*exp);
 }

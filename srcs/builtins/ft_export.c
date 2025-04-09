@@ -35,17 +35,19 @@ void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 	int		i;
 
 	i = 1;
-	if (vars->cmd_line[0].args[i])
+	if (!vars->cmd_line[vars->i].args[i])
 		ft_env(*export, vars, fd);
 	else
 	{
 		while (vars->cmd_line[0].args[i])
 		{
 			if (find_occurences(vars->cmd_line[0].args[i], '=') == 0)
-				*export = add_var_export(export, env, vars->cmd_line[0].args[i], vars);
+				*export = add_var_export(export, env,
+						vars->cmd_line[0].args[i], vars);
 			else
 			{
-				*export = assign_var_export(export, env, vars->cmd_line[0].args[i], vars);
+				*export = assign_export(export, env,
+						vars->cmd_line[0].args[i], vars);
 				*env = add_var_env(env, vars->cmd_line[0].args[i]);
 			}
 			i++;

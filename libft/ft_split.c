@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 16:25:33 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/03/03 16:32:53 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/09 11:53:04 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**ft_split(char const *s, char *charset)
 	size_t	start;
 	size_t	end;
 
-	tab = (char **) malloc ((ft_countnbstring(s, charset) + 1) * sizeof(char *));
+	tab = (char **) malloc((ft_countnbstring(s, charset) + 1) * sizeof(char *));
 	if (tab == NULL)
 		return (NULL);
 	i = 0;

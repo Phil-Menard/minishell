@@ -108,7 +108,8 @@ void	ft_cd(t_env **env, int fd, t_var *vars)
 			vars->exit_statut = 1;
 		}
 		*env = modify_env(*env, "PWD", path);
-		if (!vars->cmd_line[0].args[1] || (vars->cmd_line[0].args[1] && ft_strncmp(vars->cmd_line[0].args[1], "~", 1) != 0))
+		if (!vars->cmd_line[0].args[1] || (vars->cmd_line[0].args[1]
+				&& ft_strncmp(vars->cmd_line[0].args[1], "~", 1) != 0))
 			free(path);
 	}
 }

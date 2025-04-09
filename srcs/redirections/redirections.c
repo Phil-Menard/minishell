@@ -63,13 +63,13 @@ void	get_nb_redir(char **outfiles, int *out, int *out_append)
 	while (outfiles[i])
 	{
 		j = 0;
-		if (outfiles[i][j + 1] 
+		if (outfiles[i][j + 1]
 			&& outfiles[i][j] == '>' && outfiles[i][j + 1] != '>')
 		{
 			(*out)++;
 			*out_append = 0;
 		}
-		else if (outfiles[i][j + 1] 
+		else if (outfiles[i][j + 1]
 			&& outfiles[i][j] == '>' && outfiles[i][j + 1] == '>')
 		{
 			(*out_append)++;

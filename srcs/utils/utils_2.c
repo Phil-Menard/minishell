@@ -1,34 +1,5 @@
 #include "../minishell.h"
 
-// find s2 in s1
-// return 1 if founded or 0 if not find
-int	ft_strfind(char *s1, char *s2)
-{
-	int	i;
-	int	j;
-	int	s2_size;
-
-	i = 0;
-	s2_size = ft_strlen(s2);
-	while (s1[i])
-	{
-		j = 0;
-		if (s1[i] == s2[j])
-		{
-			while (s1[i] == s2[j])
-			{
-				j++;
-				i++;
-			}
-			if (j == s2_size)
-				return (1);
-		}
-		else
-			i++;
-	}
-	return (0);
-}
-
 //return the size of a 2D array
 int	double_arr_len(char **arr)
 {
@@ -38,14 +9,6 @@ int	double_arr_len(char **arr)
 	while (arr[size])
 		size++;
 	return (size);
-}
-
-void	quit(char *msg, int exit_status, t_var *vars)
-{
-	if (msg)
-		ft_putstr_fd(msg, 2);
-	vars->exit_statut = exit_status;
-	// exit(vars->exit_statut);
 }
 
 //compare 2 strings
@@ -59,4 +22,11 @@ int	ft_cmpstr(char *s1, char *s2)
 			return (0);
 	}
 	return (1);
+}
+
+void	print_multiple_strfd(char *s1, char *var, char *s2)
+{
+	ft_putstr_fd(s1, 1);
+	ft_putstr_fd(var, 1);
+	ft_putstr_fd(s2, 1);
 }

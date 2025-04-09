@@ -4,8 +4,6 @@
 void	nullify_arg_vars(t_var *vars)
 {
 	vars->cmd_line = NULL;
-	// vars->cmd_line->infile = NULL;
-	// vars->cmd_line->outfile = NULL;
 	vars->line = NULL;
 	vars->path = NULL;
 	vars->pids = NULL;

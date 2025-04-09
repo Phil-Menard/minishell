@@ -55,7 +55,8 @@ void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	int		i;
 
 	nb = 0;
-	if (vars->cmd_line[0].args[1] && ft_str_isalpha(vars->cmd_line[0].args[1]) == 0
+	if (vars->cmd_line[0].args[1]
+		&& ft_str_isalpha(vars->cmd_line[0].args[1]) == 0
 		&& vars->cmd_line[0].args[2])
 		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 1);
 	else

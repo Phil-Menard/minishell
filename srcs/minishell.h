@@ -15,8 +15,6 @@
 
 # define HEREDOC	".tomatePastequeCitronMiel.tmp"
 
-extern volatile int unblock_sigquit;
-
 typedef enum e_mod
 {
 	MOD_NORMAL,
@@ -85,10 +83,13 @@ typedef struct s_var
 // 	struct s_ast		*left;
 // 	struct s_ast		*right;
 // }						t_ast;
-
-
-
-
+// /**========================================================================
+//  *!                                  TREE
+//  *========================================================================**/
+// void		free_list(t_ast *tree);
+// t_ast		*new_node(char *cmd, t_token type);
+// void		add_node_end(t_ast *tree, const char *branch, t_ast *node);
+// void		parsing(t_env **env, t_var *vars, t_env **export);
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
@@ -103,13 +104,6 @@ size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 void		printlist(t_token *tokens);
-// /**========================================================================
-//  *!                                  TREE
-//  *========================================================================**/
-// void		free_list(t_ast *tree);
-// t_ast		*new_node(char *cmd, t_token type);
-// void		add_node_end(t_ast *tree, const char *branch, t_ast *node);
-// void		parsing(t_env **env, t_var *vars, t_env **export);
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/
@@ -129,7 +123,6 @@ void		ft_execve(t_var *vars, t_env **env, t_env **export, int *fd);
 void		builtin_or_cmd(t_var *vars, int *fd, t_env **env, t_env **exp);
 char		*get_right_path(char *str, t_var *vars, t_env **env);
 char		*get_next_path(char *arr, char *str, t_var *vars);
-void		check_path_errors(char *argv, char **env, int *pipefd);
 char		**split_path_var(t_env **env);
 void		end_right_path(t_var *vars, char *str, char **arr);
 /**========================================================================
@@ -152,7 +145,6 @@ int			ft_cmpstr(char *s1, char *s2);
 void		free_db_array(char **arr);
 char		**fill_arg(t_var *vars);
 char		*ft_straddstr(char *s1, char *s2);
-int			ft_strfind(char *s1, char *s2);
 int			double_arr_len(char **arr);
 char		*ft_straddchar(char *str, char c);
 int			find_occurences(char *str, char c);
@@ -161,8 +153,8 @@ long int	ft_atol(char *nptr);
 char		*ft_ltoa(long int n);
 void		free_vars(t_var *vars);
 void		free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
-void		quit(char *msg, int exit_status, t_var *vars);
 void		init_vars(t_var *vars);
+void		print_multiple_strfd(char *s1, char *var, char *s2);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/
@@ -171,13 +163,7 @@ int			*set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env, int *fd);
 int			*init_and_set_fd(t_cmd_line *cmd_line, t_var *vars, t_env **env);
 void		close_multiple_fd(int *fd);
 int			set_previous_fd(int *fd, int previous_fd);
-int			is_infile_valid(int fd, char *infile);
 char		*parse_redirections(char *line);
-/**========================================================================
- *!                      CHECK QUOTES WHEN NEW LINE
- *========================================================================**/
-int			check_quote(char *str);
-char		*get_vars(char *line);
 /**========================================================================
  *!                            REDIRECTIONS
  *========================================================================**/
@@ -202,10 +188,9 @@ void		update_exit_env(t_env *env, t_var *vars);
  *!                                 EXPORT
  *========================================================================**/
 t_env		*init_export_lst(t_env **env, t_env **lst);
-void		print_t_list(t_list *lst);
 int			var_already_exist(t_env **export, char *str);
-t_env		*add_var_export(t_env **export, t_env **env, char *line, t_var *vars);
-t_env		*assign_var_export(t_env **export, t_env **env, char *line, t_var *vars);
+t_env		*add_var_export(t_env **exp, t_env **env, char *line, t_var *vars);
+t_env		*assign_export(t_env **exp, t_env **env, char *line, t_var *vars);
 /**========================================================================
  *!                                 SIGNALS
  *========================================================================**/

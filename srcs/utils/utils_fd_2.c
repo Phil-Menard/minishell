@@ -3,8 +3,8 @@
 //create all outfiles, closes them except last one and return it
 int	set_fd_out(int fd, char **outfile, int redir)
 {
-	int	i;
-	int	size;
+	int		i;
+	int		size;
 	char	**split;
 
 	i = -1;

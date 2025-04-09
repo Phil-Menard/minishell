@@ -58,11 +58,11 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 
 void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 {
-	int		redirection;
+	int		redir;
 	int		id;
 
-	redirection = is_redirected(vars->cmd_line->infile, vars->cmd_line->outfile);
-	if (redirection >= 0)
+	redir = is_redirected(vars->cmd_line->infile, vars->cmd_line->outfile);
+	if (redir >= 0)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
