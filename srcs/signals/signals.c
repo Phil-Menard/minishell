@@ -1,27 +1,18 @@
 #include "../minishell.h"
 
 //routine de gestin SIGINT
-void	sig_handler(int signal)
+void	sig_handler(int sig)
 {
-	printf("in_child : %d\n", in_child);
-	if (signal == SIGINT)
+	if (sig == SIGINT)
 	{
-		if (in_child == 0)
-		{
-			printf("\n");
-			rl_replace_line("", 0);
-			rl_on_new_line();
-		}
-		else
-			exit(130);
-	}
-	if (in_child == 1 && signal == SIGQUIT)
-	{
-		printf("Quit (Core dumped)\n");
-		exit(203);
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		if (in_child != 1)
+			rl_redisplay();
+		in_child = 130;
 	}
 }
-
 
 void	set_signal_action(void)
 {
@@ -30,9 +21,7 @@ void	set_signal_action(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sig_handler;
 	sigaction(SIGINT, &act, NULL);
-	if (in_child == 1)
-		sigaction(SIGQUIT, &act, NULL);
-	else
+	if (in_child == 0)
 		signal(SIGQUIT, SIG_IGN);
 	sigaction(SIGPIPE, &act, NULL);
 }

@@ -69,15 +69,23 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 		if (vars->path)
 		{
+			in_child = 1;
 			vars->cmd_line[vars->i].args = fill_arg(vars);
 			id = fork();
 			if (id == 0)
+			{
+				signal(SIGQUIT, SIG_DFL);
 				ft_execve(vars, env, export, fd);
+			}
 			else
 			{
 				waitpid(id, &vars->exit_statut, 0);
 				if (WIFSIGNALED(vars->exit_statut))
+				{
+					if (WTERMSIG(vars->exit_statut) == SIGQUIT)
+						write(2, "Quit (core dumped)\n", 20);
 					vars->exit_statut = 128 + WTERMSIG(vars->exit_statut);
+				}
 				else if (WIFEXITED(vars->exit_statut))
 					vars->exit_statut = WEXITSTATUS(vars->exit_statut);
 			}

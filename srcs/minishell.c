@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-volatile sig_atomic_t	in_child;
+volatile sig_atomic_t	in_child = 0;
 
 static void	print_minishell(void)
 {
@@ -84,6 +84,12 @@ int	main(int argc, char **argv, char **envp)
 		in_child = 0;
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
+		if (in_child == 130 || in_child == 131)
+		{
+			vars.exit_statut = in_child;
+			update_exit_env(env, &vars);
+			in_child = 0;
+		}
 		if (vars.line == NULL)
 			handle_ctrl_d(&env, &export, &vars);
 		add_history(vars.line);
