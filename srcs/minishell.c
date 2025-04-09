@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-volatile sig_atomic_t	in_child;
+volatile sig_atomic_t	g_in_child;
 
 static void	print_minishell(void)
 {
@@ -21,6 +21,8 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	fd = NULL;
 	if (!vars->tokens)
 		return ;
+	g_in_child = 1;
+	set_signal_action();
 	if (vars->nb_cmd_line == 1)
 	{
 		vars->i = 0;
@@ -65,7 +67,6 @@ void	init_minishell(t_env **env, t_env **export, t_var *vars, char **envp)
 	init_vars(vars);
 	update_exit_env(*env, vars);
 	print_minishell();
-	set_signal_action();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -81,7 +82,8 @@ int	main(int argc, char **argv, char **envp)
 	init_minishell(&env, &export, &vars, envp);
 	while (1)
 	{
-		in_child = 0;
+		g_in_child = 0;
+		set_signal_action();
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
 		if (vars.line == NULL)

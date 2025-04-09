@@ -26,8 +26,6 @@ void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
 	char	**arr_env;
 
 	arr_env = lst_to_arr(env);
-	in_child = 1;
-	set_signal_action();
 	if (execve(vars->path, vars->cmd_line[vars->i].args, arr_env) == -1)
 	{
 		free_and_close(vars, env, export, fd);
