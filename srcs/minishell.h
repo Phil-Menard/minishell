@@ -13,7 +13,7 @@
 # include <limits.h>
 # include "../libft/libft.h"
 
-# define HEREDOC	"tomatePastequeCitronMiel"
+# define HEREDOC	".tomatePastequeCitronMiel.tmp"
 
 extern volatile int unblock_sigquit;
 
@@ -29,6 +29,7 @@ typedef enum e_token_type
 	TOKEN_WORD,
 	TOKEN_PIPE,
 	TOKEN_INFILE,
+	TOKEN_HEREDOC,
 	TOKEN_OUTFILE,
 	TOKEN_REDIR_FILE,
 	// TOKEN_AND,
@@ -91,6 +92,9 @@ typedef struct s_var
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
+void		add_heredoc_as_infile(t_token **tokens);
+void		append_tmp_file(int fd, char *line);
+char		**get_dels(t_token *tokens);
 void		parser(t_env **env, t_var *vars, t_env **export);
 t_token		*tokenizer(char *line);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);

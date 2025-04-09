@@ -18,15 +18,15 @@ static void	expander(t_token **tokens, t_env *env)
 
 // Change tokens after tokens of types redir to tokens of type redir_file,
 // make it easier to add them to vars->cmd_line[].infile/outfile
-static void	adjust_tokens_type(t_token **tokens)
+static void	specify_files_redir(t_token **tokens)
 {
 	t_token	*tmp;
 
 	tmp = *tokens;
 	while (tmp)
 	{
-		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE)
-			&& tmp->next && tmp->next->type == TOKEN_WORD)
+		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE
+			|| tmp->type == TOKEN_HEREDOC) && tmp->next && tmp->next->type == TOKEN_WORD)
 			tmp->next->type = TOKEN_REDIR_FILE;
 		tmp = tmp->next;
 	}
@@ -53,22 +53,58 @@ static int	check_redir_file(t_token *tokens)
 	return (1);
 }
 
+// 
+static void	ft_heredoc(t_token **tokens)
+{
+	char	**dels;
+	t_token	*tmp;
+	int		fd;
+	char	*line;
+	int		i;
+
+	// todo : expansion
+	fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return ;
+	tmp = *tokens;
+	dels = get_dels(tmp);
+	i = 0;
+	while (i < double_arr_len(dels))
+	{
+		line = readline(">");
+		if (ft_cmpstr(line, dels[i]) == 1 && i == (double_arr_len(dels) - 1))
+			append_tmp_file(fd, line);
+		if (ft_cmpstr(line, dels[i]) == 0)
+			i++;
+		free(line);
+	}
+	close(fd);
+	free_db_array(dels);
+	add_heredoc_as_infile(tokens);
+}
+
 void	parser(t_env **env, t_var *vars, t_env **export)
 {
 	t_token	*tokens;
 	// t_leaf	*leafs;
 
-	//if redir go to nowhere, go back to main (see Trello)
-	tokens = tokenizer(vars->line);
-	adjust_tokens_type(&tokens);
-	expander(&tokens, *env);
-	vars->tokens = tokens;
+	tokens = tokenizer(vars->line); //todo : laisser les quotes
+	specify_files_redir(&tokens);
 	if (check_redir_file(tokens) == 0)
 	{
 		vars->exit_statut = 2;
 		update_exit_env(*env, vars);
 		return ;
 	}
+	//? Faire en sorte que heredoc fasse par pipe (ajoute infile avant pipe)
+	vars->nb_cmd_line = count_in_tokens(tokens, "|") + 1;
+	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
+	{
+		
+		ft_heredoc(&tokens);
+	}
+	expander(&tokens, *env);
+	vars->tokens = tokens;
 	// func to now nb of leafs (compared to &&, ||, ())
 	// leafs = malloc(sizeof(t_leaf)); // for now only
 	// if (!leafs)
