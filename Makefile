@@ -29,9 +29,7 @@ SRC = minishell.c \
 	utils/utils_fd_2.c \
 	utils/utils_export.c \
 	utils/utils_free.c \
-	redirections/prepare_redir.c \
 	redirections/redirections.c \
-	redirections/redirections_parsing.c \
 	env/init_env.c \
 	env/utils_env.c \
 	signals/signals.c \
@@ -39,6 +37,7 @@ SRC = minishell.c \
 	parsing2/parser.c \
 	parsing2/set_cmd_line.c \
 	parsing2/utils_parsing.c \
+	# redirections/redirections_parsing.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \
 	# parsing/lexing_utils.c \

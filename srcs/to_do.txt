@@ -43,3 +43,5 @@ tokenize :
 
 decoupe les tokens en gardant les ",' et en coupant aux whitespaces, <, |,;
 -> dans une liste
+
+> out     \\\ commande seule doit creer fichier

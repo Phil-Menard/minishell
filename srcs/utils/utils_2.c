@@ -40,28 +40,6 @@ int	double_arr_len(char **arr)
 	return (size);
 }
 
-char	**prepare_line(char *line)
-{
-	char	**arr;
-	char	**res;
-	int		i;
-
-	arr = ft_split(line, "|");
-	i = 0;
-	while (arr[i])
-		i++;
-	res = malloc((i + 1) * sizeof(char *));
-	i = 0;
-	while (arr[i])
-	{
-		res[i] = ft_strtrim(arr[i], " ");
-		i++;
-	}
-	res[i] = NULL;
-	free_db_array(arr);
-	return (res);
-}
-
 void	quit(char *msg, int exit_status, t_var *vars)
 {
 	if (msg)
@@ -73,11 +51,11 @@ void	quit(char *msg, int exit_status, t_var *vars)
 //compare 2 strings
 //0 if same
 //1 if different
-int	ft_cmpstr(char *cmd, char *builtin)
+int	ft_cmpstr(char *s1, char *s2)
 {
-	if (ft_strlen(cmd) == ft_strlen(builtin))
+	if (ft_strlen(s1) == ft_strlen(s2))
 	{
-		if (ft_strncmp(cmd, builtin, ft_strlen(cmd)) == 0)
+		if (ft_strncmp(s1, s2, ft_strlen(s1)) == 0)
 			return (0);
 	}
 	return (1);

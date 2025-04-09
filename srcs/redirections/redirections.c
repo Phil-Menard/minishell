@@ -1,5 +1,15 @@
 #include "../minishell.h"
 
+void	prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp)
+{
+	vars->path = get_right_path(vars->cmd_line->cmd, vars, env);
+	if (vars->path)
+	{
+		vars->cmd_line->args = fill_arg(vars);
+		exec_redir(vars, fd, env, exp);
+	}
+}
+
 //execve with correct redirection
 void	exec_redir(t_var *vars, int *fd, t_env **env, t_env **export)
 {

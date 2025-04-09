@@ -144,7 +144,7 @@ void		end_pipex(int *pipefd, t_var *vars, int prev_fd, t_env **env);
  *!                               UTILS
  *========================================================================**/
 char		*ft_join_mid(char *s1, char slash, char *s2);
-int			ft_cmpstr(char *cmd, char *builtin);
+int			ft_cmpstr(char *s1, char *s2);
 void		free_db_array(char **arr);
 char		**fill_arg(t_var *vars);
 char		*ft_straddstr(char *s1, char *s2);
@@ -152,7 +152,6 @@ int			ft_strfind(char *s1, char *s2);
 int			double_arr_len(char **arr);
 char		*ft_straddchar(char *str, char c);
 int			find_occurences(char *str, char c);
-char		**prepare_line(char *line);
 int			ft_str_isalpha(char *str);
 long int	ft_atol(char *nptr);
 char		*ft_ltoa(long int n);
@@ -180,9 +179,6 @@ char		*get_vars(char *line);
  *========================================================================**/
 int			is_redirected(char **infiles, char **outfiles);
 void		prepare_redir(t_var *vars, int *fd, t_env **env, t_env **exp);
-char		*str_without_redir(char *str);
-char		**get_infile(char *str);
-char		**get_outfile(char *str);
 void		exec_redir(t_var *vars, int *fd, t_env **env, t_env **export);
 /**========================================================================
  *!                                 ENV
