@@ -34,10 +34,11 @@ SRC = minishell.c \
 	env/utils_env.c \
 	signals/signals.c \
 	parsing2/tokenizer.c \
+	parsing2/tokens_utils.c \
 	parsing2/parser.c \
 	parsing2/set_cmd_line.c \
 	parsing2/utils_parsing.c \
-	parsing2/heredoc_utils.c \
+	parsing2/heredoc.c \
 	# redirections/redirections_parsing.c \
 	# parsing/parser.c \
 	# parsing/lexing.c \

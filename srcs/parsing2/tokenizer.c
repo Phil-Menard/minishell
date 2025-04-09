@@ -2,28 +2,20 @@
 
 static void	add_token(t_token **tokens, char *buffer, t_token_type type, t_mod mod)
 {
-	t_token	*new_token;
-	t_token	*tmp;
-	
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-		return ;
-	new_token->content = ft_strdup(buffer);
-	new_token->type = type;
-	new_token->next = NULL;
+	t_token	*new;
+	int		expandable;
+
 	if (mod == MOD_NORMAL || mod == MOD_DOUBLE)
-		new_token->expandable = 1;
+		expandable = 1;
 	else
-		new_token->expandable = 0;
+		expandable = 0;
+	new = new_token(buffer, type, NULL, expandable);
+	if (!new)
+		return ;
 	if (*tokens == NULL)
-		*tokens = new_token;
+		*tokens = new;
 	else
-	{
-		tmp = *tokens;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new_token;
-	}
+		get_last_token(*tokens)->next = new;
 }
 
 static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
@@ -58,7 +50,6 @@ static inline void	add(t_token **tokens, char **buffer, t_mod mod)
 
 static void	quote_handler(char c, t_mod *mod, char **buffer)
 {
-	// printf("quote\n");
 	if (*mod == MOD_NORMAL && c == '\'')
 		*mod = MOD_SINGLE;
 	else if (*mod == MOD_NORMAL && c == '\"')
