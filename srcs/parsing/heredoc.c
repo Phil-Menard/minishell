@@ -30,26 +30,28 @@ static char	**get_dels(t_token *tokens, size_t i_pipe)
 	t_token	*tmp;
 	char	**dels;
 	size_t	i;
+	size_t	x;
 
 	tmp = tokens;
 	dels = malloc(sizeof(char *) * (count_heredoc_cmdline(tokens, i_pipe) + 1));
 	if (!dels)
 		return (NULL);
 	i = 0;
+	x = 0;
 	while (tmp)
 	{
-		if (tmp->type == TOKEN_PIPE)
+		if (i == i_pipe && tmp->type == TOKEN_HEREDOC)
+			dels[x++] = ft_strdup(tmp->next->content);
+		else if (tmp->type == TOKEN_PIPE)
 		{
 			if (i == i_pipe)
 				break ;
 			else
 				i++;
 		}
-		if (i == i_pipe && tmp->type == TOKEN_HEREDOC)
-			dels[i++] = ft_strdup(tmp->next->content);
 		tmp = tmp->next;
 	}
-	dels[i] = NULL;
+	dels[x] = NULL;
 	return (dels);
 }
 
@@ -110,18 +112,17 @@ void	ft_heredoc(t_token **tokens, t_var *vars)
 	while (i_pipe < vars->nb_cmd_line)
 	{
 		tmp = *tokens;
-		file_name = ft_straddchar(HEREDOC, i_pipe + '0');
+		file_name = ft_straddchar(ft_strdup(HEREDOC), i_pipe + '0');
 		fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 			return ;
 		dels = get_dels(tmp, i_pipe);//GERER MALLOC DELS
 		append_line_to_file(dels, fd);
+		printf("i_pipe : %zu\ndel : %s\n", i_pipe, dels[0]);
 		close(fd);
 		free_db_array(dels);
-		free(file_name);
 		add_heredoc_as_infile(tokens, i_pipe, file_name);
+		free(file_name);
 		i_pipe++;
 	}
-	tmp = *tokens;
-	printlist(tmp);
 }

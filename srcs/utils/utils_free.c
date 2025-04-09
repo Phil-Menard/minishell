@@ -10,21 +10,44 @@ void	nullify_arg_vars(t_var *vars)
 	vars->prompt = NULL;
 }
 
+void	free_db_vars(t_var *vars, size_t i)
+{
+	size_t	j;
+	char	*tmp;
+
+	tmp = ft_strdup("< .tomatePastequeCitronMiel");
+	if (vars->cmd_line[i].infile)
+	{
+		j = 0;
+		while(vars->cmd_line[i].infile[j])
+		{
+			if (ft_strncmp(tmp, vars->cmd_line[i].infile[j], ft_strlen(tmp)) == 0)
+			{
+				if (unlink(vars->cmd_line[i].infile[j] + 2) == -1)
+					 perror("unlink");
+			}
+			j++;
+		}
+		free_db_array(vars->cmd_line[i].infile);
+	}
+	if (tmp)
+		free(tmp);
+}
+
 //free all variables from t_var and set them to NULL
 void	free_vars(t_var *vars)
 {
 	size_t	i;
 
+	i = -1;
 	if (vars->prompt)
 		free(vars->prompt);
 	if (vars->cmd_line != NULL)
 	{
-		i = -1;
 		while (++i < vars->nb_cmd_line)
 		{
 			free_db_array(vars->cmd_line[i].args);
-			if (vars->cmd_line[i].infile)
-				free_db_array(vars->cmd_line[i].infile);
+			free_db_vars(vars, i);
 			if (vars->cmd_line[i].outfile)
 				free_db_array(vars->cmd_line[i].outfile);
 			free(vars->cmd_line[i].cmd);
