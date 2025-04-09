@@ -93,9 +93,7 @@ typedef struct s_var
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-void		add_heredoc_as_infile(t_token **tokens);
-void		append_tmp_file(int fd, char *line);
-char		**get_dels(t_token *tokens);
+void		ft_heredoc(t_token **tokens, t_var *vars);
 void		parser(t_env **env, t_var *vars, t_env **export);
 t_token		*tokenizer(char *line);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
@@ -103,6 +101,9 @@ char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
+t_token		*new_token(char *content, t_token_type type, t_token *next, int expandable);
+t_token		*get_cmd_line_last_token(t_token *tokens, int *i, int i_pipe);
+t_token		*get_last_token(t_token *tokens);
 void		printlist(t_token *tokens);
 /**========================================================================
  *!                           EXECUTION BUILTINS

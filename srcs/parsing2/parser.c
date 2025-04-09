@@ -53,36 +53,6 @@ static int	check_redir_file(t_token *tokens)
 	return (1);
 }
 
-// 
-static void	ft_heredoc(t_token **tokens)
-{
-	char	**dels;
-	t_token	*tmp;
-	int		fd;
-	char	*line;
-	int		i;
-
-	// todo : expansion
-	fd = open(HEREDOC, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-		return ;
-	tmp = *tokens;
-	dels = get_dels(tmp);
-	i = 0;
-	while (i < double_arr_len(dels))
-	{
-		line = readline(">");
-		if (ft_cmpstr(line, dels[i]) == 1 && i == (double_arr_len(dels) - 1))
-			append_tmp_file(fd, line);
-		if (ft_cmpstr(line, dels[i]) == 0)
-			i++;
-		free(line);
-	}
-	close(fd);
-	free_db_array(dels);
-	add_heredoc_as_infile(tokens);
-}
-
 void	parser(t_env **env, t_var *vars, t_env **export)
 {
 	t_token	*tokens;
@@ -101,7 +71,7 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
 	{
 		
-		ft_heredoc(&tokens);
+		ft_heredoc(&tokens, vars);
 	}
 	expander(&tokens, *env);
 	vars->tokens = tokens;

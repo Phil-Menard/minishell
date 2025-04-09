@@ -34,6 +34,7 @@ SRC = minishell.c \
 	env/utils_env.c \
 	signals/signals.c \
 	parsing2/tokenizer.c \
+	parsing2/tokens_utils.c \
 	parsing2/parser.c \
 	parsing2/set_cmd_line.c \
 	parsing2/utils_parsing.c \
