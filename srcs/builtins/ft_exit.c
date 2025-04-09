@@ -13,7 +13,7 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 void	arg_not_numeric(int *fd, t_var *vars, t_env **env, t_env **export)
 {
 	ft_putstr_fd("minishell: exit: ", 1);
-	ft_putstr_fd(vars->cmd_line[0].cmd, 1);
+	ft_putstr_fd(vars->cmd_line[vars->i].cmd, 1);
 	ft_putstr_fd(": numeric argument required\n", 1);
 	vars->exit_statut = 2;
 	free_before_exit(fd, vars, env, export);
@@ -27,15 +27,15 @@ long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	int			i;
 
 	i = 0;
-	while (vars->cmd_line[0].args[1][i] == '0')
+	while (vars->cmd_line[vars->i].args[1][i] == '0')
 		i++;
-	nb = ft_atol(vars->cmd_line[0].args[1] + i);
+	nb = ft_atol(vars->cmd_line[vars->i].args[1] + i);
 	content = ft_ltoa(nb);
-	if (ft_strncmp(vars->cmd_line[0].args[1] + i, content,
-			ft_strlen(vars->cmd_line[0].args[1] + i)) != 0)
+	if (ft_strncmp(vars->cmd_line[vars->i].args[1] + i, content,
+			ft_strlen(vars->cmd_line[vars->i].args[1] + i)) != 0)
 	{
-		if (ft_strncmp(vars->cmd_line[0].args[1], "-9223372036854775808",
-				ft_strlen(vars->cmd_line[0].args[1])) != 0)
+		if (ft_strncmp(vars->cmd_line[vars->i].args[1], "-9223372036854775808",
+				ft_strlen(vars->cmd_line[vars->i].args[1])) != 0)
 		{
 			free(content);
 			arg_not_numeric(fd, vars, env, export);
@@ -55,18 +55,18 @@ void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	int		i;
 
 	nb = 0;
-	if (vars->cmd_line[0].args[1]
-		&& ft_str_isalpha(vars->cmd_line[0].args[1]) == 0
-		&& vars->cmd_line[0].args[2])
+	if (vars->cmd_line[vars->i].args[1]
+		&& ft_str_isalpha(vars->cmd_line[vars->i].args[1]) == 0
+		&& vars->cmd_line[vars->i].args[2])
 		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 1);
 	else
 	{
-		if (vars->cmd_line[0].args[1])
+		if (vars->cmd_line[vars->i].args[1])
 		{
 			i = -1;
-			while (vars->cmd_line[0].args[1][++i])
+			while (vars->cmd_line[vars->i].args[1][++i])
 			{
-				if (ft_isalpha(vars->cmd_line[0].args[1][i]) == 1)
+				if (ft_isalpha(vars->cmd_line[vars->i].args[1][i]) == 1)
 					arg_not_numeric(fd, vars, env, export);
 			}
 			nb = set_nb_exit(fd, vars, env, export);

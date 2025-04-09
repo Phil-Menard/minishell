@@ -66,10 +66,10 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		prepare_redir(vars, fd, env, export);
 	else
 	{
-		vars->path = get_right_path(vars->cmd_line[0].cmd, vars, env);
+		vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 		if (vars->path)
 		{
-			vars->cmd_line[0].args = fill_arg(vars);
+			vars->cmd_line[vars->i].args = fill_arg(vars);
 			id = fork();
 			if (id == 0)
 				ft_execve(vars, env, export, fd);

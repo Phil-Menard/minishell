@@ -7,10 +7,10 @@ void	ft_unset(t_env **env, t_env **export, t_var *vars)
 
 	size = ft_strlen("declare -x ");
 	i = 1;
-	while (vars->cmd_line[0].args[i])
+	while (vars->cmd_line[vars->i].args[i])
 	{
-		*env = remove_env_var(env, vars->cmd_line[0].args[i], 0);
-		*export = remove_env_var(export, vars->cmd_line[0].args[i], size);
+		*env = remove_env_var(env, vars->cmd_line[vars->i].args[i], 0);
+		*export = remove_env_var(export, vars->cmd_line[vars->i].args[i], size);
 		i++;
 	}
 	vars->exit_statut = 0;
