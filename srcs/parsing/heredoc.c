@@ -78,13 +78,20 @@ static void	add_heredoc_as_infile(t_token **tokens, size_t i_pipe, char *file_na
 static void	append_line_to_file(char **dels, int fd)
 {
 	int		i;
-	char	*line;
+	char	*line = NULL;
 	char	*res;
 
 	i = 0;
-	while (i < double_arr_len(dels))
+	while (i < double_arr_len(dels) && g_exit_signal != 130)
 	{
 		line = readline(">");
+		if (line == NULL)
+		{
+			print_multiple_strfd
+			("warning: here-document delimited by end-of-file (wanted (",
+			dels[i], "))\n");
+			break ;
+		}
 		if (ft_cmpstr(line, dels[i]) == 1 && i == (double_arr_len(dels) - 1))
 		{
 			res = NULL;
@@ -109,7 +116,8 @@ void	ft_heredoc(t_token **tokens, t_var *vars)
 
 	// todo : expansion
 	i_pipe = 0;
-	while (i_pipe < vars->nb_cmd_line)
+	g_exit_signal = 7;
+	while (i_pipe < vars->nb_cmd_line && g_exit_signal != 130)
 	{
 		tmp = *tokens;
 		file_name = ft_straddchar(ft_strdup(HEREDOC), i_pipe + '0');

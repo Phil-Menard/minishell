@@ -61,7 +61,7 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 	int	redir;
 	int	id;
 	int	status;
-	
+
 	status = 0;
 	redir = is_redirected(vars->cmd_line->infile, vars->cmd_line->outfile);
 	if (redir >= 0)
