@@ -5,12 +5,21 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		if (g_in_child != 1)
+		if (g_exit_signal == 1)
+		{
+			printf("\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			g_exit_signal = 130;
+		}
+		else
+		{
+			printf("\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
 			rl_redisplay();
-		g_in_child = 130;
+			g_exit_signal = 130;
+		}
 	}
 }
 
@@ -21,7 +30,7 @@ void	set_signal_action(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sig_handler;
 	sigaction(SIGINT, &act, NULL);
-	if (g_in_child == 0)
+	if (g_exit_signal == 0)
 		signal(SIGQUIT, SIG_IGN);
 	else
 		sigaction(SIGQUIT, &act, NULL);

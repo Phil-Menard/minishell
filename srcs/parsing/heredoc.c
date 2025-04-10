@@ -118,7 +118,6 @@ void	ft_heredoc(t_token **tokens, t_var *vars)
 			return ;
 		dels = get_dels(tmp, i_pipe);//GERER MALLOC DELS
 		append_line_to_file(dels, fd);
-		printf("i_pipe : %zu\ndel : %s\n", i_pipe, dels[0]);
 		close(fd);
 		free_db_array(dels);
 		add_heredoc_as_infile(tokens, i_pipe, file_name);

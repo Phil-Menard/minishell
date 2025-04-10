@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-volatile sig_atomic_t	g_in_child;
+volatile sig_atomic_t	g_exit_signal = 0;
 
 static void	print_minishell(void)
 {
@@ -21,8 +21,6 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	fd = NULL;
 	if (!vars->tokens)
 		return ;
-	g_in_child = 1;
-	set_signal_action();
 	if (vars->nb_cmd_line == 1)
 	{
 		vars->i = 0;
@@ -37,6 +35,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 		vars->pids = malloc(sizeof(pid_t) * vars->nb_cmd_line);
 		free(vars->line);
 		vars->line = NULL;
+		g_exit_signal = 1;
 		pipex(vars, env, export);
 	}
 }
@@ -67,6 +66,7 @@ void	init_minishell(t_env **env, t_env **export, t_var *vars, char **envp)
 	init_vars(vars);
 	update_exit_env(*env, vars);
 	print_minishell();
+	set_signal_action();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -82,15 +82,14 @@ int	main(int argc, char **argv, char **envp)
 	init_minishell(&env, &export, &vars, envp);
 	while (1)
 	{
-		g_in_child = 0;
-		set_signal_action();
+		g_exit_signal = 0;
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
-		if (in_child == 130 || in_child == 131)
+		if (g_exit_signal != 0)
 		{
-			vars.exit_statut = in_child;
+			vars.exit_statut = g_exit_signal;
 			update_exit_env(env, &vars);
-			in_child = 0;
+			g_exit_signal = 0;
 		}
 		if (vars.line == NULL)
 			handle_ctrl_d(&env, &export, &vars);
