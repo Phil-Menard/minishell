@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-static void	add_token(t_token **tokens, char *buffer, t_token_type type, t_mod mod)
+static void	add_token(t_token **tokens, char *buf, t_token_type type, t_mod mod)
 {
 	t_token	*new;
 	int		expandable;
@@ -9,7 +9,7 @@ static void	add_token(t_token **tokens, char *buffer, t_token_type type, t_mod m
 		expandable = 1;
 	else
 		expandable = 0;
-	new = new_token(buffer, type, NULL, expandable);
+	new = new_token(buf, type, NULL, expandable);
 	if (!new)
 		return ;
 	if (*tokens == NULL)
@@ -58,36 +58,37 @@ static void	quote_handler(char c, t_mod *mod, char **buffer)
 		*mod = MOD_NORMAL;
 	else if (*mod == MOD_DOUBLE && c == '\"')
 		*mod = MOD_NORMAL;
-	else
-		*buffer = ft_straddchar(*buffer, c);
+	*buffer = ft_straddchar(*buffer, c);
 }
 
-t_token	*tokenizer(char *line)
+// l = line (norm)
+// m = mod (norm)
+t_token	*tokenizer(char *l)
 {
 	t_token	*tokens;
 	int		i;
-	t_mod	mod;
+	t_mod	m;
 	char	*buffer;
 
 	tokens = NULL;
 	i = -1;
-	mod = MOD_NORMAL;
+	m = MOD_NORMAL;
 	buffer = NULL;
-	while (line[++i])
+	while (l[++i])
 	{
-		if ((line[i] == ' ' || (line[i] >= 9 && line[i] <= 13)) && mod == MOD_NORMAL)
-			add(&tokens, &buffer, mod);
-		else if ((line[i] == '<' || line[i] == '>' || line[i] == '|') && mod == MOD_NORMAL)
+		if ((l[i] == ' ' || (l[i] >= 9 && l[i] <= 13)) && m == MOD_NORMAL)
+			add(&tokens, &buffer, m);
+		else if ((l[i] == '<' || l[i] == '>' || l[i] == '|') && m == MOD_NORMAL)
 		{
-			add(&tokens, &buffer, mod);
-			add_operator(&tokens, line, &i, mod);
+			add(&tokens, &buffer, m);
+			add_operator(&tokens, l, &i, m);
 		}
-		else if (line[i] == '\"' || line[i] == '\'')
-			quote_handler(line[i], &mod, &buffer);
+		else if (l[i] == '\"' || l[i] == '\'')
+			quote_handler(l[i], &m, &buffer);
 		else
-			buffer = ft_straddchar(buffer, line[i]);
+			buffer = ft_straddchar(buffer, l[i]);
 	}
-	add(&tokens, &buffer, mod);
+	add(&tokens, &buffer, m);
 	return (tokens);
 }
 

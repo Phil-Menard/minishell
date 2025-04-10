@@ -1,5 +1,12 @@
 #include "../minishell.h"
 
+static inline void	part_of_expand(char **res, char **var, char **temp)
+{
+	*res = NULL;
+	*var = NULL;
+	*temp = NULL;
+}
+
 // Replace the string by it's expanded version
 // free the string because planned to be use like
 // str = expand_str(str, env);
@@ -11,16 +18,15 @@ char	*expand_str(char *content, t_env *env)
 	char	*temp;
 	int		i;
 
-	res = NULL;
-	var = NULL;
-	temp = NULL;
+	part_of_expand(&res, &var, &temp);
 	i = 0;
 	while (content[i])
 	{
 		if (content[i] == '$')
 		{
 			i++;
-			while ((content[i] && content[i] != ' ') || (content[i] >= 9 && content[i] <= 13))
+			while ((content[i] && content[i] != ' ')
+				|| (content[i] >= 9 && content[i] <= 13))
 				var = ft_straddchar(var, content[i++]);
 			temp = ft_getenv(env, var);
 			res = ft_straddstr(res, temp);

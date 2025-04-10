@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_token	*new_token(char *content, t_token_type type, t_token *next, int expandable)
+t_token	*new_token(char *content, t_token_type type, t_token *next, int exp)
 {
 	t_token	*new;
 
@@ -9,7 +9,7 @@ t_token	*new_token(char *content, t_token_type type, t_token *next, int expandab
 		return (NULL);
 	new->content = ft_strdup(content);
 	new->type = type;
-	new->expandable = expandable;
+	new->expandable = exp;
 	new->next = next;
 	return (new);
 }
@@ -22,4 +22,30 @@ t_token	*get_last_token(t_token *tokens)
 	while (tmp->next)
 		tmp = tmp->next;
 	return (tmp);
+}
+
+void	crop_quotes(t_token **tokens)
+{
+	t_token	*tmp;
+	char	*res;
+
+	tmp = *tokens;
+	while (tmp)
+	{
+		if (tmp->content[0] == '\''
+			&& tmp->content[ft_strlen(tmp->content) - 1] == '\'')
+		{
+			res = ft_strtrim(tmp->content, "\'");
+			free(tmp->content);
+			tmp->content = res;
+		}
+		else if (tmp->content[0] == '\"'
+			&& tmp->content[ft_strlen(tmp->content) - 1] == '\"')
+		{
+			res = ft_strtrim(tmp->content, "\"");
+			free(tmp->content);
+			tmp->content = res;
+		}
+		tmp = tmp->next;
+	}
 }

@@ -39,6 +39,7 @@ SRC = minishell.c \
 	parsing/set_cmd_line.c \
 	parsing/utils_parsing.c \
 	parsing/heredoc.c \
+	parsing/heredoc_utils.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))

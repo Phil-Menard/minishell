@@ -3,7 +3,7 @@
 // If a token is expandable, expand it
 // cad, if there is a $var -> replace by content in env
 // otherwise if it's expandable but there's no $var, just let it.
-static void	expander(t_token **tokens, t_env *env)
+void	expander(t_token **tokens, t_env *env)
 {
 	t_token	*tmp;
 
@@ -26,7 +26,8 @@ static void	specify_files_redir(t_token **tokens)
 	while (tmp)
 	{
 		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE
-			|| tmp->type == TOKEN_HEREDOC) && tmp->next && tmp->next->type == TOKEN_WORD)
+			|| tmp->type == TOKEN_HEREDOC)
+			&& tmp->next && tmp->next->type == TOKEN_WORD)
 			tmp->next->type = TOKEN_REDIR_FILE;
 		tmp = tmp->next;
 	}
@@ -38,7 +39,8 @@ static int	check_redir_file(t_token *tokens)
 	{
 		if (tokens->type == TOKEN_INFILE || tokens->type == TOKEN_OUTFILE)
 		{
-			if (!tokens->next || (tokens->next && tokens->next->type != TOKEN_REDIR_FILE))
+			if (!tokens->next
+				|| (tokens->next && tokens->next->type != TOKEN_REDIR_FILE))
 			{
 				ft_putstr_fd("syntax error near unexpected token : ", 1);
 				if (!tokens->next)
@@ -56,9 +58,8 @@ static int	check_redir_file(t_token *tokens)
 void	parser(t_env **env, t_var *vars, t_env **export)
 {
 	t_token	*tokens;
-	// t_leaf	*leafs;
 
-	tokens = tokenizer(vars->line); //todo : laisser les quotes
+	tokens = tokenizer(vars->line);
 	specify_files_redir(&tokens);
 	if (check_redir_file(tokens) == 0)
 	{
@@ -70,12 +71,8 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
 		ft_heredoc(&tokens, vars);
 	expander(&tokens, *env);
+	crop_quotes(&tokens);
 	vars->tokens = tokens;
-	// func to now nb of leafs (compared to &&, ||, ())
-	// leafs = malloc(sizeof(t_leaf)); // for now only
-	// if (!leafs)
-		// return ;
-	// leafs->cmd_line = set_cmd_line(tokens);
 	vars->cmd_line = set_cmd_line(tokens, vars);
 	check_pipes(vars, env, export);
 }
