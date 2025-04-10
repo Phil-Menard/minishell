@@ -19,12 +19,13 @@ void	free_db_vars(t_var *vars, size_t i)
 	if (vars->cmd_line[i].infile)
 	{
 		j = 0;
-		while(vars->cmd_line[i].infile[j])
+		while (vars->cmd_line[i].infile[j])
 		{
-			if (ft_strncmp(tmp, vars->cmd_line[i].infile[j], ft_strlen(tmp)) == 0)
+			if (ft_strncmp(tmp,
+					vars->cmd_line[i].infile[j], ft_strlen(tmp)) == 0)
 			{
 				if (unlink(vars->cmd_line[i].infile[j] + 2) == -1)
-					 perror("unlink");
+					perror("unlink");
 			}
 			j++;
 		}
