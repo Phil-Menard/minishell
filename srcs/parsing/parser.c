@@ -66,13 +66,9 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 		update_exit_env(*env, vars);
 		return ;
 	}
-	//? Faire en sorte que heredoc fasse par pipe (ajoute infile avant pipe)
-	vars->nb_cmd_line = count_in_tokens(tokens, "|") + 1;
+	vars->nb_cmd_line = count_tokens_type(tokens, TOKEN_PIPE) + 1;
 	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
-	{
-		
 		ft_heredoc(&tokens, vars);
-	}
 	expander(&tokens, *env);
 	vars->tokens = tokens;
 	// func to now nb of leafs (compared to &&, ||, ())

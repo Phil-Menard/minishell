@@ -86,11 +86,11 @@ int	main(int argc, char **argv, char **envp)
 		set_signal_action();
 		vars.prompt = set_prompt_arg(&env);
 		vars.line = readline(vars.prompt);
-		if (in_child == 130 || in_child == 131)
+		if (g_in_child == 130 || g_in_child == 131)
 		{
-			vars.exit_statut = in_child;
+			vars.exit_statut = g_in_child;
 			update_exit_env(env, &vars);
-			in_child = 0;
+			g_in_child = 0;
 		}
 		if (vars.line == NULL)
 			handle_ctrl_d(&env, &export, &vars);

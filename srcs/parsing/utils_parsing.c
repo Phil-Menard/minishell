@@ -85,9 +85,17 @@ void	printlist(t_token *tokens)
 {
 	if (!tokens)
 		printf("there's no list\n");
+	printf("print list :\n");
 	while (tokens)
 	{
-		printf("%s\n", tokens->content);
+		printf("%s", tokens->content);
+		// if (tokens->type == TOKEN_PIPE)
+		// 	printf(" (pipe)");
+		// else if (tokens->type == TOKEN_WORD)
+		// 	printf(" (word)");
+		if (tokens->next != NULL)
+			printf(", ");
 		tokens = tokens->next;
 	}
+	printf("\n");
 }

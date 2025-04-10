@@ -69,7 +69,7 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 		vars->path = get_right_path(vars->cmd_line[vars->i].cmd, vars, env);
 		if (vars->path)
 		{
-			in_child = 1;
+			g_in_child = 1;
 			vars->cmd_line[vars->i].args = fill_arg(vars);
 			id = fork();
 			if (id == 0)
