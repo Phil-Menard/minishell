@@ -37,7 +37,8 @@ static int	check_redir_file(t_token *tokens)
 {
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_INFILE || tokens->type == TOKEN_OUTFILE)
+		if (tokens->type == TOKEN_INFILE || tokens->type == TOKEN_OUTFILE
+			|| tokens->type == TOKEN_HEREDOC)
 		{
 			if (!tokens->next
 				|| (tokens->next && tokens->next->type != TOKEN_REDIR_FILE))
@@ -63,6 +64,7 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	specify_files_redir(&tokens);
 	if (check_redir_file(tokens) == 0)
 	{
+		vars->tokens = tokens;
 		vars->exit_statut = 2;
 		update_exit_env(*env, vars);
 		return ;
