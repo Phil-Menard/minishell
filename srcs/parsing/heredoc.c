@@ -1,5 +1,7 @@
 #include "../minishell.h"
 
+// add before the pipe correspond to the cmd_line,
+// the infile with the file created
 static void	add_heredoc_infile(t_token **tokens, size_t i_pipe, char *file_name)
 {
 	t_token	*cmdl_last_tk;
@@ -20,7 +22,20 @@ static void	add_heredoc_infile(t_token **tokens, size_t i_pipe, char *file_name)
 	cmdl_last_tk->next = infile;
 }
 
-static void	append_line_to_file(char **dels, int fd)
+static char	*line_expand_or_not(char *line, t_env *env)
+{
+	char	*tmp;
+
+	tmp = ft_strdup(line);
+	line = expand_str(line, env);
+	if (!line)
+		line = tmp;
+	else
+		free(tmp);
+	return (line);
+}
+
+static void	append_line_to_file(char **dels, int fd, t_mod *mod, t_env *env)
 {
 	int		i;
 	char	*line;
@@ -32,6 +47,8 @@ static void	append_line_to_file(char **dels, int fd)
 		line = readline(">");
 		if (ft_cmpstr(line, dels[i]) == 1 && i == (double_arr_len(dels) - 1))
 		{
+			if (*mod == MOD_NORMAL)
+				line = line_expand_or_not(line, env);
 			res = NULL;
 			res = ft_straddstr(res, line);
 			res = ft_straddchar(res, '\n');
@@ -44,15 +61,15 @@ static void	append_line_to_file(char **dels, int fd)
 	}
 }
 
-static inline void	part_of_heredoc(char **dels, int fd)
+static inline void	part_of_heredoc(char ***dels, int fd, t_mod *mod, t_env *env)
 {
-	append_line_to_file(dels, fd);
+	append_line_to_file(*dels, fd, mod, env);
 	close(fd);
-	free_db_array(dels);
+	free_db_array(*dels);
 
 }
 
-void	ft_heredoc(t_token **tokens, t_var *vars)
+void	ft_heredoc(t_token **tokens, t_var *vars, t_env *env)
 {
 	t_token	*tmp;
 	char	**dels;
@@ -71,7 +88,7 @@ void	ft_heredoc(t_token **tokens, t_var *vars)
 		if (fd == -1)
 			return ;
 		dels = get_dels(tmp, i_pipe, &mod);
-		part_of_heredoc(dels, fd);
+		part_of_heredoc(&dels, fd, &mod, env);
 		add_heredoc_infile(tokens, i_pipe, vars->file_name);
 		free(vars->file_name);
 		i_pipe++;

@@ -69,7 +69,7 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	}
 	vars->nb_cmd_line = count_tokens_type(tokens, TOKEN_PIPE) + 1;
 	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
-		ft_heredoc(&tokens, vars);
+		ft_heredoc(&tokens, vars, *env);
 	expander(&tokens, *env);
 	crop_quotes(&tokens);
 	vars->tokens = tokens;

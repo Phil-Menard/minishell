@@ -10,7 +10,7 @@ static inline void	part_of_expand(char **res, char **var, char **temp)
 // Replace the string by it's expanded version
 // free the string because planned to be use like
 // str = expand_str(str, env);
-// do str is replaced
+// so str is replaced
 char	*expand_str(char *content, t_env *env)
 {
 	char	*res;

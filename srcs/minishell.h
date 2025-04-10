@@ -99,8 +99,8 @@ typedef struct s_var
  *========================================================================**/
 void		crop_quotes(t_token **tokens);
 int			count_heredoc_cmdline(t_token *tokens, size_t i_pipe);
-char		**get_dels(t_token *tokens, size_t i_pipe);
-void		ft_heredoc(t_token **tokens, t_var *vars);
+char		**get_dels(t_token *tokens, size_t i_pipe, t_mod *mod);
+void		ft_heredoc(t_token **tokens, t_var *vars, t_env *env);
 void		parser(t_env **env, t_var *vars, t_env **export);
 t_token		*tokenizer(char *l);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
