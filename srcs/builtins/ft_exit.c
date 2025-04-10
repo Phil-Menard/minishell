@@ -49,6 +49,13 @@ long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	return (vars->exit_statut);
 }
 
+void	too_many_args(t_var *vars, t_env **env)
+{
+	ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 1);
+	vars->exit_statut = 1;
+	update_exit_env(*env, vars);
+}
+
 void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 {
 	long	nb;
@@ -58,7 +65,7 @@ void	ft_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	if (vars->cmd_line[vars->i].args[1]
 		&& ft_str_isalpha(vars->cmd_line[vars->i].args[1]) == 0
 		&& vars->cmd_line[vars->i].args[2])
-		ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 1);
+		too_many_args(vars, env);
 	else
 	{
 		if (vars->cmd_line[vars->i].args[1])

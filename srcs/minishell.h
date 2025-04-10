@@ -15,7 +15,7 @@
 
 # define HEREDOC	".tomatePastequeCitronMiel.tmp"
 
-extern volatile sig_atomic_t	g_in_child;
+extern volatile sig_atomic_t	g_exit_signal;
 
 typedef enum e_mod
 {
