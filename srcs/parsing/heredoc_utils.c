@@ -85,3 +85,14 @@ char	**get_dels(t_token *tokens, size_t i_pipe, t_mod *mod)
 	}
 	return (dels[x] = NULL, dels);
 }
+
+void	write_line_heredoc(char *line, int fd)
+{
+	char	*res;
+
+	res = NULL;
+	res = ft_straddstr(res, line);
+	res = ft_straddchar(res, '\n');
+	ft_putstr_fd(res, fd);
+	free(res);
+}

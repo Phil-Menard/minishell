@@ -26,7 +26,7 @@ static void	specify_files_redir(t_token **tokens)
 	while (tmp)
 	{
 		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE
-			|| tmp->type == TOKEN_HEREDOC)
+				|| tmp->type == TOKEN_HEREDOC)
 			&& tmp->next && tmp->next->type == TOKEN_WORD)
 			tmp->next->type = TOKEN_REDIR_FILE;
 		tmp = tmp->next;

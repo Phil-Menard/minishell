@@ -108,10 +108,11 @@ char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
-t_token		*new_token(char *content, t_token_type type, t_token *next, int exp);
+t_token		*new_token(char *str, t_token_type type, t_token *next, int exp);
 t_token		*get_cmd_line_last_token(t_token *tokens, int *i, int i_pipe);
 t_token		*get_last_token(t_token *tokens);
-void		printlist(t_token *tokens);
+void		write_line_heredoc(char *line, int fd);
+// void		printlist(t_token *tokens);
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/
@@ -163,6 +164,8 @@ void		free_vars(t_var *vars);
 void		free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 void		init_vars(t_var *vars);
 void		print_multiple_strfd(char *s1, char *var, char *s2);
+void		start_loop(t_var *vars, t_env **env);
+char		*set_prompt_arg(t_env **env);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/
@@ -204,6 +207,7 @@ t_env		*assign_export(t_env **exp, t_env **env, char *line, t_var *vars);
  *========================================================================**/
 void		set_signal_action(void);
 void		handle_ctrl_d(t_env **env, t_env **export, t_var *vars);
-int 		rl_custom_hook(void);
+int			rl_custom_hook(void);
+void		update_status(t_var *vars, t_env **env);
 
 #endif

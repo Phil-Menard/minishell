@@ -38,8 +38,7 @@ static char	*line_expand_or_not(char *line, t_env *env)
 static void	append_line_to_file(char **dels, int fd, t_mod *mod, t_env *env)
 {
 	int		i;
-	char	*line = NULL;
-	char	*res;
+	char	*line;
 
 	i = 0;
 	while (i < double_arr_len(dels) && g_exit_signal != 130)
@@ -56,11 +55,7 @@ static void	append_line_to_file(char **dels, int fd, t_mod *mod, t_env *env)
 		{
 			if (*mod == MOD_NORMAL)
 				line = line_expand_or_not(line, env);
-			res = NULL;
-			res = ft_straddstr(res, line);
-			res = ft_straddchar(res, '\n');
-			ft_putstr_fd(res, fd);
-			free(res);
+			write_line_heredoc(line, fd);
 		}
 		if (ft_cmpstr(line, dels[i]) == 0)
 			i++;
@@ -68,12 +63,11 @@ static void	append_line_to_file(char **dels, int fd, t_mod *mod, t_env *env)
 	}
 }
 
-static inline void	part_of_heredoc(char ***dels, int fd, t_mod *mod, t_env *env)
+static void	part_of_heredoc(char ***dels, int fd, t_mod *mod, t_env *env)
 {
 	append_line_to_file(*dels, fd, mod, env);
 	close(fd);
 	free_db_array(*dels);
-
 }
 
 void	ft_heredoc(t_token **tokens, t_var *vars, t_env *env)

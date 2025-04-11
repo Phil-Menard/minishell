@@ -30,3 +30,11 @@ void	print_multiple_strfd(char *s1, char *var, char *s2)
 	ft_putstr_fd(var, 1);
 	ft_putstr_fd(s2, 1);
 }
+
+void	start_loop(t_var *vars, t_env **env)
+{
+	g_exit_signal = 0;
+	vars->prompt = set_prompt_arg(env);
+	vars->line = readline(vars->prompt);
+	update_status(vars, env);
+}

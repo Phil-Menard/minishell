@@ -82,15 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	init_minishell(&env, &export, &vars, envp);
 	while (1)
 	{
-		g_exit_signal = 0;
-		vars.prompt = set_prompt_arg(&env);
-		vars.line = readline(vars.prompt);
-		if (g_exit_signal != 0)
-		{
-			vars.exit_statut = g_exit_signal;
-			update_exit_env(env, &vars);
-			g_exit_signal = 0;
-		}
+		start_loop(&vars, &env);
 		if (vars.line == NULL)
 			handle_ctrl_d(&env, &export, &vars);
 		add_history(vars.line);

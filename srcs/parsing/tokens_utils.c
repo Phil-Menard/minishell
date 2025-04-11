@@ -1,13 +1,13 @@
 #include "../minishell.h"
 
-t_token	*new_token(char *content, t_token_type type, t_token *next, int exp)
+t_token	*new_token(char *str, t_token_type type, t_token *next, int exp)
 {
 	t_token	*new;
 
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	new->content = ft_strdup(content);
+	new->content = ft_strdup(str);
 	new->type = type;
 	new->expandable = exp;
 	new->next = next;

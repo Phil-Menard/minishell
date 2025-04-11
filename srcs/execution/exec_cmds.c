@@ -56,13 +56,29 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 	return (NULL);
 }
 
+void	end_single_cmd(t_var *vars, int id)
+{
+	int	status;
+
+	status = 0;
+	waitpid(id, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGQUIT)
+			write(2, "Quit (core dumped)\n", 20);
+		vars->exit_statut = 128 + WTERMSIG(status);
+	}
+	else if (WIFEXITED(status))
+		vars->exit_statut = WEXITSTATUS(status);
+	if (g_exit_signal == 130)
+		vars->exit_statut = 130;
+}
+
 void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 {
 	int	redir;
 	int	id;
-	int	status;
 
-	status = 0;
 	redir = is_redirected(vars->cmd_line->infile, vars->cmd_line->outfile);
 	if (redir >= 0)
 		prepare_redir(vars, fd, env, export);
@@ -77,19 +93,7 @@ void	exec_cmds(t_var *vars, int *fd, t_env **env, t_env **export)
 			if (id == 0)
 				ft_execve(vars, env, export, fd);
 			else
-			{
-				waitpid(id, &status, 0);
-				if (WIFSIGNALED(status))
-				{
-					if (WTERMSIG(status) == SIGQUIT)
-						write(2, "Quit (core dumped)\n", 20);
-					vars->exit_statut = 128 + WTERMSIG(status);
-				}
-				else if (WIFEXITED(status))
-					vars->exit_statut = WEXITSTATUS(status);
-				if (g_exit_signal == 130)
-					vars->exit_statut = 130;
-			}
+				end_single_cmd(vars, id);
 		}
 	}
 }

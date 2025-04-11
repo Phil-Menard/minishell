@@ -86,7 +86,7 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 	}
 	return (count);
 }
-
+/* 
 void	printlist(t_token *tokens)
 {
 	if (!tokens)
@@ -95,13 +95,9 @@ void	printlist(t_token *tokens)
 	while (tokens)
 	{
 		printf("%s", tokens->content);
-		// if (tokens->type == TOKEN_PIPE)
-		// 	printf(" (pipe)");
-		// else if (tokens->type == TOKEN_WORD)
-		// 	printf(" (word)");
 		if (tokens->next != NULL)
 			printf(", ");
 		tokens = tokens->next;
 	}
 	printf("\n");
-}
+} */

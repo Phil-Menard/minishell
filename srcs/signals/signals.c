@@ -50,9 +50,19 @@ void	handle_ctrl_d(t_env **env, t_env **export, t_var *vars)
 	exit(0);
 }
 
-int rl_custom_hook(void)
+int	rl_custom_hook(void)
 {
 	if (g_exit_signal == 130)
 		rl_done = 1;
 	return (0);
+}
+
+void	update_status(t_var *vars, t_env **env)
+{
+	if (g_exit_signal != 0)
+	{
+		vars->exit_statut = g_exit_signal;
+		update_exit_env(*env, vars);
+		g_exit_signal = 0;
+	}
 }
