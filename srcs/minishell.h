@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
+/*   Updated: 2025/04/11 12:28:10 by lefoffan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -80,20 +92,6 @@ typedef struct s_var
 	char		*file_name;
 }				t_var;
 
-// typedef struct s_ast
-// {
-// 	t_type				type;
-// 	char				*content;
-// 	struct s_ast		*left;
-// 	struct s_ast		*right;
-// }						t_ast;
-// /**========================================================================
-//  *!                                  TREE
-//  *========================================================================**/
-// void		free_list(t_ast *tree);
-// t_ast		*new_node(char *cmd, t_token type);
-// void		add_node_end(t_ast *tree, const char *branch, t_ast *node);
-// void		parsing(t_env **env, t_var *vars, t_env **export);
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/

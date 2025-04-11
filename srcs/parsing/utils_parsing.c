@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_parsing.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
+/*   Updated: 2025/04/11 12:27:50 by lefoffan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static inline void	part_of_expand(char **res, char **var, char **temp)
@@ -86,8 +98,8 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 	}
 	return (count);
 }
-/* 
-void	printlist(t_token *tokens)
+
+/* void	printlist(t_token *tokens)
 {
 	if (!tokens)
 		printf("there's no list\n");

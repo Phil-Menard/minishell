@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_env.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/11 11:09:13 by lefoffan          #+#    #+#             */
+/*   Updated: 2025/04/11 11:41:42 by lefoffan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_env	*add_var_env(t_env **env, char *line)
@@ -34,7 +46,7 @@ t_env	*modify_env(t_env *env, char *var_name, char *content)
 	while (current)
 	{
 		arr = ft_split(current->var, "=");
-		if (ft_strncmp(arr[0], var_name, ft_strlen(arr[0])) == 0)
+		if (ft_cmpstr(arr[0], var_name) == 0)
 		{
 			free(current->var);
 			current->var = ft_join_mid(var_name, '=', content);
@@ -58,7 +70,7 @@ char	*ft_getenv(t_env *env, char *content)
 	while (current)
 	{
 		arr = ft_split(current->var, "=");
-		if (ft_strncmp(arr[0], content, ft_strlen(arr[0])) == 0)
+		if (ft_cmpstr(arr[0], content) == 0)
 		{
 			str = ft_strdup(arr[1]);
 			free_db_array(arr);

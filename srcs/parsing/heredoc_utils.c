@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/11 11:09:34 by lefoffan          #+#    #+#             */
+/*   Updated: 2025/04/11 12:26:42 by lefoffan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 // count the nb of heredoc in the actual cmd_line (cmd between pipes)
@@ -26,6 +38,30 @@ int	count_heredoc_cmdline(t_token *tokens, size_t i_pipe)
 	return (count);
 }
 
+static char	*dels_quotes_handler(char *str, t_mod *mod)
+{
+	char	*res;
+	int		i;
+
+	res = NULL;
+	i = 0;
+	if (find_occurences(str, '\'') > 0
+		|| find_occurences(str, '"') > 0)
+	{
+		*mod = MOD_QUOTED;
+		while (str[i])
+		{
+			if (str[i] != '\'' && str[i] != '\"')
+				res = ft_straddchar(res, str[i]);
+			i++;
+		}
+		return (res);
+	}
+	else
+		*mod = MOD_NORMAL;
+	return (ft_strdup(str));
+}
+
 // add to dels[x] the del (tmp->next->content)
 // if del is quoted, mod = quoted so next the line will be expanded
 static void	part_of_get_gels(char **dels, size_t *x, t_mod *mod, t_token *tmp)
@@ -36,19 +72,14 @@ static void	part_of_get_gels(char **dels, size_t *x, t_mod *mod, t_token *tmp)
 
 	next = tmp->next;
 	next_size = ft_strlen(next->content);
-	if ((next->content[0] == '\'' && next->content[next_size - 1] == '\'')
-		|| (next->content[0] == '\"' && next->content[next_size - 1] == '\"'))
-		*mod = MOD_QUOTED;
-	else
-		*mod = MOD_NORMAL;
-	dels[*x] = ft_strdup(tmp->next->content);
-	if (dels[*x][0] == '"' && dels[*x][ft_strlen(dels[*x]) - 1] == '"')
+	dels[*x] = dels_quotes_handler(next->content, mod);
+	if (dels[*x][0] == '"' || dels[*x][ft_strlen(dels[*x]) - 1] == '"')
 	{
 		res = ft_strtrim(dels[*x], "\"");
 		free(dels[*x]);
 		dels[*x] = res;
 	}
-	else if (dels[*x][0] == '\'' && dels[*x][ft_strlen(dels[*x]) - 1] == '\'')
+	else if (dels[*x][0] == '\'' || dels[*x][ft_strlen(dels[*x]) - 1] == '\'')
 	{
 		res = ft_strtrim(dels[*x], "'");
 		free(dels[*x]);

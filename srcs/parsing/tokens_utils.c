@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokens_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/11 11:09:53 by lefoffan          #+#    #+#             */
+/*   Updated: 2025/04/11 12:27:08 by lefoffan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 t_token	*new_token(char *str, t_token_type type, t_token *next, int exp)
@@ -32,15 +44,15 @@ void	crop_quotes(t_token **tokens)
 	tmp = *tokens;
 	while (tmp)
 	{
-		if (tmp->content[0] == '\''
-			&& tmp->content[ft_strlen(tmp->content) - 1] == '\'')
+		if (tmp->content && (tmp->content[0] == '\''
+				&& tmp->content[ft_strlen(tmp->content) - 1] == '\''))
 		{
 			res = ft_strtrim(tmp->content, "\'");
 			free(tmp->content);
 			tmp->content = res;
 		}
-		else if (tmp->content[0] == '\"'
-			&& tmp->content[ft_strlen(tmp->content) - 1] == '\"')
+		else if (tmp->content && (tmp->content[0] == '\"'
+				&& tmp->content[ft_strlen(tmp->content) - 1] == '\"'))
 		{
 			res = ft_strtrim(tmp->content, "\"");
 			free(tmp->content);
