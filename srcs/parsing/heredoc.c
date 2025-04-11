@@ -114,9 +114,9 @@ void	ft_heredoc(t_token **tokens, t_var *vars)
 	int		fd;
 	size_t	i_pipe;
 
-	// todo : expansion
 	i_pipe = 0;
 	g_exit_signal = 7;
+	rl_event_hook = rl_custom_hook;
 	while (i_pipe < vars->nb_cmd_line && g_exit_signal != 130)
 	{
 		tmp = *tokens;
