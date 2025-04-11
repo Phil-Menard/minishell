@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:37 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:17:28 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	append_line_to_file(char **dels, int fd, t_mod *mod, t_env *env)
 	char	*line;
 
 	i = 0;
-	while (i < double_arr_len(dels) && g_exit_signal != 130)
+	while (i < double_arr_len(dels) && g_exit_signal != 2)
 	{
 		line = readline(">");
 		if (line == NULL)
@@ -94,7 +94,7 @@ void	ft_heredoc(t_token **tokens, t_var *vars, t_env *env)
 	i_pipe = 0;
 	g_exit_signal = 7;
 	rl_event_hook = rl_custom_hook;
-	while (i_pipe < vars->nb_cmd_line && g_exit_signal != 130)
+	while (i_pipe < vars->nb_cmd_line && g_exit_signal != 2)
 	{
 		tmp = *tokens;
 		vars->file_name = ft_straddchar(ft_strdup(HEREDOC), i_pipe + '0');

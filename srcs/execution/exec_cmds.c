@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:20 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:17:41 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	end_single_cmd(t_var *vars, int id)
 	}
 	else if (WIFEXITED(status))
 		vars->exit_statut = WEXITSTATUS(status);
-	if (g_exit_signal == 130)
+	if (g_exit_signal == 2)
 		vars->exit_statut = 130;
 }
 

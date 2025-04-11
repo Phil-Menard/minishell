@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:36 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:22:59 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	init_minishell(&env, &export, &vars, envp);
 	while (1)
 	{
+		g_exit_signal = 0;
 		start_loop(&vars, &env);
 		if (vars.line == NULL)
 			handle_ctrl_d(&env, &export, &vars);

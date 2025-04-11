@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:06 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:30:31 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	print_multiple_strfd(char *s1, char *var, char *s2)
 
 void	start_loop(t_var *vars, t_env **env)
 {
-	g_exit_signal = 0;
 	vars->prompt = set_prompt_arg(env);
 	vars->line = readline(vars->prompt);
 	update_status(vars, env);
