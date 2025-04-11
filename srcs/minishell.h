@@ -204,5 +204,6 @@ t_env		*assign_export(t_env **exp, t_env **env, char *line, t_var *vars);
  *========================================================================**/
 void		set_signal_action(void);
 void		handle_ctrl_d(t_env **env, t_env **export, t_var *vars);
+int 		rl_custom_hook(void);
 
 #endif
