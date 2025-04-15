@@ -6,106 +6,110 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:49 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 16:23:13 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 19:53:32 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	add_token(t_token **tokens, char *buf, t_token_type type, t_mod *mod)
+static void	add_token(t_tokenizer *t, char *buf, t_token_type type)
 {
-	t_token	*new;
-	int		expandable;
+	t_expand	expand;
+	char		*var;
 
-	if (*tokens && last_token(*tokens)->type == TOKEN_HEREDOC
-		&& *mod == MOD_NORMAL)
-		expandable = 1;
-	else if (*mod == MOD_NORMAL || *mod == MOD_DOUBLE)
-		expandable = 1;
+	if (t->tokens && last_token(t->tokens)->type == TOKEN_HEREDOC
+		&& t->mod == MOD_NORMAL)
+		expand = EXPANDABLE;
+	else if (t->mod == MOD_NORMAL || t->mod == MOD_DOUBLE)
+	{
+		expand = EXPANDED;
+		var = expand_str(buf, t->env);
+		if (var)
+		{
+			free(buf);
+			buf = var;
+		}
+	}
 	else
-		expandable = 0;
-	new = new_token(buf, type, NULL, expandable);
-	if (!new)
-		return ;
-	if (*tokens == NULL)
-		*tokens = new;
-	else
-		last_token(*tokens)->next = new;
-	*mod = MOD_NORMAL;
+		expand = NOT_EXPANDABLE;
+	if (t->tokens == NULL)
+		t->tokens = new_token(buf, type, NULL, expand);
+	else 
+		last_token(t->tokens)->next = new_token(buf, type, NULL, expand);
+	t->mod = MOD_NORMAL;
 }
 
-static void	add_operator(t_token **tokens, char *line, int *i, t_mod *mod)
+static void	add_operator(char *line, t_tokenizer *t)
 {
-	if (line[*i] == '>' && line[*i + 1] == '>')
+	if (line[t->i] == '>' && line[t->i + 1] == '>')
 	{
-		add_token(tokens, ">>", TOKEN_OUTFILE, mod);
-		(*i) += 1;
+		add_token(t, ft_strdup(">>"), TOKEN_OUTFILE);
+		t->i += 1;
 	}
-	else if (line[*i] == '<' && line[*i + 1] == '<')
+	else if (line[t->i] == '<' && line[t->i + 1] == '<')
 	{
-		add_token(tokens, "<<", TOKEN_HEREDOC, mod);
-		(*i) += 1;
+		add_token(t, ft_strdup("<<"), TOKEN_HEREDOC);
+		t->i += 1;
 	}
-	else if (line[*i] == '|' && line[*i + 1] != '|')
-		add_token(tokens, "|", TOKEN_PIPE, mod);
-	else if (line[*i] == '<')
-		add_token(tokens, "<", TOKEN_INFILE, mod);
-	else if (line[*i] == '>')
-		add_token(tokens, ">", TOKEN_OUTFILE, mod);
+	else if (line[t->i] == '|' && line[t->i + 1] != '|')
+		add_token(t, ft_strdup("|"), TOKEN_PIPE);
+	else if (line[t->i] == '<')
+		add_token(t, ft_strdup("<"), TOKEN_INFILE);
+	else if (line[t->i] == '>')
+		add_token(t, ft_strdup(">"), TOKEN_OUTFILE);
 }
 
-static void	add(t_token **tokens, char **buffer, t_mod *mod)
+static void	add(t_tokenizer *t)
 {
-	if (*buffer)
+	if (t->buf)
 	{
-		add_token(tokens, *buffer, TOKEN_WORD, mod);
-		free(*buffer);
-		*buffer = NULL;
+		add_token(t, t->buf, TOKEN_WORD);
+		free(t->buf);
+		t->buf = NULL;
 	}
 }
 
-static void	quote_handler(char c, t_mod *mod, char *buffer, t_token **tokens)
+static void	quote_handler(char c, t_tokenizer *t)
 {
-	if (*mod == MOD_NORMAL && c == '\'')
-		*mod = MOD_SINGLE;
-	else if (*mod == MOD_NORMAL && c == '"')
-		*mod = MOD_DOUBLE;
-	else if (*mod == MOD_SINGLE && c == '\'')
-		add(tokens, buffer, mod);
-	else if (*mod == MOD_DOUBLE && c == '"')
-		add(tokens, buffer, mod);
-
+	if (t->mod == MOD_NORMAL && c == '\'')
+		t->mod = MOD_SINGLE;
+	else if (t->mod == MOD_NORMAL && c == '"')
+		t->mod = MOD_DOUBLE;
+	else if (t->mod == MOD_SINGLE && c == '\'')
+		add(t);
+	else if (t->mod == MOD_DOUBLE && c == '"')
+		add(t);
 }
 
 // l = line
 // m = mod
-t_token	*tokenizer(char *l)
+t_token	*tokenizer(char *line, t_env *env)
 {
-	t_token	*tokens;
-	int		i;
-	t_mod	m;
-	char	*buffer;
+	t_tokenizer	t;
 
-	tokens = NULL;
-	i = -1;
-	m = MOD_NORMAL;
-	buffer = NULL;
-	while (l[++i])
+	t.tokens = NULL;
+	t.i = -1;
+	t.mod = MOD_NORMAL;
+	t.buf = NULL;
+	t.env = env;
+	while (line[++t.i])
 	{
-		if ((l[i] == ' ' || (l[i] >= 9 && l[i] <= 13)) && m == MOD_NORMAL)
-			add(&tokens, &buffer, &m);
-		else if ((l[i] == '<' || l[i] == '>' || l[i] == '|') && m == MOD_NORMAL)
+		if ((line[t.i] == ' ' || (line[t.i] >= 9 && line[t.i] <= 13))
+			&& t.mod == MOD_NORMAL)
+			add(&t);
+		else if ((line[t.i] == '<' || line[t.i] == '>' || line[t.i] == '|')
+			&& t.mod == MOD_NORMAL)
 		{
-			add(&tokens, &buffer, &m);
-			add_operator(&tokens, l, &i, &m);
+			add(&t);
+			add_operator(line, &t);
 		}
-		else if (l[i] == '\"' || l[i] == '\'')
-			quote_handler(l[i], &m, buffer, &tokens);
+		else if (line[t.i] == '\"' || line[t.i] == '\'')
+			quote_handler(line[t.i], &t);
 		else
-			buffer = ft_straddchar(buffer, l[i]);
+			t.buf = ft_straddchar(t.buf, line[t.i]);
 	}
-	add(&tokens, &buffer, &m);
-	return (tokens);
+	add(&t);
+	return (t.tokens);
 }
 
 ////////////////////////////////////////////////////////////////! 

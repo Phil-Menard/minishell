@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 16:08:13 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 19:23:01 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,18 @@ typedef enum e_token_type
 	// TOKEN_OR,
 }	t_token_type;
 
+typedef enum e_expand
+{
+	EXPANDABLE,
+	EXPANDED,
+	NOT_EXPANDABLE
+}	t_expand;
+
 typedef struct s_token
 {
 	char			*content;
 	t_token_type	type;
-	int				expandable;
+	t_expand		expand;
 	struct s_token	*next;
 }					t_token;
 
@@ -64,13 +71,6 @@ typedef struct s_cmd_line
 	char	**infile;
 	char	**outfile;
 }			t_cmd_line;
-
-typedef struct s_leaf
-{
-	t_cmd_line		*cmd_line; // tableau de cmd_line[nb de pipe + 1]
-	struct s_leaf	*left;
-	struct s_leaf	*right;
-}					t_leaf;
 
 typedef struct s_env
 {
@@ -92,6 +92,15 @@ typedef struct s_var
 	char		*file_name;
 }				t_var;
 
+typedef struct s_tokenizer
+{
+	char	*buf;
+	t_mod	mod;
+	t_token	*tokens;
+	int		i;
+	t_env	*env;
+}			t_tokenizer;
+
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
@@ -99,13 +108,13 @@ int			count_heredoc_cmdline(t_token *tokens, size_t i_pipe);
 char		**get_dels(t_token *tokens, size_t i_pipe, t_mod *mod);
 void		ft_heredoc(t_token **tokens, t_var *vars, t_env *env);
 void		parser(t_env **env, t_var *vars, t_env **export);
-t_token		*tokenizer(char *l);
+t_token		*tokenizer(char *line, t_env *env);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
 char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
-t_token		*new_token(char *str, t_token_type type, t_token *next, int exp);
+t_token		*new_token(char *s, t_token_type type, t_token *next, t_expand exp);
 t_token		*get_cmd_line_last_token(t_token *tokens, int *i, int i_pipe);
 t_token		*last_token(t_token *tokens);
 void		write_line_heredoc(char *line, int fd);

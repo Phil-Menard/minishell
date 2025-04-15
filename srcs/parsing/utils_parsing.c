@@ -6,17 +6,24 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 14:25:21 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 19:51:22 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static inline void	part_of_expand(char **res, char **var, char **temp)
+static char	*get_var(char *content, int *i, t_env *env)
 {
-	*res = NULL;
-	*var = NULL;
-	*temp = NULL;
+	char	*var;
+	char	*str;
+
+	var = NULL;
+	(*i)++;
+	while ((content[*i] && content[*i] != ' ')
+		|| (content[*i] >= 9 && content[*i] <= 13))
+		var = ft_straddchar(var, content[(*i)++]);
+	str = ft_getenv(env, var);
+	return (free(var), str);
 }
 
 // Replace the string by it's expanded version
@@ -27,28 +34,21 @@ char	*expand_str(char *content, t_env *env)
 {
 	char	*res;
 	char	*var;
-	char	*temp;
 	int		i;
 
-	part_of_expand(&res, &var, &temp);
+	res = NULL;
 	i = 0;
 	while (content[i])
 	{
 		if (content[i] == '$' && content[i + 1])
 		{
-			i++;
-			while ((content[i] && content[i] != ' ')
-				|| (content[i] >= 9 && content[i] <= 13))
-				var = ft_straddchar(var, content[i++]);
-			temp = ft_getenv(env, var);
-			res = ft_straddstr(res, temp);
-			free(temp);
+			var = get_var(content, &i, env);
+			res = ft_straddstr(res, var);
+			free(var);
 		}
 		else
 			res = ft_straddchar(res, content[i++]);
 	}
-	free(var);
-	free(content);
 	return (res);
 }
 
@@ -107,10 +107,12 @@ void	printlist(t_token *tokens)
 	while (tokens)
 	{
 		printf("%s", tokens->content);
-		if (tokens->expandable)
+		if (tokens->expand == EXPANDABLE)
 			printf(" (expandable)");
-		else
+		else if (tokens->expand == NOT_EXPANDABLE)
 			printf(" (not expandable)");
+		else if (tokens->expand == EXPANDED)
+			printf(" (expanded)");
 		if (tokens->next != NULL)
 			printf(", ");
 		tokens = tokens->next;
