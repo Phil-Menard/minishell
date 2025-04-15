@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:13 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:41:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:09:23 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_env	*add_var_env(t_env **env, char *line)
 	int		i;
 
 	arr = ft_split(line, "=");
+	if (!arr[0])
+		return (free_db_array(arr), *env);
 	str = ft_strdup(arr[0]);
 	str = ft_straddchar(str, '=');
 	i = 1;

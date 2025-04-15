@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_export.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:16 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:11:44 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,11 @@ t_env	*assign_export(t_env **exp, t_env **env, char *line, t_var *vars)
 	int		index;
 
 	arr = ft_split(line, "=");
+	if (!arr[0])
+	{
+		*exp = add_var_export(exp, env, line, vars);
+		return (free_db_array(arr), *exp);
+	}
 	*exp = add_var_export(exp, env, arr[0], vars);
 	current = *exp;
 	index = find_index_var(exp, arr[0]);
@@ -118,12 +123,10 @@ t_env	*assign_export(t_env **exp, t_env **env, char *line, t_var *vars)
 	index = 1;
 	while (arr[index])
 	{
-		current->var = ft_straddstr(current->var, arr[index]);
-		index++;
+		current->var = ft_straddstr(current->var, arr[index++]);
 		if (arr[index])
 			current->var = ft_straddchar(current->var, '=');
 	}
 	current->var = ft_straddchar(current->var, '\"');
-	free_db_array(arr);
-	return (*exp);
+	return (free_db_array(arr), *exp);
 }

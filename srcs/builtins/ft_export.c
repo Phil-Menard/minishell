@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:00 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:09:01 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:09:37 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,16 @@ void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 		ft_env(*export, vars, fd);
 	else
 	{
-		while (vars->cmd_line[0].args[i])
+		while (vars->cmd_line[vars->i].args[i])
 		{
-			if (find_occurences(vars->cmd_line[0].args[i], '=') == 0)
+			if (find_occurences(vars->cmd_line[vars->i].args[i], '=') == 0)
 				*export = add_var_export(export, env,
-						vars->cmd_line[0].args[i], vars);
+						vars->cmd_line[vars->i].args[i], vars);
 			else
 			{
 				*export = assign_export(export, env,
-						vars->cmd_line[0].args[i], vars);
-				*env = add_var_env(env, vars->cmd_line[0].args[i]);
+						vars->cmd_line[vars->i].args[i], vars);
+				*env = add_var_env(env, vars->cmd_line[vars->i].args[i]);
 			}
 			i++;
 		}
