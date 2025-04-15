@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 12:27:50 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:55:08 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*expand_str(char *content, t_env *env)
 	i = 0;
 	while (content[i])
 	{
-		if (content[i] == '$')
+		if (content[i] == '$' && content[i + 1])
 		{
 			i++;
 			while ((content[i] && content[i] != ' ')
@@ -99,7 +99,7 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 	return (count);
 }
 
-/* void	printlist(t_token *tokens)
+void	printlist(t_token *tokens)
 {
 	if (!tokens)
 		printf("there's no list\n");
@@ -112,4 +112,4 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 		tokens = tokens->next;
 	}
 	printf("\n");
-} */
+}

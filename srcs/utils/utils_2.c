@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:06 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 16:32:40 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/15 13:01:21 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	double_arr_len(char **arr)
 //1 if different
 int	ft_cmpstr(char *s1, char *s2)
 {
+	if (!s1 || !s2)
+		return (0);
 	if (ft_strlen(s1) == ft_strlen(s2))
 	{
 		if (ft_strncmp(s1, s2, ft_strlen(s1)) == 0)

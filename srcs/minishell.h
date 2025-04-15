@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 15:58:05 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/15 13:55:26 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_token		*new_token(char *str, t_token_type type, t_token *next, int exp);
 t_token		*get_cmd_line_last_token(t_token *tokens, int *i, int i_pipe);
 t_token		*get_last_token(t_token *tokens);
 void		write_line_heredoc(char *line, int fd);
-// void		printlist(t_token *tokens);
+void		printlist(t_token *tokens);
 /**========================================================================
  *!                           EXECUTION BUILTINS
  *========================================================================**/

@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:49 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:57:33 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static inline void	add(t_token **tokens, char **buffer, t_mod mod)
 	}
 }
 
-static void	quote_handler(char c, t_mod *mod, char **buffer)
+static void	quote_handler(char c, t_mod *mod)
 {
 	if (*mod == MOD_NORMAL && c == '\'')
 		*mod = MOD_SINGLE;
@@ -70,7 +70,6 @@ static void	quote_handler(char c, t_mod *mod, char **buffer)
 		*mod = MOD_NORMAL;
 	else if (*mod == MOD_DOUBLE && c == '\"')
 		*mod = MOD_NORMAL;
-	*buffer = ft_straddchar(*buffer, c);
 }
 
 // l = line (norm)
@@ -96,7 +95,7 @@ t_token	*tokenizer(char *l)
 			add_operator(&tokens, l, &i, m);
 		}
 		else if (l[i] == '\"' || l[i] == '\'')
-			quote_handler(l[i], &m, &buffer);
+			quote_handler(l[i], &m);
 		else
 			buffer = ft_straddchar(buffer, l[i]);
 	}

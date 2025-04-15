@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:44 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:10:04 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*set_cmd(t_token *tokens, size_t i)
 	x = 0;
 	while (tokens)
 	{
-		if (x == i && tokens->type == TOKEN_WORD)
+		if (x == i && tokens->type == TOKEN_WORD && tokens->content)
 			return (ft_strdup(tokens->content));
 		if (tokens->type == TOKEN_PIPE)
 			x++;

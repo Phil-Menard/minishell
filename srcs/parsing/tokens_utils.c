@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:53 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 12:27:08 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:23:23 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,30 +34,4 @@ t_token	*get_last_token(t_token *tokens)
 	while (tmp->next)
 		tmp = tmp->next;
 	return (tmp);
-}
-
-void	crop_quotes(t_token **tokens)
-{
-	t_token	*tmp;
-	char	*res;
-
-	tmp = *tokens;
-	while (tmp)
-	{
-		if (tmp->content && (tmp->content[0] == '\''
-				&& tmp->content[ft_strlen(tmp->content) - 1] == '\''))
-		{
-			res = ft_strtrim(tmp->content, "\'");
-			free(tmp->content);
-			tmp->content = res;
-		}
-		else if (tmp->content && (tmp->content[0] == '\"'
-				&& tmp->content[ft_strlen(tmp->content) - 1] == '\"'))
-		{
-			res = ft_strtrim(tmp->content, "\"");
-			free(tmp->content);
-			tmp->content = res;
-		}
-		tmp = tmp->next;
-	}
 }
