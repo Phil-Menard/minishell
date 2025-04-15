@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:40 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 14:01:59 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:17:37 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	}
 	// printlist(tokens);
 	vars->nb_cmd_line = count_tokens_type(tokens, TOKEN_PIPE) + 1;
-	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
-		ft_heredoc(&tokens, vars, *env);
+	// if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
+		// ft_heredoc(&tokens, vars, *env);
 	expander(&tokens, *env);
 	vars->tokens = tokens;
 	vars->cmd_line = set_cmd_line(tokens, vars);

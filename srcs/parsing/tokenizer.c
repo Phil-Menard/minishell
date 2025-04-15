@@ -6,18 +6,21 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:49 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 13:57:33 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:23:13 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	add_token(t_token **tokens, char *buf, t_token_type type, t_mod mod)
+static void	add_token(t_token **tokens, char *buf, t_token_type type, t_mod *mod)
 {
 	t_token	*new;
 	int		expandable;
 
-	if (mod == MOD_NORMAL || mod == MOD_DOUBLE)
+	if (*tokens && last_token(*tokens)->type == TOKEN_HEREDOC
+		&& *mod == MOD_NORMAL)
+		expandable = 1;
+	else if (*mod == MOD_NORMAL || *mod == MOD_DOUBLE)
 		expandable = 1;
 	else
 		expandable = 0;
@@ -27,10 +30,11 @@ static void	add_token(t_token **tokens, char *buf, t_token_type type, t_mod mod)
 	if (*tokens == NULL)
 		*tokens = new;
 	else
-		get_last_token(*tokens)->next = new;
+		last_token(*tokens)->next = new;
+	*mod = MOD_NORMAL;
 }
 
-static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
+static void	add_operator(t_token **tokens, char *line, int *i, t_mod *mod)
 {
 	if (line[*i] == '>' && line[*i + 1] == '>')
 	{
@@ -50,7 +54,7 @@ static void	add_operator(t_token **tokens, char *line, int *i, t_mod mod)
 		add_token(tokens, ">", TOKEN_OUTFILE, mod);
 }
 
-static inline void	add(t_token **tokens, char **buffer, t_mod mod)
+static void	add(t_token **tokens, char **buffer, t_mod *mod)
 {
 	if (*buffer)
 	{
@@ -60,20 +64,21 @@ static inline void	add(t_token **tokens, char **buffer, t_mod mod)
 	}
 }
 
-static void	quote_handler(char c, t_mod *mod)
+static void	quote_handler(char c, t_mod *mod, char *buffer, t_token **tokens)
 {
 	if (*mod == MOD_NORMAL && c == '\'')
 		*mod = MOD_SINGLE;
-	else if (*mod == MOD_NORMAL && c == '\"')
+	else if (*mod == MOD_NORMAL && c == '"')
 		*mod = MOD_DOUBLE;
 	else if (*mod == MOD_SINGLE && c == '\'')
-		*mod = MOD_NORMAL;
-	else if (*mod == MOD_DOUBLE && c == '\"')
-		*mod = MOD_NORMAL;
+		add(tokens, buffer, mod);
+	else if (*mod == MOD_DOUBLE && c == '"')
+		add(tokens, buffer, mod);
+
 }
 
-// l = line (norm)
-// m = mod (norm)
+// l = line
+// m = mod
 t_token	*tokenizer(char *l)
 {
 	t_token	*tokens;
@@ -88,18 +93,18 @@ t_token	*tokenizer(char *l)
 	while (l[++i])
 	{
 		if ((l[i] == ' ' || (l[i] >= 9 && l[i] <= 13)) && m == MOD_NORMAL)
-			add(&tokens, &buffer, m);
+			add(&tokens, &buffer, &m);
 		else if ((l[i] == '<' || l[i] == '>' || l[i] == '|') && m == MOD_NORMAL)
 		{
-			add(&tokens, &buffer, m);
-			add_operator(&tokens, l, &i, m);
+			add(&tokens, &buffer, &m);
+			add_operator(&tokens, l, &i, &m);
 		}
 		else if (l[i] == '\"' || l[i] == '\'')
-			quote_handler(l[i], &m);
+			quote_handler(l[i], &m, buffer, &tokens);
 		else
 			buffer = ft_straddchar(buffer, l[i]);
 	}
-	add(&tokens, &buffer, m);
+	add(&tokens, &buffer, &m);
 	return (tokens);
 }
 

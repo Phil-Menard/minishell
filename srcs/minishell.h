@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 13:55:26 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:08:13 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ typedef struct s_var
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
-void		crop_quotes(t_token **tokens);
 int			count_heredoc_cmdline(t_token *tokens, size_t i_pipe);
 char		**get_dels(t_token *tokens, size_t i_pipe, t_mod *mod);
 void		ft_heredoc(t_token **tokens, t_var *vars, t_env *env);
@@ -108,7 +107,7 @@ size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
 t_token		*new_token(char *str, t_token_type type, t_token *next, int exp);
 t_token		*get_cmd_line_last_token(t_token *tokens, int *i, int i_pipe);
-t_token		*get_last_token(t_token *tokens);
+t_token		*last_token(t_token *tokens);
 void		write_line_heredoc(char *line, int fd);
 void		printlist(t_token *tokens);
 /**========================================================================

@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 13:55:08 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:25:21 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,10 @@ void	printlist(t_token *tokens)
 	while (tokens)
 	{
 		printf("%s", tokens->content);
+		if (tokens->expandable)
+			printf(" (expandable)");
+		else
+			printf(" (not expandable)");
 		if (tokens->next != NULL)
 			printf(", ");
 		tokens = tokens->next;

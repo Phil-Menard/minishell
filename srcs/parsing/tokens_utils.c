@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:53 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 13:23:23 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:08:17 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ t_token	*new_token(char *str, t_token_type type, t_token *next, int exp)
 	return (new);
 }
 
-t_token	*get_last_token(t_token *tokens)
+t_token	*last_token(t_token *tokens)
 {
 	t_token	*tmp;
 
+	if (!tokens)
+		return (NULL);
 	tmp = tokens;
 	while (tmp->next)
 		tmp = tmp->next;
