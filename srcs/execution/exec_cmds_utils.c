@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmds_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:17 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:13:26 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	**split_path_var(t_env **env)
 void	end_right_path(t_var *vars, char *str, char **arr)
 {
 	vars->exit_statut = 127;
-	if (ft_strrchr(str, '/') == NULL)
+	if (find_occurences(str, '/') == 0)
 	{
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(": command not found\n", 2);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:06 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 14:30:31 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:32:40 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,14 @@ void	start_loop(t_var *vars, t_env **env)
 	vars->prompt = set_prompt_arg(env);
 	vars->line = readline(vars->prompt);
 	update_status(vars, env);
+}
+
+char	*path_with_way(char *str, t_var *vars)
+{
+	char	*path;
+
+	path = get_next_path(NULL, str, vars);
+	if (path && find_occurences(path, '/') != 0)
+		return (path);
+	return (NULL);
 }

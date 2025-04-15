@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:03 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 14:31:08 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:08:11 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ int	rl_custom_hook(void)
 
 void	update_status(t_var *vars, t_env **env)
 {
-	vars->exit_statut = g_exit_signal + 128;
-	update_exit_env(*env, vars);
+	if (g_exit_signal == 2)
+	{
+		vars->exit_statut = 130;
+		update_exit_env(*env, vars);
+	}
 	g_exit_signal = 1;
 }

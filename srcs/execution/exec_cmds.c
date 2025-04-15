@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:20 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 14:17:41 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:13:04 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 {
 	char	*path;
 
-	if (ft_strrchr(str, '/') != NULL)
+	if (find_occurences(str, '/') != 0)
 	{
 		if (access(str, X_OK) != 0)
 		{
@@ -38,7 +38,10 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 		path = ft_strdup(str);
 		return (path);
 	}
-	path = ft_join_mid(arr, '/', str);
+	if (!arr)
+		return (str);
+	else
+		path = ft_join_mid(arr, '/', str);
 	return (path);
 }
 
@@ -50,8 +53,13 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 	int		i;
 
 	arr = split_path_var(env);
-	i = 0;
-	while (arr && arr[i])
+	path = NULL;
+	if (!arr)
+		path = path_with_way(str, vars);
+	if (path)
+		return (path);
+	i = -1;
+	while (arr && arr[++i])
 	{
 		path = get_next_path(arr[i], str, vars);
 		if (path && access(path, X_OK) == 0)
@@ -62,7 +70,6 @@ char	*get_right_path(char *str, t_var *vars, t_env **env)
 		else if (ft_strrchr(str, '/') != NULL)
 			break ;
 		free(path);
-		i++;
 	}
 	end_right_path(vars, str, arr);
 	return (NULL);
