@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 13:51:00 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 14:28:10 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <limits.h>
 # include <errno.h>
+# include <sys/stat.h>
 # include "../libft/libft.h"
 
 # define HEREDOC	".tomatePastequeCitronMiel.tmp"
@@ -166,6 +167,7 @@ void		print_multiple_strfd(char *s1, char *var, char *s2, int fd);
 void		start_loop(t_var *vars, t_env **env);
 char		*set_prompt_arg(t_env **env);
 char		*path_with_way(char *str, t_var *vars);
+void		errno_error(t_var *vars);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

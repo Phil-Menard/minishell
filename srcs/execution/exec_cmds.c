@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:20 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 13:48:30 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 14:33:07 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,14 @@ char	**fill_arg(t_var *vars)
 
 char	*get_next_path(char *arr, char *str, t_var *vars)
 {
-	char	*path;
+	char		*path;
 
 	if (find_occurences(str, '/') != 0)
 	{
 		if (access(str, X_OK) != 0)
 		{
 			if (errno == EACCES)
-			{
-				ft_putstr_fd("Permission denied\n", 2);
-				vars->exit_statut = 126;
-			}
+				errno_error(vars);
 			else
 			{
 				ft_putstr_fd(str, 2);
