@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:06 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 13:01:21 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:50:50 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ int	ft_cmpstr(char *s1, char *s2)
 	return (1);
 }
 
-void	print_multiple_strfd(char *s1, char *var, char *s2)
+void	print_multiple_strfd(char *s1, char *var, char *s2, int fd)
 {
-	ft_putstr_fd(s1, 1);
-	ft_putstr_fd(var, 1);
-	ft_putstr_fd(s2, 1);
+	ft_putstr_fd(s1, fd);
+	ft_putstr_fd(var, fd);
+	ft_putstr_fd(s2, fd);
 }
 
 void	start_loop(t_var *vars, t_env **env)

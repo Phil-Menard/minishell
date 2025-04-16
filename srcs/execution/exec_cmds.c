@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:20 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 16:13:04 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:48:30 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,17 @@ char	*get_next_path(char *arr, char *str, t_var *vars)
 	{
 		if (access(str, X_OK) != 0)
 		{
-			ft_putstr_fd(str, 2);
-			ft_putstr_fd(": No such file or directory\n", 2);
-			vars->exit_statut = 127;
+			if (errno == EACCES)
+			{
+				ft_putstr_fd("Permission denied\n", 2);
+				vars->exit_statut = 126;
+			}
+			else
+			{
+				ft_putstr_fd(str, 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
+				vars->exit_statut = 127;
+			}
 			return (NULL);
 		}
 		path = ft_strdup(str);

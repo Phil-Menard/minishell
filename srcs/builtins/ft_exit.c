@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:08:52 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:08:53 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:08:04 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,8 @@ void	free_before_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 
 void	arg_not_numeric(int *fd, t_var *vars, t_env **env, t_env **export)
 {
-	ft_putstr_fd("minishell: exit: ", 1);
-	ft_putstr_fd(vars->cmd_line[vars->i].cmd, 1);
-	ft_putstr_fd(": numeric argument required\n", 1);
+	print_multiple_strfd("minishell: ", vars->cmd_line[vars->i].cmd,
+		": numeric argument required\n", 2);
 	vars->exit_statut = 2;
 	free_before_exit(fd, vars, env, export);
 	exit(vars->exit_statut);
@@ -63,7 +62,7 @@ long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 
 void	too_many_args(t_var *vars, t_env **env)
 {
-	ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 1);
+	ft_putstr_fd("exit\nminishell: exit: too many arguments\n", 2);
 	vars->exit_statut = 1;
 	update_exit_env(*env, vars);
 }

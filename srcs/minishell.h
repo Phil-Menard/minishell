@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 13:55:26 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:51:00 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <limits.h>
+# include <errno.h>
 # include "../libft/libft.h"
 
 # define HEREDOC	".tomatePastequeCitronMiel.tmp"
@@ -161,7 +162,7 @@ char		*ft_ltoa(long int n);
 void		free_vars(t_var *vars);
 void		free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 void		init_vars(t_var *vars);
-void		print_multiple_strfd(char *s1, char *var, char *s2);
+void		print_multiple_strfd(char *s1, char *var, char *s2, int fd);
 void		start_loop(t_var *vars, t_env **env);
 char		*set_prompt_arg(t_env **env);
 char		*path_with_way(char *str, t_var *vars);
