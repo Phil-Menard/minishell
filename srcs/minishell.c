@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:36 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 14:40:59 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:01:27 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	check_pipes(t_var *vars, t_env **env, t_env **export)
 	{
 		vars->i = 0;
 		fd = init_and_set_fd(vars->cmd_line, vars, env);
-		if (vars->cmd_line[vars->i].cmd && fd[0] > -1)
+		if (vars->cmd_line[vars->i].cmd && fd[0] > -1 && fd[1] > -1)
 			builtin_or_cmd(vars, fd, env, export);
 		else
 			close_multiple_fd(fd);

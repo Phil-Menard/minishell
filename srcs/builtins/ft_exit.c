@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:08:52 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 15:29:33 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:09:53 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ long	set_nb_exit(int *fd, t_var *vars, t_env **env, t_env **export)
 	int			i;
 
 	i = 0;
-	vars->cmd_line[vars->i].args[1] = parse_exit_arg(vars->cmd_line[vars->i].args[1]);
+	vars->cmd_line[vars->i].args[1]
+		= parse_exit_arg(vars->cmd_line[vars->i].args[1]);
 	nb = ft_atol(vars->cmd_line[vars->i].args[1]);
 	content = ft_ltoa(nb);
 	if (ft_strncmp(vars->cmd_line[vars->i].args[1] + i, content,
