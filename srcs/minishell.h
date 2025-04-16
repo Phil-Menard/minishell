@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 12:14:17 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:23:08 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,14 @@ typedef struct s_tokenizer
 /**========================================================================
  *!                                  PARSING
  *========================================================================**/
+t_mod		is_protected(char c);
 int			count_heredoc_cmdline(t_token *tokens, size_t i_pipe);
 char		**get_dels(t_token *tokens, size_t i_pipe, t_mod *mod);
 void		ft_heredoc(t_token **tokens, t_var *vars, t_env *env);
 void		parser(t_env **env, t_var *vars, t_env **export);
 t_token		*tokenizer(char *line, t_env *env);
 t_cmd_line	*set_cmd_line(t_token *tokens, t_var *vars);
-char		*expand_str(char *content, t_env *env);
+char		*expand_str(char *str, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);

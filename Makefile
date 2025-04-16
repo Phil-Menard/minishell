@@ -37,7 +37,8 @@ SRC = minishell.c \
 	parsing/tokens_utils.c \
 	parsing/parser.c \
 	parsing/set_cmd_line.c \
-	parsing/utils_parsing.c \
+	parsing/parsing_utils.c \
+	parsing/parsing_utils2.c \
 	parsing/heredoc.c \
 	parsing/heredoc_utils.c \
 

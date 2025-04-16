@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_parsing.c                                    :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 12:05:41 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:38:21 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,14 @@ static char	*get_var(char *content, int *i, t_env *env)
 
 	var = NULL;
 	(*i)++;
-	while ((content[*i] && content[*i] != ' ')
-		|| (content[*i] >= 9 && content[*i] <= 13))
+	while (content[*i] && ft_isalnum(content[*i]))
 		var = ft_straddchar(var, content[(*i)++]);
 	str = ft_getenv(env, var);
 	return (free(var), str);
 }
 
-// Replace the string by it's expanded version
-// free the original string
-char	*expand_str(char *content, t_env *env)
+// return content of the var in str (if there isn't just return the same)
+char	*expand_str(char *str, t_env *env)
 {
 	char	*res;
 	char	*var;
@@ -36,18 +34,17 @@ char	*expand_str(char *content, t_env *env)
 
 	res = NULL;
 	i = 0;
-	while (content[i])
+	while (str[i])
 	{
-		if (content[i] == '$' && content[i + 1])
+		if (is_protected(str[i]) != MOD_SINGLE && str[i] == '$' && str[i + 1])
 		{
-			var = get_var(content, &i, env);
+			var = get_var(str, &i, env);
 			res = ft_straddstr(res, var);
 			free(var);
 		}
 		else
-			res = ft_straddchar(res, content[i++]);
+			res = ft_straddchar(res, str[i++]);
 	}
-	free(content);
 	return (res);
 }
 

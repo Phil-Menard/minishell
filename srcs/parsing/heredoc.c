@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:37 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 11:21:07 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:13:52 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void	add_heredoc_infile(t_token **tokens, size_t i_pipe, char *file_name)
 			i++;
 		cmdl_last_tk = cmdl_last_tk->next;
 	}
-	infile_file = new_token(file_name, TOKEN_REDIR_FILE, cmdl_last_tk->next, 0);
-	infile = new_token("<", TOKEN_INFILE, infile_file, 0);
+	infile_file = new_token(file_name, TOKEN_REDIR_FILE, cmdl_last_tk->next);
+	infile = new_token("<", TOKEN_INFILE, infile_file);
 	cmdl_last_tk->next = infile;
 }
 

@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:40 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 12:13:58 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:41:09 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,6 @@ static int	specify_files_redir(t_token **tokens)
 	return (1);
 }
 
-static void	expander(t_token **tokens)
-{
-	t_token	*tmp;
-
-	tmp = *tokens;
-	while (tmp)
-	{
-
-	}
-}
-
 void	parser(t_env **env, t_var *vars, t_env **export)
 {
 	t_token	*tokens;
@@ -64,11 +53,9 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 		update_exit_env(*env, vars);
 		return ;
 	}
-	expander(&tokens);
-	printlist(tokens);
 	vars->nb_cmd_line = count_tokens_type(tokens, TOKEN_PIPE) + 1;
-	// if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
-		// ft_heredoc(&tokens, vars, *env);
+	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
+		ft_heredoc(&tokens, vars, *env);
 	vars->tokens = tokens;
 	vars->cmd_line = set_cmd_line(tokens, vars);
 	check_pipes(vars, env, export);
