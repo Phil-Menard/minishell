@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:36 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 14:36:12 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 14:40:59 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 volatile sig_atomic_t	g_exit_signal = 0;
 
-static void	print_minishell(void)
+/* static void	print_minishell(void)
 {
 	printf("___  ________ _   _ _____ _____ _   _  _____ _      _     \n");
 	printf("|  \\/  |_   _| \\ | |_   _/  ___| | | ||  ___| |    | |    \n");
@@ -23,7 +23,7 @@ static void	print_minishell(void)
 	printf("| |  | |_| |_| |\\  |_| |_/\\__/ / | | || |___| |____| |____\n");
 	printf("\\_|  |_/\\___/\\_| \\_/\\___/\\");
 	printf("____/\\_| |_/\\____/\\_____/\\_____/\n\n");
-}
+} */
 
 //check if vars contains a pipe or not, and call the corresponding function
 void	check_pipes(t_var *vars, t_env **env, t_env **export)
@@ -77,7 +77,7 @@ void	init_minishell(t_env **env, t_env **export, t_var *vars, char **envp)
 	init_export_lst(env, export);
 	init_vars(vars);
 	update_exit_env(*env, vars);
-	print_minishell();
+	// print_minishell();
 	set_signal_action();
 }
 

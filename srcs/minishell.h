@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 14:28:10 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:30:07 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ int			find_occurences(char *str, char c);
 int			ft_str_isalpha(char *str);
 long int	ft_atol(char *nptr);
 char		*ft_ltoa(long int n);
+char		*parse_exit_arg(char *str);
 void		free_vars(t_var *vars);
 void		free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 void		init_vars(t_var *vars);

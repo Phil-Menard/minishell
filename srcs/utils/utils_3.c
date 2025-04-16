@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:11 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:29:53 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,29 @@ char	*ft_ltoa(long int n)
 		res[--len] = '0' + (nbr % 10);
 		nbr /= 10;
 	}
+	return (res);
+}
+
+char	*parse_exit_arg(char *str)
+{
+	char	*res;
+	int		i;
+	int		sign;
+
+	i = 0;
+	sign = 0;
+	res = NULL;
+	if (str[i] == '-')
+	{
+		res = ft_straddchar(res, str[i]);
+		sign++;
+		i++;
+	}
+	else if (str[i] == '+')
+		i++;
+	while (str[i] == '0')
+		i++;
+	res = ft_straddstr(res, str + i);
+	free(str);
 	return (res);
 }
