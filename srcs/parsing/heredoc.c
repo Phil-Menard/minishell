@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:37 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 13:52:41 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:12:33 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static void	append_line_to_file(char **dels, int fd, t_mod *mod, t_env *env)
 			dels[i], "))\n", 2);
 			break ;
 		}
-		if (ft_cmpstr(line, dels[i]) == 1 && i == (double_arr_len(dels) - 1))
+		if (ft_cmpstr(line, dels[i]) == 1 && i == (double_arr_len(dels) - 1)
+			&& rl_done != 1)
 		{
 			if (*mod == MOD_NORMAL)
 				line = line_expand_or_not(line, env);
