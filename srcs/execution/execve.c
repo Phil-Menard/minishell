@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:25 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 14:34:18 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,27 @@ char	**lst_to_arr(t_env **env)
 
 void	ft_execve(t_var *vars, t_env **env, t_env **export, int *fd)
 {
-	char	**arr_env;
+	char		**arr_env;
+	struct stat	info;
 
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	arr_env = lst_to_arr(env);
 	if (execve(vars->path, vars->cmd_line[vars->i].args, arr_env) == -1)
 	{
+		if (stat(vars->cmd_line[vars->i].cmd, &info) == 0)
+		{
+			if (S_ISDIR(info.st_mode))
+			{
+				ft_putstr_fd("Is a directory\n", 2);
+				vars->exit_statut = 126;
+			}
+		}
+		else
+			vars->exit_statut = 2;
 		free_and_close(vars, env, export, fd);
 		if (arr_env)
 			free_db_array(arr_env);
-		vars->exit_statut = 2;
 		exit(vars->exit_statut);
 	}
 }

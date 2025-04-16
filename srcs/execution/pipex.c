@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:28 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/11 11:10:42 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 17:06:03 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	pipex(t_var *vars, t_env **env, t_env **export)
 				dup2(previous_fd, STDIN_FILENO);
 			outfile_dups(fd, pipefd, vars);
 			close_previous_fd(previous_fd);
-			if (fd[0] != -1)
+			if (fd[0] != -1 && fd[1] != -1)
 				builtin_or_cmd_pipes(vars, fd, env, export);
 			free_child_process(vars, env, export, fd);
 			exit(vars->exit_statut);

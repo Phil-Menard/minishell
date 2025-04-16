@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 16:23:08 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:03:06 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <limits.h>
+# include <errno.h>
+# include <sys/stat.h>
 # include "../libft/libft.h"
 
 # define HEREDOC	".tomatePastequeCitronMiel.tmp"
@@ -166,13 +168,15 @@ int			find_occurences(char *str, char c);
 int			ft_str_isalpha(char *str);
 long int	ft_atol(char *nptr);
 char		*ft_ltoa(long int n);
+char		*parse_exit_arg(char *str);
 void		free_vars(t_var *vars);
 void		free_and_close(t_var *vars, t_env **env, t_env **exp, int *fd);
 void		init_vars(t_var *vars);
-void		print_multiple_strfd(char *s1, char *var, char *s2);
+void		print_multiple_strfd(char *s1, char *var, char *s2, int fd);
 void		start_loop(t_var *vars, t_env **env);
 char		*set_prompt_arg(t_env **env);
 char		*path_with_way(char *str, t_var *vars);
+void		errno_error(t_var *vars);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

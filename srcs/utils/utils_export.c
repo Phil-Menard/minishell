@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:16 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 15:11:44 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:52:15 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_env	*add_var_export(t_env **exp, t_env **env, char *line, t_var *vars)
 	if (check_valid_identifier(line) == 0)
 	{
 		print_multiple_strfd("minishell: export : '", line,
-			"': not a valid identifier\n");
+			"': not a valid identifier\n", 2);
 		vars->exit_statut = 1;
 	}
 	else
