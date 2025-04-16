@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:40 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 17:41:09 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:07:46 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,36 @@ static int	specify_files_redir(t_token **tokens)
 	return (1);
 }
 
+static void	remove_quotes(t_token **tokens)
+{
+	t_token	*tmp;
+	char	quote;
+	int		i;
+	char	*res;
+
+	tmp = *tokens;
+	while (tmp)
+	{
+		res = NULL;
+		i = -1;
+		quote = 0;
+		while (tmp->content[++i])
+		{
+			if (!quote && (tmp->content[i] == '"' || tmp->content[i] == '\''))
+				quote = tmp->content[i];
+			else if (quote && tmp->content[i] != quote)
+				res = ft_straddchar(res, tmp->content[i]);
+		}
+		if (tmp->content && res)
+		{
+			free(tmp->content);
+			tmp->content = ft_strdup(res);
+			free(res);
+		}
+		tmp = tmp->next;
+	}
+}
+
 void	parser(t_env **env, t_var *vars, t_env **export)
 {
 	t_token	*tokens;
@@ -56,6 +86,7 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	vars->nb_cmd_line = count_tokens_type(tokens, TOKEN_PIPE) + 1;
 	if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
 		ft_heredoc(&tokens, vars, *env);
+	remove_quotes(&tokens);
 	vars->tokens = tokens;
 	vars->cmd_line = set_cmd_line(tokens, vars);
 	check_pipes(vars, env, export);
