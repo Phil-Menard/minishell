@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 19:51:22 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:05:41 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ static char	*get_var(char *content, int *i, t_env *env)
 }
 
 // Replace the string by it's expanded version
-// free the string because planned to be use like
-// str = expand_str(str, env);
-// so str is replaced
+// free the original string
 char	*expand_str(char *content, t_env *env)
 {
 	char	*res;
@@ -49,6 +47,7 @@ char	*expand_str(char *content, t_env *env)
 		else
 			res = ft_straddchar(res, content[i++]);
 	}
+	free(content);
 	return (res);
 }
 
@@ -107,12 +106,6 @@ void	printlist(t_token *tokens)
 	while (tokens)
 	{
 		printf("%s", tokens->content);
-		if (tokens->expand == EXPANDABLE)
-			printf(" (expandable)");
-		else if (tokens->expand == NOT_EXPANDABLE)
-			printf(" (not expandable)");
-		else if (tokens->expand == EXPANDED)
-			printf(" (expanded)");
 		if (tokens->next != NULL)
 			printf(", ");
 		tokens = tokens->next;

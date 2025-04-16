@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 19:23:01 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:14:17 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ typedef struct s_token
 {
 	char			*content;
 	t_token_type	type;
-	t_expand		expand;
 	struct s_token	*next;
 }					t_token;
 
@@ -114,7 +113,7 @@ char		*expand_str(char *content, t_env *env);
 size_t		count_tokens_type(t_token *tokens, t_token_type type);
 size_t		count_in_tokens(t_token *tokens, char *to_find);
 void		free_tokens(t_token **tokens);
-t_token		*new_token(char *s, t_token_type type, t_token *next, t_expand exp);
+t_token		*new_token(char *s, t_token_type type, t_token *next);
 t_token		*get_cmd_line_last_token(t_token *tokens, int *i, int i_pipe);
 t_token		*last_token(t_token *tokens);
 void		write_line_heredoc(char *line, int fd);

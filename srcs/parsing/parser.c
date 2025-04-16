@@ -6,50 +6,50 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:40 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 19:22:13 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:13:58 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Change tokens after tokens of types redir to tokens of type redir_file,
-// make it easier to add them to vars->cmd_line[].infile/outfile
-static void	specify_files_redir(t_token **tokens)
+// Change tokens types to redir_file after tokens of types redir
+// (it check in the same time and print an error)
+static int	specify_files_redir(t_token **tokens)
 {
 	t_token	*tmp;
 
 	tmp = *tokens;
 	while (tmp)
 	{
-		if ((tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE
-				|| tmp->type == TOKEN_HEREDOC)
-			&& tmp->next && tmp->next->type == TOKEN_WORD)
-			tmp->next->type = TOKEN_REDIR_FILE;
-		tmp = tmp->next;
-	}
-}
-
-static int	check_redir_file(t_token *tokens)
-{
-	while (tokens)
-	{
-		if (tokens->type == TOKEN_INFILE || tokens->type == TOKEN_OUTFILE
-			|| tokens->type == TOKEN_HEREDOC)
+		if (tmp->type == TOKEN_INFILE || tmp->type == TOKEN_OUTFILE
+			|| tmp->type == TOKEN_HEREDOC)
 		{
-			if (!tokens->next
-				|| (tokens->next && tokens->next->type != TOKEN_REDIR_FILE))
+			if (tmp->next && tmp->next->type == TOKEN_WORD)
+				tmp->next->type = TOKEN_REDIR_FILE;
+			else
 			{
 				ft_putstr_fd("syntax error near unexpected token : ", 1);
-				if (!tokens->next)
+				if (!tmp->next)
 					printf("newline\n");
 				else
-					printf("%s\n", tokens->next->content);
+					printf("%s\n", tmp->next->content);
 				return (0);
 			}
 		}
-		tokens = tokens->next;
+		tmp = tmp->next;
 	}
 	return (1);
+}
+
+static void	expander(t_token **tokens)
+{
+	t_token	*tmp;
+
+	tmp = *tokens;
+	while (tmp)
+	{
+
+	}
 }
 
 void	parser(t_env **env, t_var *vars, t_env **export)
@@ -57,15 +57,15 @@ void	parser(t_env **env, t_var *vars, t_env **export)
 	t_token	*tokens;
 
 	tokens = tokenizer(vars->line, *env);
-	printlist(tokens);
-	specify_files_redir(&tokens);
-	if (check_redir_file(tokens) == 0)
+	if (specify_files_redir(&tokens) == 0)
 	{
 		vars->tokens = tokens;
 		vars->exit_statut = 2;
 		update_exit_env(*env, vars);
 		return ;
 	}
+	expander(&tokens);
+	printlist(tokens);
 	vars->nb_cmd_line = count_tokens_type(tokens, TOKEN_PIPE) + 1;
 	// if (count_tokens_type(tokens, TOKEN_HEREDOC) > 0)
 		// ft_heredoc(&tokens, vars, *env);

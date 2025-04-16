@@ -6,67 +6,50 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:49 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 19:53:32 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:22:15 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	add_token(t_tokenizer *t, char *buf, t_token_type type)
+static void	add_token(t_tokenizer *t, char *op, t_token_type type)
 {
-	t_expand	expand;
-	char		*var;
-
-	if (t->tokens && last_token(t->tokens)->type == TOKEN_HEREDOC
-		&& t->mod == MOD_NORMAL)
-		expand = EXPANDABLE;
-	else if (t->mod == MOD_NORMAL || t->mod == MOD_DOUBLE)
+	if (op)
 	{
-		expand = EXPANDED;
-		var = expand_str(buf, t->env);
-		if (var)
-		{
-			free(buf);
-			buf = var;
-		}
+		if (t->tokens == NULL)
+			t->tokens = new_token(op, type, NULL);
+		else 
+			last_token(t->tokens)->next = new_token(op, type, NULL);
 	}
-	else
-		expand = NOT_EXPANDABLE;
-	if (t->tokens == NULL)
-		t->tokens = new_token(buf, type, NULL, expand);
-	else 
-		last_token(t->tokens)->next = new_token(buf, type, NULL, expand);
-	t->mod = MOD_NORMAL;
+	else if (t->buf)
+	{
+		if (t->tokens == NULL)
+			t->tokens = new_token(t->buf, type, NULL);
+		else 
+			last_token(t->tokens)->next = new_token(t->buf, type, NULL);
+		free(t->buf);
+		t->buf = NULL;
+	}
 }
 
 static void	add_operator(char *line, t_tokenizer *t)
 {
 	if (line[t->i] == '>' && line[t->i + 1] == '>')
 	{
-		add_token(t, ft_strdup(">>"), TOKEN_OUTFILE);
+		add_token(t, ">>", TOKEN_OUTFILE);
 		t->i += 1;
 	}
 	else if (line[t->i] == '<' && line[t->i + 1] == '<')
 	{
-		add_token(t, ft_strdup("<<"), TOKEN_HEREDOC);
+		add_token(t, "<<", TOKEN_HEREDOC);
 		t->i += 1;
 	}
 	else if (line[t->i] == '|' && line[t->i + 1] != '|')
-		add_token(t, ft_strdup("|"), TOKEN_PIPE);
+		add_token(t, "|", TOKEN_PIPE);
 	else if (line[t->i] == '<')
-		add_token(t, ft_strdup("<"), TOKEN_INFILE);
+		add_token(t, "<", TOKEN_INFILE);
 	else if (line[t->i] == '>')
-		add_token(t, ft_strdup(">"), TOKEN_OUTFILE);
-}
-
-static void	add(t_tokenizer *t)
-{
-	if (t->buf)
-	{
-		add_token(t, t->buf, TOKEN_WORD);
-		free(t->buf);
-		t->buf = NULL;
-	}
+		add_token(t, ">", TOKEN_OUTFILE);
 }
 
 static void	quote_handler(char c, t_tokenizer *t)
@@ -76,13 +59,12 @@ static void	quote_handler(char c, t_tokenizer *t)
 	else if (t->mod == MOD_NORMAL && c == '"')
 		t->mod = MOD_DOUBLE;
 	else if (t->mod == MOD_SINGLE && c == '\'')
-		add(t);
+		t->mod = MOD_NORMAL;
 	else if (t->mod == MOD_DOUBLE && c == '"')
-		add(t);
+		t->mod = MOD_NORMAL;
+	t->buf = ft_straddchar(t->buf, c);
 }
 
-// l = line
-// m = mod
 t_token	*tokenizer(char *line, t_env *env)
 {
 	t_tokenizer	t;
@@ -96,11 +78,11 @@ t_token	*tokenizer(char *line, t_env *env)
 	{
 		if ((line[t.i] == ' ' || (line[t.i] >= 9 && line[t.i] <= 13))
 			&& t.mod == MOD_NORMAL)
-			add(&t);
+			add_token(&t, NULL, TOKEN_WORD);
 		else if ((line[t.i] == '<' || line[t.i] == '>' || line[t.i] == '|')
 			&& t.mod == MOD_NORMAL)
 		{
-			add(&t);
+			add_token(&t, NULL, TOKEN_WORD);
 			add_operator(line, &t);
 		}
 		else if (line[t.i] == '\"' || line[t.i] == '\'')
@@ -108,22 +90,6 @@ t_token	*tokenizer(char *line, t_env *env)
 		else
 			t.buf = ft_straddchar(t.buf, line[t.i]);
 	}
-	add(&t);
+	add_token(&t, NULL, TOKEN_WORD);
 	return (t.tokens);
 }
-
-////////////////////////////////////////////////////////////////! 
-
-/* int main(int ac, char **av)
-{
-	if (ac != 2)
-		return (printf("nb arg\n"), 1);
-	t_token	*tokens;
-	
-	tokens = tokenizer(av[1]);
-	if (!tokens)
-		return (printf("error\n"), 1);
-	printlist(tokens);
-	free_tokens(&tokens);
-	return (0);
-} */

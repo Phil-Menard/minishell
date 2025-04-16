@@ -6,13 +6,13 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:53 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 19:27:17 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:13:57 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_token	*new_token(char *s, t_token_type type, t_token *next, t_expand exp)
+t_token	*new_token(char *s, t_token_type type, t_token *next)
 {
 	t_token	*new;
 
@@ -21,7 +21,6 @@ t_token	*new_token(char *s, t_token_type type, t_token *next, t_expand exp)
 		return (NULL);
 	new->content = ft_strdup(s);
 	new->type = type;
-	new->expand = exp;
 	new->next = next;
 	return (new);
 }
