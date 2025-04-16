@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:49 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 16:27:49 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:33:28 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,8 @@ static void	add_token(t_tokenizer *t, char *op, t_token_type type)
 	else if (t->buf)
 	{
 		tmp = expand_str(t->buf, t->env);
-		if (tmp)
-		{
-			free(t->buf);
-			t->buf = tmp;
-		}
+		free(t->buf);
+		t->buf = tmp;
 		if (t->tokens == NULL)
 			t->tokens = new_token(t->buf, type, NULL);
 		else 

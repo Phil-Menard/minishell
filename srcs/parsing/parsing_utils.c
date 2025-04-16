@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 18:37:39 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/16 18:38:48 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static char	*get_var(char *content, int *i, t_env *env)
 
 	var = NULL;
 	(*i)++;
-	while (content[*i] && ft_isalnum(content[*i]))
+	while (content[*i] && (ft_isalnum(content[*i])
+		|| content[*i] == '_' || content[*i] == '?'))
 		var = ft_straddchar(var, content[(*i)++]);
 	str = ft_getenv(env, var);
 	return (free(var), str);
@@ -36,7 +37,8 @@ char	*expand_str(char *str, t_env *env)
 	i = 0;
 	while (str[i])
 	{
-		if (is_protected(str[i]) != MOD_SINGLE && str[i] == '$' && str[i + 1])
+		if (is_protected(str[i]) != MOD_SINGLE && str[i] == '$' && str[i + 1]
+			&& str[i + 1] != '"')
 		{
 			var = get_var(str, &i, env);
 			res = ft_straddstr(res, var);

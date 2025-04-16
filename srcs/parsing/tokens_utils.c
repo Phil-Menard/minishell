@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:53 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 12:13:57 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/16 18:36:05 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ t_token	*new_token(char *s, t_token_type type, t_token *next)
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	new->content = ft_strdup(s);
+	if (s)
+		new->content = ft_strdup(s);
+	else
+		new->content = NULL;
 	new->type = type;
 	new->next = next;
 	return (new);
