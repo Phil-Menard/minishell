@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:40 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 19:07:46 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:11:41 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	remove_quotes(t_token **tokens)
 		res = NULL;
 		i = -1;
 		quote = 0;
-		while (tmp->content[++i])
+		while (tmp->content && tmp->content[++i])
 		{
 			if (!quote && (tmp->content[i] == '"' || tmp->content[i] == '\''))
 				quote = tmp->content[i];

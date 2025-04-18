@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 18:03:06 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/18 15:08:30 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,7 @@ typedef enum e_token_type
 	TOKEN_INFILE,
 	TOKEN_HEREDOC,
 	TOKEN_OUTFILE,
-	TOKEN_REDIR_FILE,
-	// TOKEN_AND,
-	// TOKEN_OR,
+	TOKEN_REDIR_FILE
 }	t_token_type;
 
 typedef enum e_expand
