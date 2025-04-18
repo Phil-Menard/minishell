@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:36 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 17:01:27 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/18 18:35:17 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	init_minishell(t_env **env, t_env **export, t_var *vars, char **envp)
 	init_export_lst(env, export);
 	init_vars(vars);
 	update_exit_env(*env, vars);
-	// print_minishell();
+	print_minishell();
 	set_signal_action();
 }
 

@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:49 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/16 18:33:28 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:32:21 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	add_token(t_tokenizer *t, char *op, t_token_type type)
 	{
 		if (t->tokens == NULL)
 			t->tokens = new_token(op, type, NULL);
-		else 
+		else
 			last_token(t->tokens)->next = new_token(op, type, NULL);
 	}
 	else if (t->buf)
@@ -30,7 +30,7 @@ static void	add_token(t_tokenizer *t, char *op, t_token_type type)
 		t->buf = tmp;
 		if (t->tokens == NULL)
 			t->tokens = new_token(t->buf, type, NULL);
-		else 
+		else
 			last_token(t->tokens)->next = new_token(t->buf, type, NULL);
 		free(t->buf);
 		t->buf = NULL;

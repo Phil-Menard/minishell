@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/18 17:15:05 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/18 18:38:28 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	*get_var(char *content, int *i, t_env *env)
 	var = NULL;
 	(*i)++;
 	while (content[*i] && (ft_isalnum(content[*i])
-		|| content[*i] == '_' || content[*i] == '?'))
+			|| content[*i] == '_' || content[*i] == '?'))
 	{
 		var = ft_straddchar(var, content[(*i)++]);
 		if (content[*i - 1] == '?' && content[*i])
@@ -101,7 +101,7 @@ size_t	count_in_tokens(t_token *tokens, char *to_find)
 	return (count);
 }
 
-void	printlist(t_token *tokens)
+/* void	printlist(t_token *tokens)
 {
 	if (!tokens)
 		printf("there's no list\n");
@@ -114,4 +114,4 @@ void	printlist(t_token *tokens)
 		tokens = tokens->next;
 	}
 	printf("\n");
-}
+} */
