@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/18 16:20:47 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:15:05 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ static char	*get_var(char *content, int *i, t_env *env)
 	(*i)++;
 	while (content[*i] && (ft_isalnum(content[*i])
 		|| content[*i] == '_' || content[*i] == '?'))
+	{
 		var = ft_straddchar(var, content[(*i)++]);
+		if (content[*i - 1] == '?' && content[*i])
+			break ;
+	}
 	str = ft_getenv(env, var);
 	return (free(var), str);
 }
