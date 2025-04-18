@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:56 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/18 15:46:38 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:13:30 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,11 @@ static char	*get_var(char *content, int *i, t_env *env)
 	(*i)++;
 	while (content[*i] && (ft_isalnum(content[*i])
 		|| content[*i] == '_' || content[*i] == '?'))
+	{
 		var = ft_straddchar(var, content[(*i)++]);
+		if (content[*i - 1] == '?' && content[*i])
+			break ;
+	}
 	str = ft_getenv(env, var);
 	return (free(var), str);
 }
