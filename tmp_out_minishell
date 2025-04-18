@@ -1,0 +1,19 @@
+lefoffan:/home/lefoffan/42/github/minishell$ cat << $USER
+>why
+>not
+>$USER
+>
+>
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 
+lefoffan:/home/lefoffan/42/github/minishell$ 

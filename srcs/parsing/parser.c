@@ -6,7 +6,7 @@
 /*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:40 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/18 16:19:15 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:35:43 by lefoffan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	specify_files_redir(t_token **tokens)
 static void	part_of_rm_quotes(t_token *tmp, char *res)
 {
 	if ((ft_cmpstr(tmp->content, "''") == 0
-		|| ft_cmpstr(tmp->content, "\"\"") == 0))
+			|| ft_cmpstr(tmp->content, "\"\"") == 0))
 	{
 		free(tmp->content);
 		tmp->content = NULL;
@@ -65,20 +65,20 @@ static void	remove_quotes(t_token **tokens, char quote, int i, char *res)
 	while (tmp)
 	{
 		res = NULL;
-		i = 0;
+		i = -1;
 		quote = 0;
 		if (tmp->content)
 		{
-			while (tmp->content[i])
+			while (tmp->content[++i])
 			{
-				if (!quote && (tmp->content[i] == '"' || tmp->content[i] == '\''))
+				if (!quote && (tmp->content[i] == '"'
+						|| tmp->content[i] == '\''))
 					quote = tmp->content[i];
 				else if ((quote && tmp->content[i] != quote) || (!quote
-					&& (tmp->content[i] != '"' || tmp->content[i] != '\'')))
+						&& (tmp->content[i] != '"' || tmp->content[i] != '\'')))
 					res = ft_straddchar(res, tmp->content[i]);
 				else if (quote && tmp->content[i] == quote)
 					quote = 0;
-				i++;
 			}
 			part_of_rm_quotes(tmp, res);
 		}
