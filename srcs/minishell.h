@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lefoffan <lefoffan@student.42perpignan.    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:10:48 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/18 15:08:30 by lefoffan         ###   ########.fr       */
+/*   Updated: 2025/04/18 18:15:12 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,8 @@ void		start_loop(t_var *vars, t_env **env);
 char		*set_prompt_arg(t_env **env);
 char		*path_with_way(char *str, t_var *vars);
 void		errno_error(t_var *vars);
+int			check_valid_identifier(char *line);
+t_env		*add_var_exportl(t_env **exp, t_env **env, char *line, t_var *vars);
 /**========================================================================
  *!                      UTILS FUNCTIONS FOR FD
  *========================================================================**/

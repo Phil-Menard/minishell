@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:09:00 by lefoffan          #+#    #+#             */
-/*   Updated: 2025/04/15 15:09:37 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/18 18:14:45 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	ft_export(t_var *vars, t_env **env, t_env **export, int fd)
 		while (vars->cmd_line[vars->i].args[i])
 		{
 			if (find_occurences(vars->cmd_line[vars->i].args[i], '=') == 0)
-				*export = add_var_export(export, env,
+				*export = add_var_exportl(export, env,
 						vars->cmd_line[vars->i].args[i], vars);
 			else
 			{
